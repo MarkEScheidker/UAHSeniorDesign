@@ -9,7 +9,7 @@ plugins {
 }
 
 version = "1.0.0-SNAPSHOT"
-group = "net.fuel.charger"
+group = "com.chargerfuel"
 
 repositories {
     mavenCentral()
@@ -60,4 +60,16 @@ kotlin {
         implementation("io.kvision:kvision-testutils:$kvisionVersion")
     }
     sourceSets["main"].resources.srcDir(webDir)
+}
+
+val host = "charger.food.is"
+val user = "jetson"
+val pass = "uahcharger123"
+
+tasks.register("upload") {
+    group = "charger fuel"
+    dependsOn("clean","zip")
+    doLast {
+        println("//TODO: Upload to server :)")
+    }
 }
