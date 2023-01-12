@@ -63,7 +63,7 @@ class ChargerPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.task("upload") {
             group = "charger fuel"
-//            dependsOn("clean", "zip")
+            dependsOn("clean", "zip")
             doLast {
                 establishSession()?.run {
                     println("Removing old files...")
