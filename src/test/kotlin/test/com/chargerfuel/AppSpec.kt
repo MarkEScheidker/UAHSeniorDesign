@@ -1,4 +1,4 @@
-package test.net.fuel.charger.chargerfuel
+package test.com.chargerfuel
 
 import io.kvision.test.SimpleSpec
 import kotlin.test.Test

@@ -1,4 +1,4 @@
-package net.fuel.charger.chargerfuel
+package com.chargerfuel
 
 import io.kvision.Application
 import io.kvision.CoreModule
