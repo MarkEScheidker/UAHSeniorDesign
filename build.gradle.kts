@@ -72,6 +72,8 @@ class ChargerPlugin : Plugin<Project> {
                     uploadZip()
                     println("Unpacking zip...")
                     runCommand("cd /opt/charger_fuel/ && unzip -o /opt/charger_fuel/chargerfuel.zip && rm chargerfuel.zip")
+                    println("Reloading server...")
+                    runCommand("nginx -s reload")
                     disconnect()
                 }
             }
