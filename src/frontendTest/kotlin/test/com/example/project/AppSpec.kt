@@ -1,4 +1,4 @@
-package test.com.chargerfuel
+package test.com.example.project
 
 import io.kvision.test.SimpleSpec
 import kotlin.test.Test

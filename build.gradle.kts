@@ -25,11 +25,11 @@ class ChargerPlugin : Plugin<Project> {
             connect()
         }
 
-    private fun Session.uploadZip() {
+    private fun Session.uploadJar() {
         (openChannel("sftp") as ChannelSftp).run {
             connect()
             cd("/opt/charger_fuel")
-            put(FileInputStream(File("./build/libs/chargerfuel.zip")),"chargerfuel.zip")
+            put(FileInputStream(File("./build/libs/chargerfuel.jar")),"chargerfuel.jar")
             disconnect()
         }
     }
@@ -50,10 +50,7 @@ class ChargerPlugin : Plugin<Project> {
                     if (i < 0) break;
                     println(String(read, 0, i))
                 }
-                if (isClosed) {
-                    println("exit-status: $exitStatus")
-                    break;
-                }
+                if (isClosed) break;
                 Thread.sleep(1000)
             }
             disconnect()
@@ -63,17 +60,18 @@ class ChargerPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.task("upload") {
             group = "charger fuel"
-            dependsOn("clean", "zip")
+            dependsOn("jar")
             doLast {
                 establishSession()?.run {
-                    println("Removing old files...")
-                    runCommand("rm /opt/charger_fuel/*")
-                    println("Uploading zip...")
-                    uploadZip()
-                    println("Unpacking zip...")
-                    runCommand("cd /opt/charger_fuel/ && unzip -o /opt/charger_fuel/chargerfuel.zip && rm chargerfuel.zip")
+                    println("Killing old server...")
+                    runCommand("pkill -f \"chargerfuel -jar /opt/charger_fuel/chargerfuel.jar\"")
+                    println("Removing old jar...")
+                    runCommand("rm /opt/charger_fuel/chargerfuel.jar")
+                    println("Uploading jar...")
+                    uploadJar()
                     println("Reloading server...")
-                    runCommand("nginx -s reload")
+                    runCommand("nohup bash -c 'exec -a \"chargerfuel\" java -jar /opt/charger_fuel/chargerfuel.jar > /opt/charger_fuel/log.txt 2>&1 &'")
+                    runCommand("java -jar /opt/charger_fuel/chargerfuel.jar")
                     disconnect()
                 }
             }
@@ -84,7 +82,7 @@ class ChargerPlugin : Plugin<Project> {
 plugins {
     val kotlinVersion: String by System.getProperties()
     kotlin("plugin.serialization") version kotlinVersion
-    kotlin("js") version kotlinVersion
+    kotlin("multiplatform") version kotlinVersion
     val kvisionVersion: String by System.getProperties()
     id("io.kvision") version kvisionVersion
 }
@@ -102,11 +100,25 @@ repositories {
 // Versions
 val kotlinVersion: String by System.getProperties()
 val kvisionVersion: String by System.getProperties()
+val ktorVersion: String by project
+val logbackVersion: String by project
 
-val webDir = file("src/main/web")
+val webDir = file("src/frontendMain/web")
+val mainClassName = "io.ktor.server.netty.EngineMain"
 
 kotlin {
-    js {
+    jvm("backend") {
+        compilations.all {
+            java {
+                targetCompatibility = JavaVersion.VERSION_1_8
+            }
+            kotlinOptions {
+                jvmTarget = "1.8"
+                freeCompilerArgs = listOf("-Xjsr305=strict")
+            }
+        }
+    }
+    js("frontend") {
         browser {
             runTask {
                 outputFileName = "main.bundle.js"
@@ -118,7 +130,7 @@ kotlin {
                         "/kv/*" to "http://localhost:8080",
                         "/kvws/*" to mapOf("target" to "ws://localhost:8080", "ws" to true)
                     ),
-                    static = mutableListOf("$buildDir/processedResources/js/main")
+                    static = mutableListOf("$buildDir/processedResources/frontend/main")
                 )
             }
             webpackTask {
@@ -132,14 +144,117 @@ kotlin {
         }
         binaries.executable()
     }
-    sourceSets["main"].dependencies {
-        implementation("io.kvision:kvision:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-css:$kvisionVersion")
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                api("io.kvision:kvision-server-ktor-koin:$kvisionVersion")
+            }
+            kotlin.srcDir("build/generated-src/common")
+        }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+            }
+        }
+        val backendMain by getting {
+            dependencies {
+                implementation(kotlin("stdlib-jdk8"))
+                implementation(kotlin("reflect"))
+                implementation("io.ktor:ktor-server-netty:$ktorVersion")
+                implementation("io.ktor:ktor-server-auth:$ktorVersion")
+                implementation("io.ktor:ktor-server-compression:$ktorVersion")
+                implementation("ch.qos.logback:logback-classic:$logbackVersion")
+            }
+        }
+        val backendTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(kotlin("test-junit"))
+            }
+        }
+        val frontendMain by getting {
+            resources.srcDir(webDir)
+            dependencies {
+                implementation("io.kvision:kvision:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap:$kvisionVersion")
+                implementation("io.kvision:kvision-bootstrap-css:$kvisionVersion")
+            }
+            kotlin.srcDir("build/generated-src/frontend")
+        }
+        val frontendTest by getting {
+            dependencies {
+                implementation(kotlin("test-js"))
+                implementation("io.kvision:kvision-testutils:$kvisionVersion")
+            }
+        }
     }
-    sourceSets["test"].dependencies {
-        implementation(kotlin("test-js"))
-        implementation("io.kvision:kvision-testutils:$kvisionVersion")
+}
+
+afterEvaluate {
+    tasks {
+        create("frontendArchive", Jar::class).apply {
+            dependsOn("frontendBrowserProductionWebpack")
+            group = "package"
+            archiveAppendix.set("frontend")
+            val distribution =
+                project.tasks.getByName("frontendBrowserProductionWebpack", org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack::class).destinationDirectory!!
+            from(distribution) {
+                include("*.*")
+            }
+            from(webDir)
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+            into("/assets")
+            inputs.files(distribution, webDir)
+            outputs.file(archiveFile)
+            manifest {
+                attributes(
+                    mapOf(
+                        "Implementation-Title" to rootProject.name,
+                        "Implementation-Group" to rootProject.group,
+                        "Implementation-Version" to rootProject.version,
+                        "Timestamp" to System.currentTimeMillis()
+                    )
+                )
+            }
+        }
+        getByName("backendProcessResources", Copy::class) {
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        }
+        getByName("backendJar").group = "package"
+        create("jar", Jar::class).apply {
+            dependsOn("frontendArchive", "backendJar")
+            group = "package"
+            manifest {
+                attributes(
+                    mapOf(
+                        "Implementation-Title" to rootProject.name,
+                        "Implementation-Group" to rootProject.group,
+                        "Implementation-Version" to rootProject.version,
+                        "Timestamp" to System.currentTimeMillis(),
+                        "Main-Class" to mainClassName
+                    )
+                )
+            }
+            val dependencies = configurations["backendRuntimeClasspath"].filter { it.name.endsWith(".jar") } +
+                    project.tasks["backendJar"].outputs.files +
+                    project.tasks["frontendArchive"].outputs.files
+            dependencies.forEach {
+                if (it.isDirectory) from(it) else from(zipTree(it))
+            }
+            exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+            inputs.files(dependencies)
+            outputs.file(archiveFile)
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        }
+        create("backendRun", JavaExec::class) {
+            dependsOn("compileKotlinBackend")
+            group = "run"
+            main = mainClassName
+            classpath =
+                configurations["backendRuntimeClasspath"] + project.tasks["compileKotlinBackend"].outputs.files +
+                        project.tasks["backendProcessResources"].outputs.files
+            workingDir = buildDir
+        }
     }
-    sourceSets["main"].resources.srcDir(webDir)
 }

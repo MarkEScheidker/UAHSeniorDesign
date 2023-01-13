@@ -35,5 +35,5 @@
   "headers": {
     "Language": ""
   },
-  "output": "src/main/resources/i18n/messages.pot"
+  "output": "src/frontendMain/resources/i18n/messages.pot"
 }
