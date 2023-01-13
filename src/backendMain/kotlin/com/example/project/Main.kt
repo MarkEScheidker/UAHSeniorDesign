@@ -10,6 +10,7 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 fun Application.main() {
+    //compress all the packets
     install(Compression)
     routing {
         getAllServiceManagers().forEach { applyRoutes(it) }

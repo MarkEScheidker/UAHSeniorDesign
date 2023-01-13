@@ -34,6 +34,15 @@ class ChargerPlugin : Plugin<Project> {
         }
     }
 
+    private fun Session.uploadNginxConfig() {
+        (openChannel("sftp") as ChannelSftp).run {
+            connect()
+            cd("/etc/nginx/sites-available")
+            put(FileInputStream(File("./nginx/charger.food.is")),"charger.food.is")
+            disconnect()
+        }
+    }
+
     private fun Session.runCommand(cmd: String) {
         (openChannel("exec") as ChannelExec).run {
             setCommand(cmd)
