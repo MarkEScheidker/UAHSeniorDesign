@@ -1,4 +1,4 @@
-package com.example.project
+package com.chargerfuel
 
 import io.kvision.annotations.KVService
 
