@@ -80,13 +80,20 @@ class ChargerPlugin : Plugin<Project> {
                     uploadJar()
                     println("Reloading server...")
                     runCommand("nohup bash -c 'exec -a \"chargerfuel\" java -jar /opt/charger_fuel/chargerfuel.jar > /opt/charger_fuel/log.txt 2>&1 &'")
-                    runCommand("java -jar /opt/charger_fuel/chargerfuel.jar")
+                    println("all tasks complete")
+                    disconnect()
+                }
+            }
+        }
+        target.task("nginx") {
+            group = "charger fuel"
+            doLast {
+                establishSession()?.run {
                     println("uploading nginx config...")
                     uploadNginxConfig()
                     println("reloading nginx...")
                     runCommand("sudo /usr/sbin/service nginx reload")
-                    println("all tasks complete");
-                    disconnect()
+                    println("all tasks complete")
                 }
             }
         }
