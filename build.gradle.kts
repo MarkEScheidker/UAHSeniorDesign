@@ -185,6 +185,8 @@ kotlin {
                 implementation("io.ktor:ktor-server-netty:$ktorVersion")
                 implementation("io.ktor:ktor-server-auth:$ktorVersion")
                 implementation("io.ktor:ktor-server-compression:$ktorVersion")
+                implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
+                implementation("io.ktor:ktor-server-sessions-jvm:$ktorVersion")
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
             }
         }
