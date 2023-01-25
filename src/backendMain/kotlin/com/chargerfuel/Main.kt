@@ -36,16 +36,11 @@ fun Application.main() {
         cookie<UserSession>("user_session") {
             cookie.path = "/"
             cookie.maxAgeInSeconds = 60 * 30
-
-            //no idea if this does anything
-            cookie.secure = true
         }
     }
 
     routing {
         getAllServiceManagers().forEach { applyRoutes(it) }
-        get("/") { call.respondRedirect("/login") }
-        get("/login") { call.respondText(getHtml("login"), ContentType.Text.Html) }
         authenticate("login") {
             post("/login") {
                 call.sessions.set(UserSession(call.principal<UserIdPrincipal>()?.name.toString()))
@@ -59,6 +54,14 @@ fun Application.main() {
                 call.respondRedirect("/login")
             }
         }
+        get("/") { call.respondRedirect("/login") }
+        get("/index.html") { call.respondRedirect("/login") }
+        get("/login") {
+            call.sessions.get<UserSession>()
+                ?.let { call.respondRedirect("/main") }
+                ?: call.respondText(getHtml("login"), ContentType.Text.Html)
+        }
+        intercept(ApplicationCallPipeline.Fallback) { call.respondRedirect("/login") }
     }
     val module = module {
         factoryOf(::PingService)
