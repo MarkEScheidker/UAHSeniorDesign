@@ -7,6 +7,7 @@ import io.ktor.server.plugins.compression.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
+import io.ktor.util.*
 import io.kvision.remote.applyRoutes
 import io.kvision.remote.getAllServiceManagers
 import io.kvision.remote.kvisionInit
@@ -33,12 +34,14 @@ fun Application.main() {
 
     //TODO handle session encryption @Gabriel @Asher https://ktor.io/docs/sessions.html
     install(Sessions) {
+        //non-static keys should be generated for true security, this is a demonstration
+        val secretEncryptKey = hex("00112233445566778899aabbccddeeff")
+        val secretSignKey = hex("6819b57a326945c1968f45236589")
         cookie<UserSession>("user_session") {
             cookie.path = "/"
             cookie.maxAgeInSeconds = 60 * 30
-
-            //no idea if this does anything
             cookie.secure = true
+            transform(SessionTransportTransformerEncrypt(secretEncryptKey, secretSignKey))
         }
     }
 
