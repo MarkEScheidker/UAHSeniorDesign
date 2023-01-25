@@ -13,8 +13,8 @@ val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 class App : Application() {
     override fun start(state: Map<String, Any>) {
         //Register pages
-        Login.create()()
-        Main.create()()
+        Login.load(this)
+        Main.load(this)
     }
 }
 
