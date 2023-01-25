@@ -32,9 +32,8 @@ fun Application.main() {
         }
     }
 
-    //TODO handle session encryption @Gabriel @Asher https://ktor.io/docs/sessions.html
     install(Sessions) {
-        //non-static keys should be generated for true security, this is a demonstration
+        //TODO Replace hard coded secret keys with cryptographically random equivalents @Gabriel @Asher
         val secretEncryptKey = hex("00112233445566778899aabbccddeeff")
         val secretSignKey = hex("6819b57a326945c1968f45236589")
         cookie<UserSession>("user_session") {
