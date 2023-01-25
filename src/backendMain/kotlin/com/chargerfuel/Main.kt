@@ -36,6 +36,9 @@ fun Application.main() {
         cookie<UserSession>("user_session") {
             cookie.path = "/"
             cookie.maxAgeInSeconds = 60 * 30
+
+            //no idea if this does anything
+            cookie.secure = true
         }
     }
 
