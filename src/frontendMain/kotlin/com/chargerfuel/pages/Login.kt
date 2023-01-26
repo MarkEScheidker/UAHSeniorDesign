@@ -21,7 +21,7 @@ object Login : Webpage("login") {
         vPanel {
             background = Background(color = Color.rgba(0, 0, 0, 128))
             position = Position.ABSOLUTE
-            width = 400.px; maxWidth = 100.vw; height = 100.vh; right = 0.px
+            width = 500.px; maxWidth = 100.vw; height = 100.vh; right = 0.px
             colorName = Col.LIGHTSTEELBLUE
             formPanel(FormMethod.POST, "/login", FormEnctype.MULTIPART) {
                 padding = 10.perc
