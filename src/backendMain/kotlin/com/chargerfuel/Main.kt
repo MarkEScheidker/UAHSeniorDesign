@@ -24,11 +24,11 @@ fun Application.main() {
             userParamName = "username"
             passwordParamName = "password"
             validate { if (it.name == "admin" && it.password == "password") UserIdPrincipal(it.name) else null }
-            challenge { call.respondRedirect("/login") }
+            challenge("/login")
         }
         session<UserSession>("sesh") {
             validate { it }
-            challenge { call.respondRedirect("/login") }
+            challenge("/login")
         }
     }
 

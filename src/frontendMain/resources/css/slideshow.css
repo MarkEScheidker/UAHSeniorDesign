@@ -1,0 +1,17 @@
+@keyframes slideshowOne {
+    from {
+        left: 0;
+    }
+    to {
+        left: -900vh;
+    }
+}
+
+@keyframes slideshowTwo {
+    from {
+        left: 900vh;
+    }
+    to {
+        left: 0;
+    }
+}
