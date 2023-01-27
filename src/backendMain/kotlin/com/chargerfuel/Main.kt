@@ -34,8 +34,8 @@ fun Application.main() {
 
     install(Sessions) {
         //TODO Replace hard coded secret keys with cryptographically random equivalents @Gabriel @Asher
-        val secretEncryptKey = hex("00112233445566778899aabbccddeeff")
-        val secretSignKey = hex("6819b57a326945c1968f45236589")
+        val secretEncryptKey = Security.generate16ByteKey()
+        val secretSignKey = Security.generate14ByteKey()
         cookie<UserSession>("user_session") {
             cookie.path = "/"
             cookie.maxAgeInSeconds = 60 * 30
