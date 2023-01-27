@@ -6,7 +6,6 @@ import io.ktor.server.auth.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.http.content.*
 import io.ktor.server.sessions.*
 import io.ktor.util.*
 import io.kvision.remote.applyRoutes
@@ -65,9 +64,7 @@ fun Application.main() {
         get("/login") {
             call.sessions.get<UserSession>()
                 ?.let { call.respondRedirect("/main") }
-
-                //this is evil, I welcome a better solution with open arms
-                ?: call.respondText(getHtml("login").replaceFirst("<head>", "<head><link rel='icon' href='https://www.uah.edu/templates/uah/favicon.ico' type='image/x-icon'>"), ContentType.Text.Html)
+                ?: call.respondText(getHtml("login"), ContentType.Text.Html)
         }
         intercept(ApplicationCallPipeline.Fallback) { call.respondRedirect("/login") }
     }
