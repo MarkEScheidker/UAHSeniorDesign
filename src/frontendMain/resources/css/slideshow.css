@@ -2,6 +2,33 @@
     from {
         left: 0;
     }
+    10% {
+        left: 0;
+    }
+    20% {
+        left: -200vh;
+    }
+    30% {
+        left: -200vh;
+    }
+    40% {
+        left: -400vh;
+    }
+    50% {
+        left: -400vh;
+    }
+    60% {
+        left: -600vh;
+    }
+    70% {
+        left: -600vh;
+    }
+    80% {
+        left: -800vh;
+    }
+    90% {
+        left: -800vh;
+    }
     to {
         left: -900vh;
     }
@@ -10,6 +37,33 @@
 @keyframes slideshowTwo {
     from {
         left: 900vh;
+    }
+    10% {
+        left: 900vh;
+    }
+    20% {
+        left: 700vh;
+    }
+    30% {
+        left: 700vh;
+    }
+    40% {
+        left: 500vh;
+    }
+    50% {
+        left: 500vh;
+    }
+    60% {
+        left: 300vh;
+    }
+    70% {
+        left: 300vh;
+    }
+    80% {
+        left: 100vh;
+    }
+    90% {
+        left: 100vh;
     }
     to {
         left: 0;

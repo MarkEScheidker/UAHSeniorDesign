@@ -7,7 +7,6 @@ import io.ktor.server.plugins.compression.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import io.ktor.util.*
 import io.kvision.remote.applyRoutes
 import io.kvision.remote.getAllServiceManagers
 import io.kvision.remote.kvisionInit
@@ -33,9 +32,8 @@ fun Application.main() {
     }
 
     install(Sessions) {
-        //TODO Replace hard coded secret keys with cryptographically random equivalents @Gabriel @Asher
-        val secretEncryptKey = Security.generate16ByteKey()
-        val secretSignKey = Security.generate14ByteKey()
+        val secretEncryptKey = generate16ByteKey()
+        val secretSignKey = generate14ByteKey()
         cookie<UserSession>("user_session") {
             cookie.path = "/"
             cookie.maxAgeInSeconds = 60 * 30
@@ -44,7 +42,6 @@ fun Application.main() {
     }
 
     routing {
-
         getAllServiceManagers().forEach { applyRoutes(it) }
         authenticate("login") {
             post("/login") {
@@ -66,6 +63,7 @@ fun Application.main() {
                 ?.let { call.respondRedirect("/main") }
                 ?: call.respondText(getHtml("login"), ContentType.Text.Html)
         }
+        get("/test") { call.respondText(getHtml("test"), ContentType.Text.Html) }
         intercept(ApplicationCallPipeline.Fallback) { call.respondRedirect("/login") }
     }
     val module = module {
