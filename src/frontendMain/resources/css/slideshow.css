@@ -1,17 +1,17 @@
 @keyframes slideshowOne {
-    from,13% {
+    from,15% {
         left: 0;
     }
-    17%,33% {
+    20%,35% {
         left: -200vh;
     }
-    37%,53% {
+    40%,55% {
         left: -400vh;
     }
-    57%,73% {
+    60%,75% {
         left: -600vh;
     }
-    77%,93% {
+    80%,95% {
         left: -800vh;
     }
     to {
@@ -20,19 +20,19 @@
 }
 
 @keyframes slideshowTwo {
-    from,13% {
+    from,15% {
         left: 1000vh;
     }
-    17%,33% {
+    20%,35% {
         left: 800vh;
     }
-    37%,53% {
+    40%,55% {
         left: 600vh;
     }
-    57%,73% {
+    60%,75% {
         left: 400vh;
     }
-    77%,93% {
+    80%,95% {
         left: 200vh;
     }
     to {
