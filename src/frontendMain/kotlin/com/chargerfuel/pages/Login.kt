@@ -29,14 +29,14 @@ object Login : Webpage("login") {
             height = 100.vh
             left = 0.perc
             top = 0.perc
-            setStyle("animation", "slideshowOne 50s ease-out infinite")
+            setStyle("animation", "slideshowOne 50s cubic-bezier(.25,.01,.29,.99) infinite")
         }
         image(require("img/login.jpg") as? String, "Food Display") {
             position = Position.ABSOLUTE
             height = 100.vh
             left = 0.perc
             top = 0.perc
-            setStyle("animation", "slideshowTwo 50s ease-out infinite")
+            setStyle("animation", "slideshowTwo 50s cubic-bezier(.25,.01,.29,.99) infinite")
         }
         vPanel {
             background = Background(color = Color.rgba(0, 0, 0, 128))
