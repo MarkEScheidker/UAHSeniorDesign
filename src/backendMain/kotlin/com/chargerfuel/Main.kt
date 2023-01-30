@@ -42,7 +42,7 @@ fun Application.main() {
     }
 
     routing {
-        getAllServiceManagers().forEach { applyRoutes(it) }
+//        getAllServiceManagers().forEach { applyRoutes(it) }
         authenticate("login") {
             post("/login") {
                 call.sessions.set(UserSession(call.principal<UserIdPrincipal>()?.name.toString()))
@@ -66,8 +66,5 @@ fun Application.main() {
         get("/test") { call.respondText(getHtml("test"), ContentType.Text.Html) }
         intercept(ApplicationCallPipeline.Fallback) { call.respondRedirect("/login") }
     }
-    val module = module {
-        factoryOf(::PingService)
-    }
-    kvisionInit(module)
+    kvisionInit()
 }
