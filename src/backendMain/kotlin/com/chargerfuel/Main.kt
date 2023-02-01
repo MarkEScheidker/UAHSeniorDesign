@@ -60,6 +60,7 @@ fun Application.main() {
         get("/test") { call.respondText(getHtml("test"), ContentType.Text.Html) }
         nonAuthRoute("login", "main")
         nonAuthRoute("signup", "main")
+        nonAuthRoute("reset", "main")
         get("/") { call.respondRedirect("/login") }
         get("/index.html") { call.respondRedirect("/login") }
         intercept(ApplicationCallPipeline.Fallback) { call.respondRedirect("/login") }
