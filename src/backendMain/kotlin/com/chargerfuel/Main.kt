@@ -7,11 +7,7 @@ import io.ktor.server.plugins.compression.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import io.kvision.remote.applyRoutes
-import io.kvision.remote.getAllServiceManagers
 import io.kvision.remote.kvisionInit
-import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.module
 
 @Suppress("unused")
 fun Application.main() {
@@ -41,8 +37,13 @@ fun Application.main() {
         }
     }
 
+    fun Routing.nonAuthRoute(nonAuth: String, fail: String) = get("/$nonAuth") {
+        call.sessions.get<UserSession>()
+            ?.let { call.respondRedirect("/$fail") }
+            ?: call.respondText(getHtml(nonAuth), ContentType.Text.Html)
+    }
+
     routing {
-//        getAllServiceManagers().forEach { applyRoutes(it) }
         authenticate("login") {
             post("/login") {
                 call.sessions.set(UserSession(call.principal<UserIdPrincipal>()?.name.toString()))
@@ -56,19 +57,11 @@ fun Application.main() {
                 call.respondRedirect("/login")
             }
         }
+        get("/test") { call.respondText(getHtml("test"), ContentType.Text.Html) }
+        nonAuthRoute("login", "main")
+        nonAuthRoute("signup", "main")
         get("/") { call.respondRedirect("/login") }
         get("/index.html") { call.respondRedirect("/login") }
-        get("/login") {
-            call.sessions.get<UserSession>()
-                ?.let { call.respondRedirect("/main") }
-                ?: call.respondText(getHtml("login"), ContentType.Text.Html)
-        }
-        get("/signup") {
-            call.sessions.get<UserSession>()
-                ?.let { call.respondRedirect("/main") }
-                ?: call.respondText(getHtml("signup"), ContentType.Text.Html)
-        }
-        get("/test") { call.respondText(getHtml("test"), ContentType.Text.Html) }
         intercept(ApplicationCallPipeline.Fallback) { call.respondRedirect("/login") }
     }
     kvisionInit()
