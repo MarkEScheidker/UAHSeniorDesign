@@ -1,8 +1,9 @@
 package com.chargerfuel
 
-import com.chargerfuel.pages.Login
-import com.chargerfuel.pages.Main
-import com.chargerfuel.pages.Signup
+import com.chargerfuel.pages.LoginPage
+import com.chargerfuel.pages.MainPage
+import com.chargerfuel.pages.ResetPage
+import com.chargerfuel.pages.SignupPage
 import io.kvision.*
 import kotlinx.browser.window
 import kotlinx.coroutines.CoroutineScope
@@ -14,9 +15,10 @@ val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 class App : Application() {
     override fun start(state: Map<String, Any>) {
         //Register pages
-        Login.load(this)
-        Main.load(this)
-        Signup.load(this)
+        LoginPage.load(this)
+        MainPage.load(this)
+        SignupPage.load(this)
+        ResetPage.load(this)
     }
 }
 

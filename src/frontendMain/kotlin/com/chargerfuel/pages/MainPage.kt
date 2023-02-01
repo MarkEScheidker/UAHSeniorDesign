@@ -8,7 +8,7 @@ import io.kvision.panel.vPanel
 import io.kvision.utils.perc
 import io.kvision.utils.px
 
-object Main : Webpage("main") {
+object MainPage : Webpage("main") {
     override val html: Root.() -> Unit = {
         vPanel(alignItems = AlignItems.CENTER) {
             padding = 100.px

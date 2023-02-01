@@ -7,7 +7,6 @@ import io.kvision.form.FormMethod
 import io.kvision.form.formPanel
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
-import io.kvision.form.text.text
 import io.kvision.html.*
 import io.kvision.panel.Root
 import io.kvision.panel.hPanel
@@ -18,7 +17,7 @@ import io.kvision.utils.px
 import io.kvision.utils.vh
 import io.kvision.utils.vw
 
-object Login : Webpage("login") {
+object LoginPage : Webpage("login") {
     override val html: Root.() -> Unit = {
         require("css/slideshow.css")
         position = Position.RELATIVE
