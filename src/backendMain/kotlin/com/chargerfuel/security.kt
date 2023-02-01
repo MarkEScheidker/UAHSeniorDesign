@@ -20,3 +20,7 @@ fun generate14ByteKey(): ByteArray {
 fun generateHashedPassword(plainPassword: String): String {
     return BCrypt.hashpw(plainPassword, BCrypt.gensalt())
 }
+
+fun comparePasswords(plainPassword: String, hashedPassword: String): Boolean {
+    return BCrypt.checkpw(plainPassword, hashedPassword)
+}
