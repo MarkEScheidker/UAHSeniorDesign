@@ -25,12 +25,6 @@ object SQLUtils {
     //TODO add more get/store commands for user accounts
     fun GetHashedPW(username: String): String
     {
-
-        return ""
-    }
-
-    fun GetPWSalt(username: String): String{
-
         return ""
     }
 
