@@ -189,6 +189,8 @@ kotlin {
                 implementation("io.ktor:ktor-server-sessions-jvm:$ktorVersion")
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
                 implementation("mysql:mysql-connector-java:8.0.15")
+                implementation("org.mindrot:jbcrypt:0.4")
+
             }
         }
         val backendTest by getting {
