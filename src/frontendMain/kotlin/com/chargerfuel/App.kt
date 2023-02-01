@@ -2,6 +2,7 @@ package com.chargerfuel
 
 import com.chargerfuel.pages.Login
 import com.chargerfuel.pages.Main
+import com.chargerfuel.pages.Signup
 import io.kvision.*
 import kotlinx.browser.window
 import kotlinx.coroutines.CoroutineScope
@@ -15,6 +16,7 @@ class App : Application() {
         //Register pages
         Login.load(this)
         Main.load(this)
+        Signup.load(this)
     }
 }
 

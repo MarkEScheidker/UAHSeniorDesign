@@ -7,6 +7,7 @@ import io.kvision.form.FormMethod
 import io.kvision.form.formPanel
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
+import io.kvision.form.text.text
 import io.kvision.html.*
 import io.kvision.panel.Root
 import io.kvision.panel.hPanel
@@ -54,6 +55,7 @@ object Login : Webpage("login") {
                     link(label = "Forgot Username/Password", url = "reset")
                     button(text = "Login", type = ButtonType.SUBMIT)
                 }
+                link(label = "New to Charger Fuel? Sign Up Here!", url = "signup")
             }
         }
     }

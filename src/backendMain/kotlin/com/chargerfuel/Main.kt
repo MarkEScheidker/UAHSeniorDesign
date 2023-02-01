@@ -63,6 +63,11 @@ fun Application.main() {
                 ?.let { call.respondRedirect("/main") }
                 ?: call.respondText(getHtml("login"), ContentType.Text.Html)
         }
+        get("/signup") {
+            call.sessions.get<UserSession>()
+                ?.let { call.respondRedirect("/main") }
+                ?: call.respondText(getHtml("signup"), ContentType.Text.Html)
+        }
         get("/test") { call.respondText(getHtml("test"), ContentType.Text.Html) }
         intercept(ApplicationCallPipeline.Fallback) { call.respondRedirect("/login") }
     }
