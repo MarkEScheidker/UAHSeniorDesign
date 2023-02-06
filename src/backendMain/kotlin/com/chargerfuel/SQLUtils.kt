@@ -1,11 +1,12 @@
 package com.chargerfuel
+
 import java.sql.*
 
 object SQLUtils {
     //private const val DB_URL = "jdbc:mysql://localhost/database_name"
 
     // TODO store database credentials locally in a file instead of hard coded
-    private const val USER = "jetson"
+    private const val USER = "root"
     private const val PASS = "password"
 
     // Connection object
@@ -23,12 +24,20 @@ object SQLUtils {
     }
 
     //TODO add more get/store commands for user accounts
-    fun GetHashedPW(username: String): String
-    {
+    fun GetHashedPW(username: String): String {
+        //TODO write a sql query that gets a user's hashed password, return "" if user not found
         return ""
     }
+    fun SetHashedPW(username: String, hashedpw: String): Boolean{
+        //todo write a function that sets a user's hashed password, return 0 for success, return 1 for user not found
+        return true;
+    }
 
- 
+
+
+
+
+
     /*
     // A static map to store the query results
     private val queryCache: MutableMap<String, Any> = mutableMapOf()
