@@ -8,12 +8,11 @@ import io.kvision.form.FormType
 import io.kvision.form.formPanel
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
-import io.kvision.html.ButtonType
-import io.kvision.html.button
-import io.kvision.html.h1
-import io.kvision.html.image
+import io.kvision.html.*
 import io.kvision.panel.Root
 import io.kvision.panel.flexPanel
+import io.kvision.panel.hPanel
+import io.kvision.panel.vPanel
 import io.kvision.require
 import io.kvision.utils.perc
 import io.kvision.utils.px
@@ -77,7 +76,7 @@ object LoginPage : Webpage("login") {
                 justifyContent = JustifyContent.CENTER
                 gridRowGap = 10
                 width = 100.perc
-                h1("Student Login")
+                h1("Login")
                 add(LoginInfo::username, Text(name = "username") {
                     placeholder = "Username"
                     input.apply { width = 100.perc }
@@ -86,7 +85,15 @@ object LoginPage : Webpage("login") {
                     placeholder = "Password"
                     input.apply { width = 100.perc }
                 })
-                button(text = "Login", type = ButtonType.SUBMIT) { alignSelf = AlignItems.END }
+                hPanel {
+                    justifyContent = JustifyContent.SPACEBETWEEN
+                    vPanel {
+                        link("Forgot Username/Password", "reset") { colorName = Col.LIGHTSTEELBLUE }
+                        link("New to Charger Fuel? Sign Up Here!", "signup") { colorName = Col.LIGHTSTEELBLUE }
+                    }
+                    button(text = "Login", type = ButtonType.SUBMIT)
+                }
+
             }
             val resize = {
                 if (window.innerHeight >= window.innerWidth) {
