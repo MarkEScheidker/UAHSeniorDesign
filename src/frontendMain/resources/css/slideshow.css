@@ -1,41 +1,14 @@
-@keyframes slideshowOne {
-    from,15% {
+@keyframes slideshow {
+    from, 35% {
+        left: 100vw;
+        opacity: 0;
+    }
+    40%, 55% {
+        left: 50vw;
+        opacity: 100%;
+    }
+    60%, to {
         left: 0;
-    }
-    20%,35% {
-        left: -200vh;
-    }
-    40%,55% {
-        left: -400vh;
-    }
-    60%,75% {
-        left: -600vh;
-    }
-    80%,95% {
-        left: -800vh;
-    }
-    to {
-        left: -1000vh;
-    }
-}
-
-@keyframes slideshowTwo {
-    from,15% {
-        left: 1000vh;
-    }
-    20%,35% {
-        left: 800vh;
-    }
-    40%,55% {
-        left: 600vh;
-    }
-    60%,75% {
-        left: 400vh;
-    }
-    80%,95% {
-        left: 200vh;
-    }
-    to {
-        left: 0;
+        opacity: 0;
     }
 }
