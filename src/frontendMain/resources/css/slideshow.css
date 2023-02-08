@@ -1,14 +1,22 @@
 @keyframes slideshow {
     from, 35% {
+        transform: translate(0, -50%);
         left: 100vw;
-        opacity: 0;
+        z-index: 3;
     }
     40%, 55% {
+        transform: translate(-50%, -50%);
         left: 50vw;
-        opacity: 100%;
+        z-index: 2;
     }
-    60%, to {
-        left: 0;
-        opacity: 0;
+    60% {
+        transform: translate(-50%, -50%);
+        left: 50vw;
+        z-index: 1;
+    }
+    61%, to {
+        transform: translate(-50%, -50%);
+        left: 50vw;
+        z-index: 0;
     }
 }

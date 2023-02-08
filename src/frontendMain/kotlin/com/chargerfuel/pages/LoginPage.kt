@@ -25,9 +25,9 @@ object LoginPage : Webpage("login") {
     override val html: Root.() -> Unit = {
         //region Background Images
         val slide = Style {
-            setStyle("transform", "translate(-50%, 0)")
             minHeight = 100.vh
             minWidth = 100.vw
+            top = 50.vh
             position = Position.FIXED
             justifySelf = JustifyItems.CENTER
         }
@@ -66,10 +66,8 @@ object LoginPage : Webpage("login") {
             display = Display.FLEX
             flexDirection = FlexDirection.COLUMN
             padding = 20.px
-            val img = image(require("img/fuel.png") as? String, "banner") {
-                setStyle("object-fit", "contain")
-                maxWidth = 100.perc
-            }
+            zIndex = 4
+            val img = image(require("img/fuel.png") as? String, "banner") { setStyle("object-fit", "contain") }
             formPanel(FormMethod.POST, "/login", FormEnctype.MULTIPART, FormType.INLINE) {
                 display = Display.FLEX
                 flexDirection = FlexDirection.COLUMN
@@ -100,16 +98,19 @@ object LoginPage : Webpage("login") {
                 if (window.innerHeight >= window.innerWidth) {
                     //Vertical Mobile
                     img.height = 30.vh
+                    img.maxWidth = 100.perc
                     width = 100.vw
                     flexDirection = FlexDirection.COLUMN
                 } else if (window.innerHeight < 600) {
                     //Horizontal Mobile
                     img.height = 60.vh
+                    img.maxWidth = 50.perc
                     width = 100.vw
                     flexDirection = FlexDirection.ROW
                 } else {
                     //Desktop
                     img.height = 30.vh
+                    img.maxWidth = 100.perc
                     width = 500.px
                     flexDirection = FlexDirection.COLUMN
                 }
