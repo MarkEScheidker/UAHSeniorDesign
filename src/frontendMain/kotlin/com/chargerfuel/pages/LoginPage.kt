@@ -26,7 +26,8 @@ object LoginPage : Webpage("login") {
         //region Background Images
         val slide = Style {
             setStyle("transform", "translate(-50%, 0)")
-            height = 100.vh
+            minHeight = 100.vh
+            minWidth = 100.vw
             position = Position.FIXED
             justifySelf = JustifyItems.CENTER
         }
