@@ -4,7 +4,9 @@ import java.security.SecureRandom
 import org.mindrot.jbcrypt.BCrypt
 
 object Security {
-    private val secureRandom = SecureRandom().apply { setSeed(generateSeed(16)) }
+    private val secureRandom = SecureRandom().apply {
+        setSeed(generateSeed(16))
+    }
 
     fun generateXByteKey(size: Int): ByteArray {
         val key = ByteArray(size)
