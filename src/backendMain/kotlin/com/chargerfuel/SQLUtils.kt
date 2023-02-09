@@ -6,7 +6,7 @@ import java.sql.*
 object SQLUtils {
     private const val DB_URL = "jdbc:mysql://localhost/main657432"
 
-    //store database credentials locally in a file instead of hard coded
+    //pull database credentials from local file
     private var lines:List<String> = File("mysqlPassword.txt").readLines()
     private val USER = lines[0]
     private val PASS = lines[1]
@@ -17,6 +17,7 @@ object SQLUtils {
     // create a queryCache for the menu information
     private val queryCache: MutableMap<String, Any> = mutableMapOf()
 
+    //initialize the database connection in a try catch
     init {
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS)
