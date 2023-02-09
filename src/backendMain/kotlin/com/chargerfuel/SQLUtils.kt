@@ -35,11 +35,6 @@ object SQLUtils {
         return false
     }
 
-
-
-
-
-
     /*
     // A static map to store the query results
     private val queryCache: MutableMap<String, Any> = mutableMapOf()
