@@ -21,7 +21,6 @@ import io.kvision.utils.vw
 import kotlinx.browser.window
 
 object LoginPage : Webpage("login") {
-
     override val html: Root.() -> Unit = {
         //region Background Images
         val slide = Style {
@@ -75,7 +74,7 @@ object LoginPage : Webpage("login") {
                 justifyContent = JustifyContent.CENTER
                 gridRowGap = 10
                 width = 100.perc
-                h1("Login")
+                h1("Login") { alignSelf = AlignItems.CENTER }
                 add(LoginInfo::username, Text(name = "username") {
                     placeholder = "Username"
                     input.apply { width = 100.perc }
@@ -92,7 +91,6 @@ object LoginPage : Webpage("login") {
                     }
                     button(text = "Login", type = ButtonType.SUBMIT)
                 }
-
             }
             val resize = {
                 if (window.innerHeight >= window.innerWidth) {
@@ -117,6 +115,7 @@ object LoginPage : Webpage("login") {
             }
             resize()
             window.addEventListener("resize", { resize() })
+            window.addEventListener("message", { console.log("test") })
         }
         //endregion
     }

@@ -1,6 +1,5 @@
 package com.chargerfuel
 
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.compression.*
@@ -40,7 +39,7 @@ fun Application.main() {
     fun Routing.nonAuthRoute(nonAuth: String, fail: String) = get("/$nonAuth") {
         call.sessions.get<UserSession>()
             ?.let { call.respondRedirect("/$fail") }
-            ?: call.respondText(getHtml(nonAuth), ContentType.Text.Html)
+            ?: call.respondHtml(nonAuth)
     }
 
     routing {
@@ -51,13 +50,13 @@ fun Application.main() {
             }
         }
         authenticate("sesh") {
-            get("/main") { call.respondText(getHtml("main"), ContentType.Text.Html) }
+            get("/main") { call.respondHtml("main") }
             get("/logout") {
                 call.sessions.clear<UserSession>()
                 call.respondRedirect("/login")
             }
         }
-        get("/test") { call.respondText(getHtml("test"), ContentType.Text.Html) }
+        get("/test") { call.respondHtml("test") }
         nonAuthRoute("login", "main")
         nonAuthRoute("signup", "main")
         nonAuthRoute("reset", "main")
