@@ -26,16 +26,13 @@ object SQLUtils {
     }
 
     //TODO add more get/store commands for user accounts
-    fun getHashedPW(username: String): String {
-        //TODO write a sql query that gets a user's hashed password, return "" if user not found
-        //PYACHI NOTE: Try returning a nullable type, where null is returned instead of ""
-        //This allows for null coalescence instead of manually checking for empty strings.
-        return ""
+    fun getHashedPW(username: String): String? {
+        //TODO write a sql query that gets a user's hashed password, return null if user not found
+        return null
     }
     fun setHashedPW(username: String, hashedpw: String): Boolean{
-        //todo write a function that sets a user's hashed password, return 0 for success, return 1 for user not found
-        //PYACHI NOTE: Why return false if successful? False should indicate failure.
-        return true
+        //todo write a function that sets a user's hashed password, return 1 for success, return 0 for user not found
+        return false
     }
 
 
