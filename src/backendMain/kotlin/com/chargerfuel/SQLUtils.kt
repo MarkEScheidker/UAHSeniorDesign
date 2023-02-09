@@ -1,13 +1,15 @@
 package com.chargerfuel
 
+import java.io.File
 import java.sql.*
 
 object SQLUtils {
-    //private const val DB_URL = "jdbc:mysql://localhost/database_name"
+    private const val DB_URL = "jdbc:mysql://localhost/main657432"
 
-    // TODO store database credentials locally in a file instead of hard coded
-    private const val USER = "root"
-    private const val PASS = "password"
+    //store database credentials locally in a file instead of hard coded
+    private var lines:List<String> = File("mysqlPassword.txt").readLines()
+    private val USER = lines[0]
+    private val PASS = lines[1]
 
     // Connection object
     private var conn: Connection? = null
@@ -17,7 +19,7 @@ object SQLUtils {
 
     init {
         try {
-            //conn = DriverManager.getConnection(DB_URL, USER, PASS)
+            conn = DriverManager.getConnection(DB_URL, USER, PASS)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -33,7 +35,7 @@ object SQLUtils {
     fun setHashedPW(username: String, hashedpw: String): Boolean{
         //todo write a function that sets a user's hashed password, return 0 for success, return 1 for user not found
         //PYACHI NOTE: Why return false if successful? False should indicate failure.
-        return true;
+        return true
     }
 
 
