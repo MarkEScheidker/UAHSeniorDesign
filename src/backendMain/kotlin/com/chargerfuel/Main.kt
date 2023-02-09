@@ -27,8 +27,8 @@ fun Application.main() {
     }
 
     install(Sessions) {
-        val secretEncryptKey = Security.generate16ByteKey()
-        val secretSignKey = Security.generate14ByteKey()
+        val secretEncryptKey = Security.generateXByteKey(16)
+        val secretSignKey = Security.generateXByteKey(32)
         cookie<UserSession>("user_session") {
             cookie.path = "/"
             cookie.maxAgeInSeconds = 60 * 30
