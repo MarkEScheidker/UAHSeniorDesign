@@ -17,7 +17,9 @@ object Security {
         return BCrypt.hashpw(plainPassword, BCrypt.gensalt())
     }
 
-    fun comparePasswords(plainPassword: String, hashedPassword: String): Boolean {
+    fun comparePasswords(plainPassword: String, hashedPassword: String?): Boolean {
+        if(hashedPassword == null)
+            return false
         return BCrypt.checkpw(plainPassword, hashedPassword)
     }
 }

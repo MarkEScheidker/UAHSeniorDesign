@@ -36,6 +36,11 @@ object SQLUtils {
         return false
     }
 
+    fun doesUserExist(username: String): Boolean{
+        //TODO write a function that checks the database for a user with the given name
+        return false
+    }
+
     /*
     // A static map to store the query results
     private val queryCache: MutableMap<String, Any> = mutableMapOf()
