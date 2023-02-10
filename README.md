@@ -7,9 +7,10 @@ that makes it run.
 
 # What does it do?
 At the moment, we have set up gradle to compile the front and backend 
-compponents of a kvision server, and sends it to a physical server box 
-running on a home network. web pages and the backend components that host 
-the services that make them run will be created in the coming months. 
+compponents of a kvision/Ktor server, and sends it to a physical server box 
+running on a home network. Web pages and the backend components that host 
+the services that make them are currently in development, and a Mysql database 
+integration is currently underway.  
 
 # What will the final product look like?
 We plan to allow new users to create accounts with an email and 
