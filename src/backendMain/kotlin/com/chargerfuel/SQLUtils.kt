@@ -12,7 +12,7 @@ object SQLUtils {
     private val PASS = lines[1]
 
     // Connection object
-    private var conn: Connection? = null
+    private var connection: Connection? = null
 
     // create a queryCache for the menu information
     private val queryCache: MutableMap<String, Any> = mutableMapOf()
@@ -20,7 +20,7 @@ object SQLUtils {
     //initialize the database connection in a try catch
     init {
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS)
+            connection = DriverManager.getConnection(DB_URL, USER, PASS)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -28,45 +28,72 @@ object SQLUtils {
 
     //TODO add more get/store commands for user accounts
     fun getHashedPW(username: String): String? {
-        //TODO write a sql query that gets a user's hashed password, return null if user not found
-        return null
+        var statement: Statement? = null
+        var resultSet: ResultSet? = null
+
+        try {
+            statement = connection?.createStatement()
+            resultSet = statement?.executeQuery("SELECT PasswordID FROM User_Login WHERE UserName='$username'")
+
+            if (resultSet!!.next()) {
+                val passwordId = resultSet.getInt("PasswordID")
+                resultSet.close()
+
+                resultSet = statement?.executeQuery("SELECT PasswordHash FROM Password WHERE PasswordID=$passwordId")
+
+                if (resultSet!!.next()) {
+                    return resultSet.getString("PasswordHash")
+                }
+            }
+            return null
+
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            return null
+        } finally {
+            resultSet?.close()
+            statement?.close()
+        }
     }
+
     fun setHashedPW(username: String, hashedpw: String): Boolean{
-        //todo write a function that sets a user's hashed password, return 1 for success, return 0 for user not found
-        return false
+        var statement: Statement? = null
+        var resultSet: ResultSet? = null
+
+        try {
+            statement = connection?.createStatement()
+            resultSet = statement?.executeQuery("SELECT PasswordID FROM User_Login WHERE UserName='$username'")
+
+            if (resultSet!!.next()) {
+                val passwordId = resultSet.getInt("password_id")
+                statement?.executeUpdate("UPDATE Password SET PasswordHash='$hashedpw' WHERE PasswordID=$passwordId")
+                return true
+            }
+            return false
+
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            return false
+        } finally {
+            resultSet?.close()
+            statement?.close()
+        }
     }
 
     fun doesUserExist(username: String): Boolean{
-        //TODO write a function that checks the database for a user with the given name
-        return false
-    }
+        var statement: Statement? = null
+        var resultSet: ResultSet? = null
 
-    /*
-    // A static map to store the query results
-    private val queryCache: MutableMap<String, Any> = mutableMapOf()
-
-    // Function to retrieve data from the database
-    fun retrieveDataFromDB(query: String): Any {
-        // Check if the query result is already in the cache
-        if (queryCache.containsKey(query)) {
-            // If it is, return the cached result
-            return queryCache[query]!!
+        try {
+            statement = connection?.createStatement()
+            resultSet = statement?.executeQuery("SELECT * FROM User_Login WHERE UserName='$username'")
+            return resultSet!!.next()
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            return false
+        } finally {
+            resultSet?.close()
+            statement?.close()
         }
-        // If the result is not in the cache, execute the query and store the result
-        val result = executeQuery(query)
-        queryCache[query] = result
-        return result
     }
-
-    // Function to execute the query and retrieve the result
-    fun executeQuery(query: String): Any {
-        // Implementation to execute the query and retrieve the result
-        // ...
-        // ...
-        // Return the result
-        return result
-    }
-     */
-
-
 }
