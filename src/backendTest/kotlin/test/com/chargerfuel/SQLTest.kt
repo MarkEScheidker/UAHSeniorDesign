@@ -1,5 +1,6 @@
 package test.com.chargerfuel
 
+import com.chargerfuel.Security
 import org.junit.Test
 
 class SQLTest {
