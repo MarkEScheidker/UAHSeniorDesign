@@ -86,7 +86,7 @@ object LoginPage : Webpage("login") {
                 hPanel {
                     justifyContent = JustifyContent.SPACEBETWEEN
                     vPanel {
-                        link("Forgot Username/Password", "reset") { colorName = Col.LIGHTSTEELBLUE }
+                        link("Forgot Password", "reset") { colorName = Col.LIGHTSTEELBLUE }
                         link("New to Charger Fuel? Sign Up Here!", "signup") { colorName = Col.LIGHTSTEELBLUE }
                     }
                     button(text = "Login", type = ButtonType.SUBMIT)
