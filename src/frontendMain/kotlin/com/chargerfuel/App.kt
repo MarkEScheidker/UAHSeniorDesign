@@ -1,9 +1,6 @@
 package com.chargerfuel
 
-import com.chargerfuel.pages.LoginPage
-import com.chargerfuel.pages.MainPage
-import com.chargerfuel.pages.ResetPage
-import com.chargerfuel.pages.SignupPage
+import com.chargerfuel.pages.*
 import io.kvision.*
 import kotlinx.browser.window
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +16,7 @@ class App : Application() {
         MainPage.load(this)
         SignupPage.load(this)
         ResetPage.load(this)
+        Restaurants.load(this)
     }
 }
 
