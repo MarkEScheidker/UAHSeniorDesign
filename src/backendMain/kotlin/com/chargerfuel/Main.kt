@@ -1,10 +1,8 @@
 package com.chargerfuel
 
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.compression.*
-import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -76,8 +74,8 @@ fun Application.main() {
         nonAuthRoute("signup", "main")
         post("/signup") {
             val parameters = call.receiveParameters()
-            val email = parameters["email"]
-            val password = parameters["password"]
+            val email = parameters["email"] ?: return@post
+            val password = parameters["password"] ?: return@post
             //TODO check for email usage and/or send email verification
             //TODO Send packet to caller to tell to check email
         }
