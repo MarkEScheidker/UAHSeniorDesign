@@ -1,8 +1,11 @@
 package com.chargerfuel
 
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.compression.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
@@ -48,13 +51,13 @@ fun Application.main() {
         }
     }
 
-    fun Routing.nonAuthRoute(nonAuth: String, fail: String) = get("/$nonAuth") {
-        call.sessions.get<UserSession>()
-            ?.let { call.respondRedirect("/$fail") }
-            ?: call.respondHtml(nonAuth)
-    }
-
     routing {
+        fun nonAuthRoute(nonAuth: String, fail: String) =
+            get("/$nonAuth") {
+                call.sessions.get<UserSession>()
+                    ?.let { call.respondRedirect("/$fail") }
+                    ?: call.respondHtml(nonAuth)
+            }
         authenticate("login") {
             post("/login") {
                 call.sessions.set(UserSession(call.principal<UserIdPrincipal>()?.name.toString()))
@@ -71,10 +74,18 @@ fun Application.main() {
         get("/test") { call.respondHtml("test") }
         nonAuthRoute("login", "main")
         nonAuthRoute("signup", "main")
+        post("/signup") {
+            val parameters = call.receiveParameters()
+            val email = parameters["email"]
+            val password = parameters["password"]
+            //TODO check for email usage and/or send email verification
+            //TODO Send packet to caller to tell to check email
+        }
         nonAuthRoute("reset", "main")
         get("/") { call.respondRedirect("/login") }
         get("/index.html") { call.respondRedirect("/login") }
-        intercept(ApplicationCallPipeline.Fallback) { call.respondRedirect("/login") }
+        //TODO This spit a ton of errors in the backend log, find another way...
+//        intercept(ApplicationCallPipeline.Fallback) { call.respondRedirect("/login") }
     }
     kvisionInit()
 }
