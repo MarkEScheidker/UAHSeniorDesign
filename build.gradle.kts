@@ -29,7 +29,7 @@ class ChargerPlugin : Plugin<Project> {
         (openChannel("sftp") as ChannelSftp).run {
             connect()
             cd("/opt/charger_fuel")
-            put(FileInputStream(File("./build/libs/chargerfuel.jar")),"chargerfuel.jar")
+            put(FileInputStream(File("./build/libs/chargerfuel.jar")), "chargerfuel.jar")
             disconnect()
         }
     }
@@ -38,7 +38,7 @@ class ChargerPlugin : Plugin<Project> {
         (openChannel("sftp") as ChannelSftp).run {
             connect()
             cd("/etc/nginx/sites-available")
-            put(FileInputStream(File("./nginx/charger.food.is")),"charger.food.is")
+            put(FileInputStream(File("./nginx/charger.food.is")), "charger.food.is")
             disconnect()
         }
     }
@@ -190,6 +190,7 @@ kotlin {
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
                 implementation("mysql:mysql-connector-java:8.0.15")
                 implementation("org.mindrot:jbcrypt:0.4")
+                implementation("com.sun.mail:javax.mail:1.6.2")
 
             }
         }
@@ -224,7 +225,10 @@ afterEvaluate {
             group = "package"
             archiveAppendix.set("frontend")
             val distribution =
-                project.tasks.getByName("frontendBrowserProductionWebpack", org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack::class).destinationDirectory!!
+                project.tasks.getByName(
+                    "frontendBrowserProductionWebpack",
+                    org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack::class
+                ).destinationDirectory!!
             from(distribution) {
                 include("*.*")
             }
