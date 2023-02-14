@@ -84,13 +84,13 @@ object SQLUtils {
         var statement: Statement? = null
         var resultSet: ResultSet? = null
 
-        try {
+        return try {
             statement = connection?.createStatement()
             resultSet = statement?.executeQuery("SELECT * FROM User_Login WHERE UserName='$username'")
-            return resultSet!!.next()
+            resultSet!!.next()
         } catch (e: SQLException) {
             e.printStackTrace()
-            return false
+            false
         } finally {
             resultSet?.close()
             statement?.close()

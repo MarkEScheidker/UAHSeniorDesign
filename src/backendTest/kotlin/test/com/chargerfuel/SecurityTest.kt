@@ -33,6 +33,14 @@ class SecurityTest {
         if(matching2 == true){
             throw Exception()
         }
+    }
 
+    @Test
+    fun test_generateSecureToken(){
+        val token = Security.generateSecureToken()
+        if(token.length != 44){
+            throw Exception()
+        }
+        print(token)
     }
 }
