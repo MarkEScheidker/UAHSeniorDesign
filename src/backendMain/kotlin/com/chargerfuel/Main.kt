@@ -18,10 +18,6 @@ fun Application.main() {
             userParamName = "username"
             passwordParamName = "password"
 
-            validate { if (it.name == "admin" && it.password == "password") UserIdPrincipal(it.name) else null }
-
-            //TODO replace validate above with validate below once SQLUtils.getHashedPW() works
-            /*
             validate {
                 if (Security.comparePasswords(it.password,SQLUtils.getHashedPW(it.name))) {
                     UserIdPrincipal(it.name)
@@ -29,7 +25,6 @@ fun Application.main() {
                     null
                 }
             }
-            */
 
             challenge("/login")
         }

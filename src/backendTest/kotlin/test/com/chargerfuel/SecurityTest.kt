@@ -43,4 +43,9 @@ class SecurityTest {
         }
         print(token)
     }
+
+    @Test
+    fun generateHashesManually(){
+        print(Security.generateHashedPassword("test123"))
+    }
 }
