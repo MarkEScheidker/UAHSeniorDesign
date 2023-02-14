@@ -76,6 +76,14 @@ fun Application.main() {
             //TODO Send packet to caller to tell to check email
         }
         nonAuthRoute("reset", "main")
+        post("/reset"){
+            val parameters = call.receiveParameters()
+            val email = parameters["email"] ?: return@post
+            //TODO check for email usage and/or send email reset
+            EmailService.sendPasswordReset(email,Security.generateSecureToken())
+            //TODO Send packet to caller to tell to check email
+            call.respondRedirect("/login")
+        }
         get("/") { call.respondRedirect("/login") }
         get("/index.html") { call.respondRedirect("/login") }
         //TODO This spit a ton of errors in the backend log, find another way...
