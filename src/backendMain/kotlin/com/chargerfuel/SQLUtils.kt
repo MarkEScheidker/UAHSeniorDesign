@@ -33,7 +33,7 @@ object SQLUtils {
 
         try {
             statement = connection?.createStatement()
-            resultSet = statement?.executeQuery("SELECT PasswordID FROM User_Login WHERE UserName='$username'")
+            resultSet = statement?.executeQuery("SELECT PasswordHash FROM UserLogin WHERE UserName='$username'")
 
             if (resultSet!!.next()) {
                 val passwordId = resultSet.getInt("PasswordID")
@@ -62,10 +62,10 @@ object SQLUtils {
 
         try {
             statement = connection?.createStatement()
-            resultSet = statement?.executeQuery("SELECT PasswordID FROM User_Login WHERE UserName='$username'")
+            resultSet = statement?.executeQuery("SELECT PasswordID FROM UserLogin WHERE UserName='$username'")
 
             if (resultSet!!.next()) {
-                val passwordId = resultSet.getInt("password_id")
+                val passwordId = resultSet.getInt("PasswordID")
                 statement?.executeUpdate("UPDATE Password SET PasswordHash='$hashedpw' WHERE PasswordID=$passwordId")
                 return true
             }
@@ -86,7 +86,7 @@ object SQLUtils {
 
         return try {
             statement = connection?.createStatement()
-            resultSet = statement?.executeQuery("SELECT * FROM User_Login WHERE UserName='$username'")
+            resultSet = statement?.executeQuery("SELECT * FROM UserLogin WHERE UserName='$username'")
             resultSet!!.next()
         } catch (e: SQLException) {
             e.printStackTrace()
