@@ -61,20 +61,22 @@ object SQLUtils {
 //        }
 //    }
 //
-//    fun doesUserExist(username: String): Boolean{
-//        var statement: Statement? = null
-//        var resultSet: ResultSet? = null
-//
-//        return try {
-//            statement = connection?.createStatement()
-//            resultSet = statement?.executeQuery("SELECT * FROM UserLogin WHERE UserName='$username'")
-//            resultSet!!.next()
-//        } catch (e: SQLException) {
-//            e.printStackTrace()
-//            false
-//        } finally {
-//            resultSet?.close()
-//            statement?.close()
-//        }
-//    }
+    fun doesUserExist(username: String): Boolean{
+        return try {
+            val connection = DriverManager.getConnection(DB_URL, USER, PASS)
+            println(connection)
+            val statement = connection.createStatement()
+            println(statement)
+
+            val resultSet = statement.executeQuery("SELECT * FROM UserLogin WHERE UserName='$username'")
+            val exists = resultSet.next()
+            resultSet.close()
+            statement.close()
+            connection.close()
+            return exists
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            return false
+        }
+    }
 }

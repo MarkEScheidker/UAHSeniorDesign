@@ -79,10 +79,14 @@ fun Application.main() {
         post("/reset"){
             val parameters = call.receiveParameters()
             val email = parameters["email"] ?: return@post
-            //TODO check for email usage and/or send email reset
-            EmailService.sendPasswordReset(email,Security.generateSecureToken())
-            //TODO Send packet to caller to tell to check email
-            call.respondRedirect("/login")
+            if(SQLUtils.doesUserExist(email)){
+                //TODO check for email usage and/or send email reset
+                EmailService.sendPasswordReset(email,Security.generateSecureToken())
+                //TODO Send packet to caller to tell to check email
+                call.respondRedirect("/login")
+            }else{
+                call.respondRedirect("/reset")
+            }
         }
         get("/") { call.respondRedirect("/login") }
         get("/index.html") { call.respondRedirect("/login") }
