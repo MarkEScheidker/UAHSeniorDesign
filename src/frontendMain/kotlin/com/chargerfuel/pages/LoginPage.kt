@@ -82,11 +82,11 @@ object LoginPage : Webpage("login") {
                 add(LoginInfo::password, Password(name = "password") {
                     placeholder = "Password"
                     input.apply { width = 100.perc }
-                })
+                },required = true, )
                 hPanel {
                     justifyContent = JustifyContent.SPACEBETWEEN
                     vPanel {
-                        link("Forgot Password", "reset") { colorName = Col.LIGHTSTEELBLUE }
+                        link("Forgot Password? Reset It Here!", "reset") { colorName = Col.LIGHTSTEELBLUE }
                         link("New to Charger Fuel? Sign Up Here!", "signup") { colorName = Col.LIGHTSTEELBLUE }
                     }
                     button(text = "Login", type = ButtonType.SUBMIT)
