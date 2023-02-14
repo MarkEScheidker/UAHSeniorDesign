@@ -73,7 +73,7 @@ object SQLUtils {
             resultSet.close()
             statement.close()
             connection.close()
-            return exists
+            exists
         } catch (e: SQLException) {
             e.printStackTrace()
             return false
