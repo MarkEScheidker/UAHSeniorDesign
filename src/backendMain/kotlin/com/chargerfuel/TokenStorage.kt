@@ -1,6 +1,5 @@
 package com.chargerfuel
 
-
 object TokenStorage {
     private const val TIMEOUT = 1800000 //30 minutes in ms
     data class TokenData (val username: String, val timestamp: Long, val token: String)
@@ -14,7 +13,7 @@ object TokenStorage {
 
     fun retrievePWToken(username: String): String?{
         val time = System.currentTimeMillis()
-        PasswordResetTokens.removeIf { it.timestamp - time > TIMEOUT}
+        PasswordResetTokens.removeIf { time - it.timestamp > TIMEOUT}
         PasswordResetTokens.forEach{
             if(it.username == username)
             {
@@ -26,7 +25,7 @@ object TokenStorage {
 
     fun doesPWTokenExist(username: String): Boolean{
         val time = System.currentTimeMillis()
-        PasswordResetTokens.removeIf { it.timestamp - time > TIMEOUT}
+        PasswordResetTokens.removeIf { time - it.timestamp > TIMEOUT}
         PasswordResetTokens.forEach{
             if(it.username == username)
             {
@@ -43,7 +42,7 @@ object TokenStorage {
 
     fun retrieveAccToken(username: String): String?{
         val time = System.currentTimeMillis()
-        AccountCreationTokens.removeIf { it.timestamp - time > TIMEOUT}
+        AccountCreationTokens.removeIf { time - it.timestamp > TIMEOUT}
         AccountCreationTokens.forEach{
             if(it.username == username)
             {
@@ -55,7 +54,7 @@ object TokenStorage {
 
     fun doesAccTokenExist(username: String): Boolean{
         val time = System.currentTimeMillis()
-        AccountCreationTokens.removeIf { it.timestamp - time > TIMEOUT}
+        AccountCreationTokens.removeIf { time - it.timestamp > TIMEOUT}
         AccountCreationTokens.forEach{
             if(it.username == username)
             {
