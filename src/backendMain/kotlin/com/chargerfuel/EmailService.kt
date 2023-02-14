@@ -39,4 +39,19 @@ object EmailService {
             mex.printStackTrace()
         }
     }
+
+    fun sendPasswordReset(to: String, hash: String) {
+        try {
+            val message = MimeMessage(session)
+            message.setFrom(InternetAddress(from))
+            message.addRecipient(Message.RecipientType.TO, InternetAddress(to))
+            message.subject = "Charger Fuel Password Reset"
+            message.setText("Please click the link below to Reset your password.\n\nhttps://charger.food.is/reset?id=$hash")
+            Transport.send(message)
+        } catch (mex: MessagingException) {
+            mex.printStackTrace()
+        }
+
+
+    }
 }
