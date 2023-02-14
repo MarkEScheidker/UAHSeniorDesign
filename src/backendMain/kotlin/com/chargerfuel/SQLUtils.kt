@@ -7,7 +7,7 @@ object SQLUtils {
     private const val DB_URL = "jdbc:mysql://localhost/main657432"
 
     //pull database credentials from local file
-    private var lines:List<String> = File("mysqlPassword.txt").readLines()
+    private var lines:List<String> = File("/opt/charger_fuel/mysqlPassword.txt").readLines()
     private val USER = lines[0]
     private val PASS = lines[1]
 
