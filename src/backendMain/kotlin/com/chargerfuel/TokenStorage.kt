@@ -36,4 +36,32 @@ object TokenStorage {
         return false
     }
 
+    fun storeAccToken(username: String, token: String){
+        AccountCreationTokens.removeIf {it.username == username }
+        AccountCreationTokens.add(TokenData(username,System.currentTimeMillis(),token))
+    }
+
+    fun retrieveAccToken(username: String): String?{
+        val time = System.currentTimeMillis()
+        AccountCreationTokens.removeIf { it.timestamp - time > TIMEOUT}
+        AccountCreationTokens.forEach{
+            if(it.username == username)
+            {
+                return it.token
+            }
+        }
+        return null
+    }
+
+    fun doesAccTokenExist(username: String): Boolean{
+        val time = System.currentTimeMillis()
+        AccountCreationTokens.removeIf { it.timestamp - time > TIMEOUT}
+        AccountCreationTokens.forEach{
+            if(it.username == username)
+            {
+                return true
+            }
+        }
+        return false
+    }
 }
