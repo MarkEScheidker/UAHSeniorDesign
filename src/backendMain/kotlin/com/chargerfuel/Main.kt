@@ -84,7 +84,7 @@ fun Application.main() {
                 EmailService.sendPasswordReset(email,Security.generateSecureToken())
                 //TODO Send packet to caller to tell to check email
                 call.respondRedirect("/login")
-            }else{
+            } else {
                 call.respondRedirect("/reset")
             }
         }
