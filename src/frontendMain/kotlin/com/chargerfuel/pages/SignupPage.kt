@@ -42,7 +42,10 @@ object SignupPage : Webpage("signup") {
                     Text(name = "email") {
                         placeholder = "UAH Email"
                         width = 80.perc
-                        input.apply { width = 100.perc }
+                        input.apply {
+                            width = 100.perc
+                            setAttribute("autocapitalize", "none")
+                        }
                     },
                     required = true,
                     validatorMessage = { "Not a valid UAH email address" },
@@ -50,12 +53,18 @@ object SignupPage : Webpage("signup") {
                 val passwordBox = Password(name = "password") {
                     placeholder = "Password"
                     width = 80.perc
-                    input.apply { width = 100.perc }
+                    input.apply {
+                        width = 100.perc
+                        setAttribute("autocapitalize", "none")
+                    }
                 }
                 val confirmationBox = Password(name = "confirmation") {
                     placeholder = "Confirm Password"
                     width = 80.perc
-                    input.apply { width = 100.perc }
+                    input.apply {
+                        width = 100.perc
+                        setAttribute("autocapitalize", "none")
+                    }
                 }
                 add(CreateAccountInfo::password, passwordBox,
                     required = true,

@@ -41,7 +41,10 @@ object ResetPage : Webpage("reset") {
                     Text(name = "email") {
                         placeholder = "UAH Email"
                         width = 80.perc
-                        input.apply { width = 100.perc }
+                        input.apply {
+                            width = 100.perc
+                            setAttribute("autocapitalize", "none")
+                        }
                     },
                     required = true,
                     validatorMessage = { "Not a valid UAH email address" },

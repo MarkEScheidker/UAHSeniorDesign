@@ -77,11 +77,17 @@ object LoginPage : Webpage("login") {
                 h1("Login") { alignSelf = AlignItems.CENTER }
                 add(LoginInfo::username, Text(name = "username") {
                     placeholder = "Username"
-                    input.apply { width = 100.perc }
+                    input.apply {
+                        width = 100.perc
+                        setAttribute("autocapitalize", "none")
+                    }
                 })
                 add(LoginInfo::password, Password(name = "password") {
                     placeholder = "Password"
-                    input.apply { width = 100.perc }
+                    input.apply {
+                        width = 100.perc
+                        setAttribute("autocapitalize", "none")
+                    }
                 },required = true, )
                 hPanel {
                     justifyContent = JustifyContent.SPACEBETWEEN
