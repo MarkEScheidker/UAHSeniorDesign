@@ -37,6 +37,20 @@ object SQLUtils {
         }
     }
 
+    fun setHashedPW(username: String, passwordHash: String): Boolean {
+        return try {
+            val connection = DriverManager.getConnection(DB_URL, USER, PASS)
+            val statement = connection.createStatement()
+            val updateCount = statement.executeUpdate("UPDATE Password p JOIN UserLogin ul ON p.PasswordID = ul.PasswordID SET PasswordHash = '$passwordHash' WHERE ul.UserName = '$username'")
+            statement.close()
+            connection.close()
+            updateCount > 0
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            false
+        }
+    }
+
 //    fun setHashedPW(username: String, hashedpw: String): Boolean{
 //        var statement: Statement? = null
 //        var resultSet: ResultSet? = null
