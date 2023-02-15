@@ -19,9 +19,7 @@ object SQLUtils {
     fun getHashedPW(username: String): String? {
         return try {
             val connection = DriverManager.getConnection(DB_URL, USER, PASS)
-            println(connection)
             val statement = connection.createStatement()
-            println(statement)
             val resultSet =
                 statement.executeQuery("SELECT PasswordHash FROM UserLogin ul JOIN Password p ON ul.PasswordID = p.PasswordID WHERE UserName = '$username'")
             println(resultSet)
