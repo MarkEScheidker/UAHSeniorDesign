@@ -80,14 +80,16 @@ fun Application.main() {
             val parameters = call.receiveParameters()
             val email = parameters["email"] ?: return@post
             if(SQLUtils.doesUserExist(email)){
-                //TODO check for email usage and/or send email reset
-                EmailService.sendPasswordReset(email,Security.generateSecureToken())
+                val pwtoken = Security.generateSecureToken()
+                TokenStorage.storePWToken(email,pwtoken)
+                EmailService.sendPasswordReset(email,pwtoken)
                 //TODO Send packet to caller to tell to check email
                 call.respondRedirect("/login")
             } else {
                 call.respondRedirect("/reset")
             }
         }
+
         get("/") { call.respondRedirect("/login") }
         get("/index.html") { call.respondRedirect("/login") }
         //TODO This spit a ton of errors in the backend log, find another way...
