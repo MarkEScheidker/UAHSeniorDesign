@@ -72,7 +72,7 @@ fun Application.main() {
             val email = parameters["email"] ?: return@post
             val password = parameters["password"] ?: return@post
             //TODO check for email usage and/or send email verification
-            EmailService.sendEmailValidation(email,password)
+            EmailService.sendEmailValidation(email,Security.generateSecureToken())
             //TODO Send packet to caller to tell to check email
         }
         nonAuthRoute("reset", "main")
