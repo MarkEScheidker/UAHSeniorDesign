@@ -53,6 +53,7 @@ fun Application.main() {
             }
         authenticate("login") {
             post("/login") {
+                call.sessions.clear<UserSession>()
                 call.sessions.set(UserSession(call.principal<UserIdPrincipal>()?.name.toString()))
                 call.respondRedirect("/main")
             }
