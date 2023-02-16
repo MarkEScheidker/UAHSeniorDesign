@@ -20,9 +20,9 @@ object Restaurants : Webpage("test") {
             h1(content = "Restaurants") {
                 addBsBgColor(BsBgColor.WHITE)
             }
-            gridPanel (justifyItems = JustifyItems.CENTER){
+            gridPanel(justifyItems = JustifyItems.CENTER) {
                 addBsBgColor(BsBgColor.WHITE)
-                Border(1.px,BorderStyle.SOLID, Color.rgba(0,0,0,1))
+                Border(1.px, BorderStyle.SOLID, Color.rgba(0, 0, 0, 1))
                 add(image(io.kvision.require("img/the_den.jpg") as? String, "The Den") {
                     width = 90.perc
                     height = 75.perc

@@ -1,13 +1,13 @@
 package com.chargerfuel.pages
 
 import com.chargerfuel.LoginInfo
+import com.chargerfuel.util.addEmailBox
+import com.chargerfuel.util.addPasswordBox
 import io.kvision.core.*
 import io.kvision.form.FormEnctype
 import io.kvision.form.FormMethod
 import io.kvision.form.FormType
 import io.kvision.form.formPanel
-import io.kvision.form.text.Password
-import io.kvision.form.text.Text
 import io.kvision.html.*
 import io.kvision.panel.Root
 import io.kvision.panel.flexPanel
@@ -67,7 +67,7 @@ object LoginPage : Webpage("login") {
             padding = 20.px
             zIndex = 4
             val img = image(require("img/fuel.png") as? String, "banner") { setStyle("object-fit", "contain") }
-            formPanel(FormMethod.POST, "/login", FormEnctype.MULTIPART, FormType.INLINE) {
+            formPanel<LoginInfo>(FormMethod.POST, "/login", FormEnctype.MULTIPART, FormType.INLINE) {
                 display = Display.FLEX
                 flexDirection = FlexDirection.COLUMN
                 alignItems = AlignItems.STRETCH
@@ -75,18 +75,12 @@ object LoginPage : Webpage("login") {
                 gridRowGap = 10
                 width = 100.perc
                 h1("Login") { alignSelf = AlignItems.CENTER }
-                add(LoginInfo::username, Text(name = "username") {
-                    placeholder = "Username"
-                    input.apply { width = 100.perc }
-                })
-                add(LoginInfo::password, Password(name = "password") {
-                    placeholder = "Password"
-                    input.apply { width = 100.perc }
-                },required = true, )
+                addEmailBox()
+                addPasswordBox()
                 hPanel {
                     justifyContent = JustifyContent.SPACEBETWEEN
                     vPanel {
-                        link("Forgot Password? Reset It Here!", "reset") { colorName = Col.LIGHTSTEELBLUE }
+                        link("Forgot Password? Reset It Here!", "forgot") { colorName = Col.LIGHTSTEELBLUE }
                         link("New to Charger Fuel? Sign Up Here!", "signup") { colorName = Col.LIGHTSTEELBLUE }
                     }
                     button(text = "Login", type = ButtonType.SUBMIT)

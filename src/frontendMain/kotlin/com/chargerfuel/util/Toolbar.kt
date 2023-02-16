@@ -1,4 +1,4 @@
-package com.chargerfuel.templates
+package com.chargerfuel.util
 
 import io.kvision.core.*
 import io.kvision.html.image
