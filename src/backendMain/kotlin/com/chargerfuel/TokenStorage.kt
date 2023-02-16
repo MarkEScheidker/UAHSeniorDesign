@@ -3,36 +3,36 @@ package com.chargerfuel
 object TokenStorage {
     private const val TIMEOUT = 30 * 60 * 1000 //30 minutes in ms
 
-    private data class TokenData(val timestamp: Long, val token: String)
+    private data class TokenData(val timestamp: Long, val email: String)
 
+    private var passwordRequestTokens: MutableMap<String, TokenData> = mutableMapOf()
     private var passwordResetTokens: MutableMap<String, TokenData> = mutableMapOf()
     private var accountCreationTokens: MutableMap<String, TokenData> = mutableMapOf()
 
-    fun storePWToken(username: String, token: String) {
-        passwordResetTokens[username] = TokenData(System.currentTimeMillis(), token)
+    fun setPasswordRequestToken(email: String, token: String) {
+        passwordRequestTokens[token] = TokenData(System.currentTimeMillis(), email)
     }
 
-    fun retrievePWToken(username: String): String? {
-        passwordResetTokens.values.removeIf { System.currentTimeMillis() - it.timestamp > TIMEOUT }
-        return passwordResetTokens.remove(username)?.token
+    fun getPasswordRequestToken(token: String): String? {
+        passwordRequestTokens.entries.removeIf { System.currentTimeMillis() - it.value.timestamp > TIMEOUT }
+        return passwordRequestTokens.remove(token)?.email
     }
 
-    fun doesPWTokenExist(username: String): Boolean {
-        accountCreationTokens.values.removeIf { System.currentTimeMillis() - it.timestamp > TIMEOUT }
-        return accountCreationTokens.containsKey(username)
+    fun setPasswordResetToken(email: String, token: String) {
+        passwordResetTokens[token] = TokenData(System.currentTimeMillis(), email)
     }
 
-    fun storeAccToken(username: String, token: String) {
-        accountCreationTokens[username] = TokenData(System.currentTimeMillis(), token)
+    fun getPasswordResetToken(token: String): String? {
+        passwordResetTokens.entries.removeIf { System.currentTimeMillis() - it.value.timestamp > TIMEOUT }
+        return passwordResetTokens.remove(token)?.email
     }
 
-    fun retrieveAccToken(username: String): String? {
-        accountCreationTokens.values.removeIf { System.currentTimeMillis() - it.timestamp > TIMEOUT }
-        return accountCreationTokens.remove(username)?.token
+    fun setAccountCreationToken(email: String, token: String) {
+        accountCreationTokens[token] = TokenData(System.currentTimeMillis(), email)
     }
 
-    fun doesAccTokenExist(username: String): Boolean {
-        accountCreationTokens.values.removeIf { System.currentTimeMillis() - it.timestamp > TIMEOUT }
-        return accountCreationTokens.containsKey(username)
+    fun getAccountCreationToken(token: String): String? {
+        accountCreationTokens.entries.removeIf { System.currentTimeMillis() - it.value.timestamp > TIMEOUT }
+        return accountCreationTokens.remove(token)?.email
     }
 }

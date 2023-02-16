@@ -6,11 +6,12 @@ import javax.mail.*
 import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeMessage
 
+private const val host = "smtp.gmail.com"
+
 object EmailService {
     private var lines:List<String> = File("/opt/charger_fuel/emailCredentials.txt").readLines()
     private val from = lines[0]
     private val password = lines[1]
-    private const val host = "smtp.gmail.com"
     private val session: Session
 
     init {

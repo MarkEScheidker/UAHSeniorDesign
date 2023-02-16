@@ -16,13 +16,12 @@ object SQLUtils {
     private val queryCache: MutableMap<String, Any> = mutableMapOf()
 
     //TODO add more get/store commands for user accounts
-    fun getHashedPW(username: String): String? {
+    fun getHashedPW(email: String): String? {
         return try {
             val connection = DriverManager.getConnection(DB_URL, USER, PASS)
             val statement = connection.createStatement()
             val resultSet =
-                statement.executeQuery("SELECT PasswordHash FROM UserLogin ul JOIN Password p ON ul.PasswordID = p.PasswordID WHERE UserName = '$username'")
-            println(resultSet)
+                statement.executeQuery("SELECT PasswordHash FROM UserLogin ul JOIN Password p ON ul.PasswordID = p.PasswordID WHERE UserName = '$email'")
             var result: String? = null
             if (resultSet.next()) result = resultSet.getString("PasswordHash")
             resultSet.close()
@@ -73,14 +72,11 @@ object SQLUtils {
 //        }
 //    }
 //
-    fun doesUserExist(username: String): Boolean{
+    fun isEmailRegistered(email: String): Boolean {
         return try {
             val connection = DriverManager.getConnection(DB_URL, USER, PASS)
-            println(connection)
             val statement = connection.createStatement()
-            println(statement)
-
-            val resultSet = statement.executeQuery("SELECT * FROM UserLogin WHERE UserName='$username'")
+            val resultSet = statement.executeQuery("SELECT * FROM UserLogin WHERE UserEmail='$email'")
             val exists = resultSet.next()
             resultSet.close()
             statement.close()
