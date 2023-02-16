@@ -1,11 +1,8 @@
 package com.chargerfuel.util
 
-import com.chargerfuel.AppScope
 import io.kvision.form.FormPanel
 import io.kvision.form.text.Text
 import io.kvision.utils.perc
-import kotlinx.browser.window
-import kotlinx.coroutines.launch
 
 fun FormPanel<*>.addEmailBox() {
     add("email",
@@ -13,9 +10,10 @@ fun FormPanel<*>.addEmailBox() {
             placeholder = "UAH Email"
             width = 100.perc
             input.width = 100.perc
+            input.setAttribute("autocapitalize", "none")
         },
         required = true,
-        validatorMessage =  { "Not a valid UAH email address" },
+        validatorMessage = { "Not a valid UAH email address" },
         validator = { "[a-z]{2,3}[0-9]{4}@uah.edu".toRegex().matches(it.value ?: "") })
 }
 
@@ -25,6 +23,7 @@ fun FormPanel<*>.addPasswordBox() {
             placeholder = "Password"
             width = 100.perc
             input.width = 100.perc
+            input.setAttribute("autocapitalize", "none")
         },
         required = true,
         validatorMessage = { "TODO" },
@@ -36,6 +35,7 @@ fun FormPanel<*>.addPasswordBoxWithConfirmation(placeholder: String) {
         this.placeholder = placeholder
         width = 100.perc
         input.width = 100.perc
+        input.setAttribute("autocapitalize", "none")
     }
     add("password",
         password,
@@ -47,6 +47,7 @@ fun FormPanel<*>.addPasswordBoxWithConfirmation(placeholder: String) {
             this.placeholder = "Confirm $placeholder"
             width = 100.perc
             input.width = 100.perc
+            input.setAttribute("autocapitalize", "none")
         },
         required = true,
         validatorMessage = { "Passwords do not match" },
