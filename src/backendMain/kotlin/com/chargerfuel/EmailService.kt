@@ -47,12 +47,10 @@ object EmailService {
             message.setFrom(InternetAddress(from))
             message.addRecipient(Message.RecipientType.TO, InternetAddress(to))
             message.subject = "Charger Fuel Password Reset"
-            message.setText("Please click the link below to Reset your password.\n\nhttps://charger.food.is/reset?id=$hash")
+            message.setText("Temporary Password: $hash\n\nhttps://charger.food.is/login")
             Transport.send(message)
         } catch (mex: MessagingException) {
             mex.printStackTrace()
         }
-
-
     }
 }
