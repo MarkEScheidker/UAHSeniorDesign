@@ -1,10 +1,46 @@
 package com.chargerfuel.util
 
-import io.kvision.form.FormPanel
+import com.chargerfuel.emailValidation
+import com.chargerfuel.emailValidationMessage
+import com.chargerfuel.passwordValidation
+import com.chargerfuel.passwordValidationMessage
+import io.kvision.core.*
+import io.kvision.form.*
+import io.kvision.form.text.Password
 import io.kvision.form.text.Text
+import io.kvision.html.ButtonType
+import io.kvision.html.button
+import io.kvision.html.h1
 import io.kvision.utils.perc
 
-fun FormPanel<*>.addEmailBox() {
+inline fun <reified T : Any> Container.basicForm(
+    name: String,
+    post: String,
+    crossinline init: FormPanel<T>.() -> Unit
+) {
+    formPanel(
+        FormMethod.POST,
+        "/$post",
+        FormEnctype.MULTIPART,
+        FormType.INLINE
+    ) {
+        width = 80.perc
+        display = Display.FLEX
+        flexDirection = FlexDirection.COLUMN
+        justifyContent = JustifyContent.CENTER
+        alignContent = AlignContent.CENTER
+        gridRowGap = 10
+        h1(name)
+        init()
+        val button = button(text = name, type = ButtonType.SUBMIT) {
+            alignSelf = AlignItems.END
+            disabled = true
+        }
+        onEvent { change = { button.disabled = !validate(true) } }
+    }
+}
+
+fun FormPanel<*>.emailBox() {
     add("email",
         Text(name = "email") {
             placeholder = "UAH Email"
@@ -13,25 +49,12 @@ fun FormPanel<*>.addEmailBox() {
             input.setAttribute("autocapitalize", "none")
         },
         required = true,
-        validatorMessage = { "Not a valid UAH email address" },
-        validator = { "[a-z]{2,3}[0-9]{4}@uah.edu".toRegex().matches(it.value ?: "") })
+        validatorMessage = { emailValidationMessage(it.value ?: "") },
+        validator = { emailValidation(it.value ?: "") })
 }
 
-fun FormPanel<*>.addPasswordBox() {
-    add("password",
-        Text(name = "password") {
-            placeholder = "Password"
-            width = 100.perc
-            input.width = 100.perc
-            input.setAttribute("autocapitalize", "none")
-        },
-        required = true,
-        validatorMessage = { "TODO" },
-        validator = { true })
-}
-
-fun FormPanel<*>.addPasswordBoxWithConfirmation(placeholder: String) {
-    val password = Text(name = "password") {
+fun FormPanel<*>.passwordBoxWithConfirmation(placeholder: String) {
+    val password = Password(name = "password") {
         this.placeholder = placeholder
         width = 100.perc
         input.width = 100.perc
@@ -40,10 +63,10 @@ fun FormPanel<*>.addPasswordBoxWithConfirmation(placeholder: String) {
     add("password",
         password,
         required = true,
-        validatorMessage = { "TODO" },
-        validator = { true })
+        validatorMessage = { passwordValidationMessage(it.value ?: "") },
+        validator = { passwordValidation(it.value ?: "") })
     add("passwordConfirmation",
-        Text(name = "passwordConfirmation") {
+        Password(name = "passwordConfirmation") {
             this.placeholder = "Confirm $placeholder"
             width = 100.perc
             input.width = 100.perc

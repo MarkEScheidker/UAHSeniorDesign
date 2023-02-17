@@ -6,7 +6,6 @@ import io.kvision.*
 import kotlinx.browser.window
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.*
 
 @Suppress("unused")
 val AppScope = CoroutineScope(window.asCoroutineDispatcher())
@@ -19,7 +18,6 @@ class App : Application() {
         load(SignupPage)
         load(Restaurants)
         load(ForgotPasswordPage)
-        load(ResetPasswordPage)
     }
 }
 

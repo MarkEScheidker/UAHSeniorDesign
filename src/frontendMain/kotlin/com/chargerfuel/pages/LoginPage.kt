@@ -1,13 +1,13 @@
 package com.chargerfuel.pages
 
 import com.chargerfuel.LoginInfo
-import com.chargerfuel.util.addEmailBox
-import com.chargerfuel.util.addPasswordBox
+import com.chargerfuel.util.emailBox
 import io.kvision.core.*
 import io.kvision.form.FormEnctype
 import io.kvision.form.FormMethod
 import io.kvision.form.FormType
 import io.kvision.form.formPanel
+import io.kvision.form.text.Password
 import io.kvision.html.*
 import io.kvision.panel.Root
 import io.kvision.panel.flexPanel
@@ -75,16 +75,26 @@ object LoginPage : Webpage("login") {
                 gridRowGap = 10
                 width = 100.perc
                 h1("Login") { alignSelf = AlignItems.CENTER }
-                addEmailBox()
-                addPasswordBox()
+                emailBox()
+                add(
+                    "password",
+                    Password(name = "password") {
+                        placeholder = "Password"
+                        width = 100.perc
+                        input.width = 100.perc
+                        input.setAttribute("autocapitalize", "none")
+                    }, required = true
+                )
+                val button = Button(text = "Login", type = ButtonType.SUBMIT, disabled = true)
                 hPanel {
                     justifyContent = JustifyContent.SPACEBETWEEN
                     vPanel {
-                        link("Forgot Password? Reset It Here!", "forgot") { colorName = Col.LIGHTSTEELBLUE }
-                        link("New to Charger Fuel? Sign Up Here!", "signup") { colorName = Col.LIGHTSTEELBLUE }
+                        link("Forgot Password?", "forgot") { colorName = Col.LIGHTSTEELBLUE }
+                        link("New to Charger Fuel?", "signup") { colorName = Col.LIGHTSTEELBLUE }
                     }
-                    button(text = "Login", type = ButtonType.SUBMIT)
+                    add(button)
                 }
+                onEvent { change = { button.disabled = !validate(true) } }
             }
             val resize = {
                 if (window.innerHeight >= window.innerWidth) {
@@ -109,7 +119,6 @@ object LoginPage : Webpage("login") {
             }
             resize()
             window.addEventListener("resize", { resize() })
-            window.addEventListener("message", { console.log("test") })
         }
         //endregion
     }
