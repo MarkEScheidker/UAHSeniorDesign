@@ -3,36 +3,23 @@ package com.chargerfuel
 object TokenStorage {
     private const val TIMEOUT = 30 * 60 * 1000 //30 minutes in ms
 
-    private data class TokenData(val timestamp: Long, val email: String)
-
-    private var passwordRequestTokens: MutableMap<String, TokenData> = mutableMapOf()
-    private var passwordResetTokens: MutableMap<String, TokenData> = mutableMapOf()
-    private var accountCreationTokens: MutableMap<String, TokenData> = mutableMapOf()
-
-    fun setPasswordRequestToken(email: String, token: String) {
-        passwordRequestTokens[token] = TokenData(System.currentTimeMillis(), email)
+    private data class Token(val value: String) {
+        val time = System.currentTimeMillis()
     }
 
-    fun getPasswordRequestToken(token: String): String? {
-        passwordRequestTokens.entries.removeIf { System.currentTimeMillis() - it.value.timestamp > TIMEOUT }
-        return passwordRequestTokens.remove(token)?.email
+    private val tokens: MutableMap<String, Token> = mutableMapOf()
+
+    private fun sanitize() {
+        tokens.entries.removeIf { System.currentTimeMillis() - it.value.time > TIMEOUT }
     }
 
-    fun setPasswordResetToken(email: String, token: String) {
-        passwordResetTokens[token] = TokenData(System.currentTimeMillis(), email)
+    fun addToken(token: String, value: String) {
+        sanitize()
+        tokens[token] = Token(value)
     }
 
-    fun getPasswordResetToken(token: String): String? {
-        passwordResetTokens.entries.removeIf { System.currentTimeMillis() - it.value.timestamp > TIMEOUT }
-        return passwordResetTokens.remove(token)?.email
-    }
-
-    fun setAccountCreationToken(email: String, token: String) {
-        accountCreationTokens[token] = TokenData(System.currentTimeMillis(), email)
-    }
-
-    fun getAccountCreationToken(token: String): String? {
-        accountCreationTokens.entries.removeIf { System.currentTimeMillis() - it.value.timestamp > TIMEOUT }
-        return accountCreationTokens.remove(token)?.email
+    fun removeToken(token: String): String? {
+        sanitize()
+        return tokens.remove(token)?.value
     }
 }
