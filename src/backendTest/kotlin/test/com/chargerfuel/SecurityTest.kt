@@ -2,6 +2,7 @@ package test.com.chargerfuel
 
 import com.chargerfuel.Security
 import org.junit.Test
+import org.mindrot.jbcrypt.BCrypt
 
 class SecurityTest {
     @Test
@@ -22,15 +23,15 @@ class SecurityTest {
     @Test
     fun test_Bcrypt() {
         val password = "Password1!"
-        val hashed = Security.generateHashedPassword(password)
-        val matching = Security.comparePasswords(password, hashed)
-        if(matching == false) {
+        val hashed = BCrypt.hashpw(password, BCrypt.gensalt())
+        val matching = BCrypt.checkpw(password, hashed)
+        if (matching == false) {
             throw Exception()
         }
 
         val wrongPassword = "Password1!asdf"
-        val matching2 = Security.comparePasswords(wrongPassword,hashed)
-        if(matching2 == true){
+        val matching2 = BCrypt.checkpw(wrongPassword, hashed)
+        if (matching2 == true) {
             throw Exception()
         }
     }
@@ -46,6 +47,6 @@ class SecurityTest {
 
     @Test
     fun generateHashesManually(){
-        print(Security.generateHashedPassword("test123"))
+        print(BCrypt.hashpw("test123", BCrypt.gensalt()))
     }
 }

@@ -1,7 +1,7 @@
 package com.chargerfuel
 
-import java.security.SecureRandom
 import org.mindrot.jbcrypt.BCrypt
+import java.security.SecureRandom
 import java.util.*
 
 object Security {
@@ -19,14 +19,5 @@ object Security {
         val bytes = ByteArray(33)
         secureRandom.nextBytes(bytes)
         return Base64.getUrlEncoder().encodeToString(bytes)
-    }
-    fun generateHashedPassword(plainPassword: String): String {
-        return BCrypt.hashpw(plainPassword, BCrypt.gensalt())
-    }
-
-    fun comparePasswords(plainPassword: String, hashedPassword: String?): Boolean {
-        if(hashedPassword == null)
-            return false
-        return BCrypt.checkpw(plainPassword, hashedPassword)
     }
 }
