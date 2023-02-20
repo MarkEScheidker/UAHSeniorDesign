@@ -34,7 +34,7 @@ fun Application.main() {
             passwordParamName = "password"
 
             validate {
-                if (TokenStorage.removeToken(it.password) == it.name) UserIdPrincipal(it.name)
+                if (TokenStorage.getToken(it.password) == it.name) UserIdPrincipal(it.name)
                 else SQLUtils.getHashedPW(it.name)?.let { password ->
                     if (BCrypt.checkpw(it.password, password)) UserIdPrincipal(it.name) else null
                 }
@@ -121,7 +121,7 @@ fun Application.main() {
             val email = call.receiveParameters()["email"].takeIf(emailValidation)
                 ?: TODO("Tell user error has occurred and to try again")
             if (SQLUtils.isEmailRegistered(email)) {
-                val token = Security.generateSecureToken()
+                val token = Security.generateTempPassword()
                 TokenStorage.addToken(token, email)
                 EmailService.sendPasswordReset(email, token)
                 //TODO Tell user to check email

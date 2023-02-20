@@ -20,4 +20,10 @@ object Security {
         secureRandom.nextBytes(bytes)
         return Base64.getUrlEncoder().encodeToString(bytes)
     }
+
+    fun generateTempPassword(): String {
+        val bytes = ByteArray(9)
+        secureRandom.nextBytes(bytes)
+        return Base64.getUrlEncoder().encodeToString(bytes)
+    }
 }
