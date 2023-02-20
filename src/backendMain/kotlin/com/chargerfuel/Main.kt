@@ -34,7 +34,7 @@ fun Application.main() {
             passwordParamName = "password"
 
             validate {
-                if (TokenStorage.getToken(it.password) == it.name) UserIdPrincipal(it.name)
+                if (TokenStorage.removeToken(it.password) == it.name) UserIdPrincipal(it.name)
                 else SQLUtils.getHashedPW(it.name)?.let { password ->
                     if (BCrypt.checkpw(it.password, password)) UserIdPrincipal(it.name) else null
                 }

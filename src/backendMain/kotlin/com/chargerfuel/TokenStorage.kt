@@ -22,9 +22,4 @@ object TokenStorage {
         sanitize()
         return tokens.remove(token)?.value
     }
-
-    fun getToken(token: String): String? {
-        sanitize()
-        return tokens[token]?.value
-    }
 }
