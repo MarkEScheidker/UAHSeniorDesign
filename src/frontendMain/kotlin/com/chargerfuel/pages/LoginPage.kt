@@ -14,18 +14,15 @@ import io.kvision.panel.flexPanel
 import io.kvision.panel.hPanel
 import io.kvision.panel.vPanel
 import io.kvision.require
-import io.kvision.utils.perc
-import io.kvision.utils.px
-import io.kvision.utils.vh
-import io.kvision.utils.vw
+import io.kvision.utils.*
 import kotlinx.browser.window
 
 object LoginPage : Webpage("login") {
     override val html: Root.() -> Unit = {
         //region Background Images
         val slide = Style {
-            minHeight = 100.vh
-            minWidth = 100.vw
+            height = 100.vh
+            width = 100.perc
             top = 50.vh
             position = Position.FIXED
             justifySelf = JustifyItems.CENTER
@@ -36,22 +33,32 @@ object LoginPage : Webpage("login") {
             image(require("img/food1.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) 0s infinite")
+                setStyle("object-fit", "cover")
+                setStyle("object-position", "center")
             }
             image(require("img/food2.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) -10s infinite")
+                setStyle("object-fit", "cover")
+                setStyle("object-position", "center")
             }
             image(require("img/food3.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) -20s infinite")
+                setStyle("object-fit", "cover")
+                setStyle("object-position", "center")
             }
             image(require("img/food4.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) -30s infinite")
+                setStyle("object-fit", "cover")
+                setStyle("object-position", "center")
             }
             image(require("img/food5.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) -40s infinite")
+                setStyle("object-fit", "cover")
+                setStyle("object-position", "center")
             }
         }
         //endregion
