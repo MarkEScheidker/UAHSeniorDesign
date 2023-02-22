@@ -28,20 +28,14 @@ fun Container.centeredBox(init: FlexPanel.() -> Unit) {
 }
 
 fun Container.emptyToolbar() {
-    hPanel(justify = JustifyContent.SPACEBETWEEN, alignItems = AlignItems.CENTER) {
+    hPanel(justify = JustifyContent.CENTER, alignItems = AlignItems.CENTER) {
         width = 100.vw; maxWidth = 100.vw; minWidth = 100.vw
         height = 10.vh; maxHeight = 10.vh; minHeight = 10.vh
         background = Background(Color.name(Col.ALICEBLUE))
         borderBottom = Border(5.px, BorderStyle.SOLID, Color.name(Col.MIDNIGHTBLUE))
         boxShadow = BoxShadow(0.px, 0.px, 5.px, 5.px, Color.name(Col.MIDNIGHTBLUE))
-        div {}
         image(require("img/splash-text.png") as? String, "splash") {
             maxHeight = 8.vh
-            setStyle("object-fit", "contain")
-        }
-        image(require("img/ico.png") as? String, "icon") {
-            maxHeight = 8.vh
-            paddingRight = 2.vh
             setStyle("object-fit", "contain")
         }
     }
