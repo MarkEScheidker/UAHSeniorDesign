@@ -18,6 +18,7 @@ class App : Application() {
         load(SignupPage)
         load(Restaurants)
         load(ForgotPasswordPage)
+        load(AccountSettings)
     }
 }
 

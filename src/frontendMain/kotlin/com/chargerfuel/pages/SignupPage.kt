@@ -7,8 +7,9 @@ import io.kvision.panel.Root
 object SignupPage : Webpage("signup") {
     override val html: Root.() -> Unit = {
         emptyToolbar()
-        centeredBox {
+        base {
             basicForm<LoginInfo>("Create Account", "signup") {
+                center()
                 emailBox()
                 passwordBoxWithConfirmation("Password")
             }

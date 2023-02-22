@@ -81,6 +81,7 @@ fun Application.main() {
         //Logged In Pages
         authenticate("session") {
             get("/main") { call.respondHtml("main") }
+            get("/account") { call.respondHtml("account") }
         }
 
         //Account Creation
