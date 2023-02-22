@@ -41,7 +41,7 @@ fun Container.toolbar() {
             float = PosFloat.LEFT
             setStyle("column-gap", "2vh")
             link("Orders", "/orders") {
-                fontSize = 3.vh
+                setStyle("font-size", "min(3vh, 4vw)")
                 textDecoration = TextDecoration(TextDecorationLine.NONE)
                 colorName = Col.BLACK
             }
@@ -52,7 +52,7 @@ fun Container.toolbar() {
                 setStyle("border-radius", "2px")
             }
             link("Account", "/account") {
-                fontSize = 3.vh
+                setStyle("font-size", "min(3vh, 4vw)")
                 textDecoration = TextDecoration(TextDecorationLine.NONE)
                 colorName = Col.BLACK
             }
@@ -63,14 +63,13 @@ fun Container.toolbar() {
                 setStyle("border-radius", "2px")
             }
             link("Logout", "/logout") {
-                fontSize = 3.vh
+                setStyle("font-size", "min(3vh, 4vw)")
                 textDecoration = TextDecoration(TextDecorationLine.NONE)
                 colorName = Col.BLACK
             }
         }
         image(require("img/ico.png") as? String, "icon") {
             maxHeight = 8.vh
-            maxWidth = 20.perc
             paddingRight = 2.vh
             float = PosFloat.RIGHT
             setStyle("object-fit", "contain")
