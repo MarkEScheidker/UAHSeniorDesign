@@ -26,6 +26,8 @@ object LoginPage : Webpage("login") {
             top = 50.vh
             position = Position.FIXED
             justifySelf = JustifyItems.CENTER
+            setStyle("object-fit", "cover")
+            setStyle("object-position", "center")
         }
         flexPanel {
             require("css/slideshow.css")
@@ -33,32 +35,22 @@ object LoginPage : Webpage("login") {
             image(require("img/food1.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) 0s infinite")
-                setStyle("object-fit", "cover")
-                setStyle("object-position", "center")
             }
             image(require("img/food2.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) -10s infinite")
-                setStyle("object-fit", "cover")
-                setStyle("object-position", "center")
             }
             image(require("img/food3.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) -20s infinite")
-                setStyle("object-fit", "cover")
-                setStyle("object-position", "center")
             }
             image(require("img/food4.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) -30s infinite")
-                setStyle("object-fit", "cover")
-                setStyle("object-position", "center")
             }
             image(require("img/food5.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) -40s infinite")
-                setStyle("object-fit", "cover")
-                setStyle("object-position", "center")
             }
         }
         //endregion
