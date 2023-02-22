@@ -61,8 +61,10 @@ fun Application.main() {
         get("/") { call.respondRedirect("/login") }
         get("/login") {
             call.sessions.get<UserSession>()
+                ?.takeIf { sessionCache.containsKey(it.name) }
                 ?.let { call.respondRedirect("/main") }
                 ?: call.respondHtml("login")
+
         }
         authenticate("form") {
             post("/login") {
