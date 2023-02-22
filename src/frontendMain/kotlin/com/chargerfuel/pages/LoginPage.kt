@@ -1,20 +1,23 @@
 package com.chargerfuel.pages
 
 import com.chargerfuel.LoginInfo
-import com.chargerfuel.util.emailBox
 import io.kvision.core.*
 import io.kvision.form.FormEnctype
 import io.kvision.form.FormMethod
 import io.kvision.form.FormType
 import io.kvision.form.formPanel
 import io.kvision.form.text.Password
+import io.kvision.form.text.Text
 import io.kvision.html.*
 import io.kvision.panel.Root
 import io.kvision.panel.flexPanel
 import io.kvision.panel.hPanel
 import io.kvision.panel.vPanel
 import io.kvision.require
-import io.kvision.utils.*
+import io.kvision.utils.perc
+import io.kvision.utils.px
+import io.kvision.utils.vh
+import io.kvision.utils.vw
 import kotlinx.browser.window
 
 object LoginPage : Webpage("login") {
@@ -74,7 +77,15 @@ object LoginPage : Webpage("login") {
                 gridRowGap = 10
                 width = 100.perc
                 h1("Login") { alignSelf = AlignItems.CENTER }
-                emailBox()
+                add(
+                    "email",
+                    Text(name = "email") {
+                        placeholder = "UAH Email"
+                        width = 100.perc
+                        input.width = 100.perc
+                        input.setAttribute("autocapitalize", "none")
+                    }, required = true
+                )
                 add(
                     "password",
                     Password(name = "password") {
