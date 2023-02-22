@@ -40,17 +40,6 @@ fun Container.toolbar() {
             maxWidth = 80.perc
             float = PosFloat.LEFT
             setStyle("column-gap", "2vh")
-            link("Shop", "/test") {//TODO Change this to real restaurant page @Bailey
-                fontSize = 3.vh
-                textDecoration = TextDecoration(TextDecorationLine.NONE)
-                colorName = Col.BLACK
-            }
-            div {
-                background = Background(Color.name(Col.BLACK))
-                height = 100.perc
-                width = 2.px
-                setStyle("border-radius", "2px")
-            }
             link("Orders", "/orders") {
                 fontSize = 3.vh
                 textDecoration = TextDecoration(TextDecorationLine.NONE)
@@ -63,6 +52,17 @@ fun Container.toolbar() {
                 setStyle("border-radius", "2px")
             }
             link("Account", "/account") {
+                fontSize = 3.vh
+                textDecoration = TextDecoration(TextDecorationLine.NONE)
+                colorName = Col.BLACK
+            }
+            div {
+                background = Background(Color.name(Col.BLACK))
+                height = 100.perc
+                width = 2.px
+                setStyle("border-radius", "2px")
+            }
+            link("Logout", "/logout") {
                 fontSize = 3.vh
                 textDecoration = TextDecoration(TextDecorationLine.NONE)
                 colorName = Col.BLACK
