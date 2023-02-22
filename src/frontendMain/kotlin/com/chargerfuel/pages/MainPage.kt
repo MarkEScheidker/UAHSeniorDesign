@@ -1,5 +1,7 @@
 package com.chargerfuel.pages
 
+import com.chargerfuel.util.centeredBox
+import com.chargerfuel.util.toolbar
 import io.kvision.core.*
 import io.kvision.html.h1
 import io.kvision.html.link
@@ -10,14 +12,9 @@ import io.kvision.utils.px
 
 object MainPage : Webpage("main") {
     override val html: Root.() -> Unit = {
-        vPanel(alignItems = AlignItems.CENTER) {
-            padding = 100.px
-            background = Background(color = Color.rgba(0, 0, 0, 128))
-            position = Position.ABSOLUTE
-            width = 100.perc
-            colorName = Col.LIGHTSTEELBLUE
-            h1(content = "You have logged in!")
-            link(label = "Logout", url = "logout")
+        toolbar()
+        centeredBox {
+
         }
     }
 }
