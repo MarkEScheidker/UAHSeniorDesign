@@ -1,5 +1,6 @@
 package com.chargerfuel
 
+import io.ktor.network.sockets.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.compression.*
@@ -10,6 +11,11 @@ import io.ktor.server.sessions.*
 import io.kvision.remote.kvisionInit
 import org.mindrot.jbcrypt.BCrypt
 import kotlin.collections.set
+import io.ktor.server.websocket.*
+import io.ktor.websocket.*
+import java.time.Duration
+import java.util.*
+import kotlin.collections.LinkedHashSet
 
 private const val TIMEOUT: Long = 1000 * 60 * 30
 private val sessionCache: MutableMap<String, Long> = mutableMapOf()
@@ -55,6 +61,12 @@ fun Application.main() {
             challenge("/login")
         }
     }
+
+    install(WebSockets) {
+        pingPeriod = Duration.ofSeconds(15)
+        timeout = Duration.ofSeconds(15)
+    }
+
 
     routing {
         //Account Login
@@ -132,6 +144,22 @@ fun Application.main() {
             } else {
                 //TODO Tell user email is not registered"
                 call.respondRedirect("/login")
+            }
+        }
+
+        //websockets
+        val connections = Collections.synchronizedSet<Connection?>(LinkedHashSet())
+
+        //TODO actually implement this websocket for out purposes, this is not directly applicable
+        webSocket("/websocket") {
+            val thisConnection = Connection(this)
+            connections += thisConnection
+            try {
+                send("You are connected!")
+            } catch (e: Exception) {
+                println(e.localizedMessage)
+            } finally {
+                connections -= thisConnection
             }
         }
 
