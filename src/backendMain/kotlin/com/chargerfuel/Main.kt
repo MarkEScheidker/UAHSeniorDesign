@@ -15,6 +15,7 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import java.time.Duration
 import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.LinkedHashSet
 
 private const val TIMEOUT: Long = 1000 * 60 * 30
@@ -66,7 +67,6 @@ fun Application.main() {
         pingPeriod = Duration.ofSeconds(15)
         timeout = Duration.ofSeconds(15)
     }
-
 
     routing {
         //Account Login
@@ -150,7 +150,7 @@ fun Application.main() {
         //websockets
         val connections = Collections.synchronizedSet<Connection?>(LinkedHashSet())
 
-        //TODO actually implement this websocket for out purposes, this is not directly applicable
+        //TODO actually implement this websocket for our purposes, this is not directly applicable
         webSocket("/websocket") {
             val thisConnection = Connection(this)
             connections += thisConnection
@@ -167,4 +167,12 @@ fun Application.main() {
         get("/test") { call.respondHtml("test") }
     }
     kvisionInit()
+}
+
+//TODO remove this class from this file and put it somewhere else
+class Connection(val session: DefaultWebSocketSession) {
+    companion object {
+        val lastId = AtomicInteger(0)
+    }
+    val name = "user${lastId.getAndIncrement()}"
 }
