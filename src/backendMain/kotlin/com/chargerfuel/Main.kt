@@ -13,6 +13,7 @@ import org.mindrot.jbcrypt.BCrypt
 import kotlin.collections.set
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -152,14 +153,21 @@ fun Application.main() {
 
         //TODO actually implement this websocket for our purposes, this is not directly applicable
         webSocket("/websocket") {
-            val thisConnection = Connection(this)
-            connections += thisConnection
+            val thisConnection = WebSocketManager.Connection(this)
+            WebSocketManager.addConnection(thisConnection)
             try {
-                send("You are connected!")
-            } catch (e: Exception) {
-                println(e.localizedMessage)
-            } finally {
-                connections -= thisConnection
+                for (frame in incoming){
+                    val text = (frame as Frame.Text).readText()
+                    println("onMessage")
+                    outgoing.send(Frame.Text(text))
+                }
+            } catch (e: ClosedReceiveChannelException) {
+                println("onClose ${closeReason.await()}")
+                WebSocketManager.removeConnection(thisConnection)
+            } catch (e: Throwable) {
+                println("onError ${closeReason.await()}")
+                WebSocketManager.removeConnection(thisConnection)
+                e.printStackTrace()
             }
         }
 
@@ -170,9 +178,3 @@ fun Application.main() {
 }
 
 //TODO remove this class from this file and put it somewhere else
-class Connection(val session: DefaultWebSocketSession) {
-    companion object {
-        val lastId = AtomicInteger(0)
-    }
-    val name = "user${lastId.getAndIncrement()}"
-}
