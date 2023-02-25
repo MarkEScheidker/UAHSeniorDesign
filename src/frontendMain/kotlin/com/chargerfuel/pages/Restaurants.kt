@@ -1,6 +1,7 @@
 package com.chargerfuel.pages
 
 import com.chargerfuel.util.base
+import com.chargerfuel.util.center
 import com.chargerfuel.util.toolbar
 import io.kvision.core.*
 import io.kvision.html.Align
@@ -18,9 +19,11 @@ object Restaurants : Webpage("test") {
         toolbar()
         base {
             vPanel(alignItems = AlignItems.CENTER) {
+                center()
+                io.kvision.require("css/scrollbars.css")
                 position = Position.ABSOLUTE
                 colorName = Col.BLACK
-                width = 80.perc
+                width = 90.perc
                 height = 90.perc
                 overflowX = Overflow.HIDDEN
                 overflowY = Overflow.SCROLL
@@ -49,8 +52,8 @@ object Restaurants : Webpage("test") {
                         height = 65.perc
                     }, 2, 2)
                     add(image(io.kvision.require("img/dunkin.png") as? String, "Dunkin") {
-                        width = 85.perc
-                        height = 85.perc
+                        width = 75.perc
+                        height = 75.perc
                     }, 1, 3)
                     add(image(io.kvision.require("img/charger_brew.png") as? String, "Charger Brew") {
                         width = 75.perc
