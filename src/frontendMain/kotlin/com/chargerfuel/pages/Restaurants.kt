@@ -13,7 +13,7 @@ import io.kvision.panel.vPanel
 import io.kvision.utils.perc
 import io.kvision.utils.px
 
-object Restaurants : Webpage("test") {
+object Restaurants : Webpage("orders") {
     override val html: Root.() -> Unit = {
         // background = Background(color =
         toolbar()
@@ -34,7 +34,7 @@ object Restaurants : Webpage("test") {
                 }
                 gridPanel(justifyItems = JustifyItems.CENTER) {
                     //addBsBgColor(BsBgColor.WHITE)
-                    add(image(io.kvision.require("img/the_den.jpg") as? String, "The Den") {
+                    add(image(io.kvision.require("img/the_den.png") as? String, "The Den") {
                         width = 90.perc
                         height = 75.perc
                     }, 1, 1)
@@ -44,8 +44,7 @@ object Restaurants : Webpage("test") {
                     }, 2, 1)
                     add(image(io.kvision.require("img/boars_head.png") as? String, "Boar's Head") {
                         width = 90.perc
-                        height = 65.perc
-                        addBsBgColor(BsBgColor.WHITE)
+                        height = 80.perc
                     }, 1, 2)
                     add(image(io.kvision.require("img/mein_bowl.png") as? String, "Mein Bowl") {
                         width = 90.perc

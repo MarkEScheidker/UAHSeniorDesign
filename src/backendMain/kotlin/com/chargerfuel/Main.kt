@@ -172,7 +172,7 @@ fun Application.main() {
         }
 
         //Testing
-        get("/test") { call.respondHtml("test") }
+        get("/orders") { call.respondHtml("orders") }
     }
     kvisionInit()
 }
