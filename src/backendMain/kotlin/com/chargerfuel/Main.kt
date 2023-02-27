@@ -8,16 +8,14 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import io.kvision.remote.kvisionInit
-import org.mindrot.jbcrypt.BCrypt
-import kotlin.collections.set
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
+import io.kvision.remote.kvisionInit
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import org.mindrot.jbcrypt.BCrypt
 import java.time.Duration
 import java.util.*
-import java.util.concurrent.atomic.AtomicInteger
-import kotlin.collections.LinkedHashSet
+import kotlin.collections.set
 
 private const val TIMEOUT: Long = 1000 * 60 * 30
 private val sessionCache: MutableMap<String, Long> = mutableMapOf()
@@ -125,7 +123,9 @@ fun Application.main() {
             call.request.queryParameters["id"]
                 ?.let { TokenStorage.removeToken(it) }
                 ?.let {
-                    SQLUtils.addUserAccount(it.substringBefore(':'), it.substringAfter(':'))
+                    val email = it.substringBefore(':')
+                    if (!SQLUtils.isEmailRegistered(email))
+                        SQLUtils.addUserAccount(email, it.substringAfter(':'))
                     call.respondRedirect("/login")
                 }
                 ?: call.respondRedirect("/signup")
@@ -156,7 +156,7 @@ fun Application.main() {
             val thisConnection = WebSocketManager.Connection(this)
             WebSocketManager.addConnection(thisConnection)
             try {
-                for (frame in incoming){
+                for (frame in incoming) {
                     val text = (frame as Frame.Text).readText()
                     println("onMessage")
                     outgoing.send(Frame.Text(text))
