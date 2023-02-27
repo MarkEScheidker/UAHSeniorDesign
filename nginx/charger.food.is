@@ -15,6 +15,11 @@ server {
         ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
         ssl_ciphers HIGH:!aNULL:!MD5;
 
+        ssl_stapling on;
+        ssl_stapling_verify on;
+        ssl_trusted_certificate /etc/letsencrypt/live/charger.food.is/chain.pem;
+        resolver 8.8.8.8;
+
         location / {
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;
