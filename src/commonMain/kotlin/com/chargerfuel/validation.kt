@@ -13,6 +13,7 @@ val passwordValidation: (String?) -> Boolean = {
 
 val passwordValidationMessage: (String?) -> String = {
     if (it == null || it.length < 8) "Password must contain at least 8 characters"
+    else if (it.length > 32) "Password must contain at most 32 characters"
     else if (!it.contains("[A-Z]".toRegex())) "Password must contain an uppercase letter"
     else if (!it.contains("[a-z]".toRegex())) "Password must contain a lowercase letter"
     else if (!it.contains("[0-9]".toRegex())) "Password must contain a number"

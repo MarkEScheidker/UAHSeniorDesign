@@ -1,20 +1,23 @@
 package com.chargerfuel.pages
 
 import com.chargerfuel.LoginInfo
-import com.chargerfuel.util.emailBox
 import io.kvision.core.*
 import io.kvision.form.FormEnctype
 import io.kvision.form.FormMethod
 import io.kvision.form.FormType
 import io.kvision.form.formPanel
 import io.kvision.form.text.Password
+import io.kvision.form.text.Text
 import io.kvision.html.*
 import io.kvision.panel.Root
 import io.kvision.panel.flexPanel
 import io.kvision.panel.hPanel
 import io.kvision.panel.vPanel
 import io.kvision.require
-import io.kvision.utils.*
+import io.kvision.utils.perc
+import io.kvision.utils.px
+import io.kvision.utils.vh
+import io.kvision.utils.vw
 import kotlinx.browser.window
 
 object LoginPage : Webpage("login") {
@@ -26,6 +29,8 @@ object LoginPage : Webpage("login") {
             top = 50.vh
             position = Position.FIXED
             justifySelf = JustifyItems.CENTER
+            setStyle("object-fit", "cover")
+            setStyle("object-position", "center")
         }
         flexPanel {
             require("css/slideshow.css")
@@ -33,32 +38,22 @@ object LoginPage : Webpage("login") {
             image(require("img/food1.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) 0s infinite")
-                setStyle("object-fit", "cover")
-                setStyle("object-position", "center")
             }
             image(require("img/food2.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) -10s infinite")
-                setStyle("object-fit", "cover")
-                setStyle("object-position", "center")
             }
             image(require("img/food3.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) -20s infinite")
-                setStyle("object-fit", "cover")
-                setStyle("object-position", "center")
             }
             image(require("img/food4.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) -30s infinite")
-                setStyle("object-fit", "cover")
-                setStyle("object-position", "center")
             }
             image(require("img/food5.jpg") as? String, "background") {
                 addCssStyle(slide)
                 setStyle("animation", "slideshow 50s cubic-bezier(.25,.01,.29,.99) -40s infinite")
-                setStyle("object-fit", "cover")
-                setStyle("object-position", "center")
             }
         }
         //endregion
@@ -82,7 +77,15 @@ object LoginPage : Webpage("login") {
                 gridRowGap = 10
                 width = 100.perc
                 h1("Login") { alignSelf = AlignItems.CENTER }
-                emailBox()
+                add(
+                    "email",
+                    Text(name = "email") {
+                        placeholder = "UAH Email"
+                        width = 100.perc
+                        input.width = 100.perc
+                        input.setAttribute("autocapitalize", "none")
+                    }, required = true
+                )
                 add(
                     "password",
                     Password(name = "password") {
