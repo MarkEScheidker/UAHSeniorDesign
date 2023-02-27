@@ -17,11 +17,12 @@ object SQLUtils {
     // create a queryCache for the menu information
     private val queryCache: MutableMap<String, Any> = mutableMapOf()
 
-    private val connection: Connection = DriverManager.getConnection(DB_URL, USER, PASS)
+    private var connection: Connection = DriverManager.getConnection(DB_URL, USER, PASS)
 
     //TODO add more get/store commands for user accounts
     fun getHashedPW(email: String): String? {
         return try {
+            refreshConnection()
             val statement = connection.createStatement()
             val resultSet =
                 statement.executeQuery("SELECT PasswordHash FROM UserLogin ul JOIN Password p ON ul.PasswordID = p.PasswordID WHERE UserEmail = '$email'")
@@ -38,6 +39,7 @@ object SQLUtils {
 
     fun setHashedPassword(email: String, hash: String): Boolean {
         return try {
+            refreshConnection()
             val statement = connection.createStatement()
             val updateCount =
                 statement.executeUpdate("UPDATE Password p JOIN UserLogin ul ON p.PasswordID = ul.PasswordID SET PasswordHash = '$hash' WHERE ul.UserEmail = '$email'")
@@ -51,6 +53,7 @@ object SQLUtils {
 
     fun isEmailRegistered(email: String): Boolean {
         return try {
+            refreshConnection()
             val statement = connection.createStatement()
             val resultSet = statement.executeQuery("SELECT * FROM UserLogin WHERE UserEmail = '$email'")
             val exists = resultSet.next()
@@ -65,6 +68,7 @@ object SQLUtils {
 
     fun addUserAccount(email: String, passwordHash: String) {
         try {
+            refreshConnection()
             var statement = connection.prepareStatement(
                 "INSERT INTO Password (PasswordHash) VALUES ('$passwordHash')",
                 Statement.RETURN_GENERATED_KEYS
@@ -83,5 +87,9 @@ object SQLUtils {
         } catch (e: SQLException) {
             e.printStackTrace()
         }
+    }
+
+    private fun refreshConnection() {
+        if (connection.isClosed) connection = DriverManager.getConnection(DB_URL, USER, PASS)
     }
 }
