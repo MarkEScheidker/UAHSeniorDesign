@@ -1,13 +1,13 @@
 package com.chargerfuel.pages
 
 import com.chargerfuel.LoginInfo
-import com.chargerfuel.util.emailBox
 import io.kvision.core.*
 import io.kvision.form.FormEnctype
 import io.kvision.form.FormMethod
 import io.kvision.form.FormType
 import io.kvision.form.formPanel
 import io.kvision.form.text.Password
+import io.kvision.form.text.Text
 import io.kvision.html.*
 import io.kvision.panel.Root
 import io.kvision.panel.flexPanel
@@ -24,11 +24,13 @@ object LoginPage : Webpage("login") {
     override val html: Root.() -> Unit = {
         //region Background Images
         val slide = Style {
-            minHeight = 100.vh
-            minWidth = 100.vw
+            height = 100.vh
+            width = 100.perc
             top = 50.vh
             position = Position.FIXED
             justifySelf = JustifyItems.CENTER
+            setStyle("object-fit", "cover")
+            setStyle("object-position", "center")
         }
         flexPanel {
             require("css/slideshow.css")
@@ -75,7 +77,15 @@ object LoginPage : Webpage("login") {
                 gridRowGap = 10
                 width = 100.perc
                 h1("Login") { alignSelf = AlignItems.CENTER }
-                emailBox()
+                add(
+                    "email",
+                    Text(name = "email") {
+                        placeholder = "UAH Email"
+                        width = 100.perc
+                        input.width = 100.perc
+                        input.setAttribute("autocapitalize", "none")
+                    }, required = true
+                )
                 add(
                     "password",
                     Password(name = "password") {

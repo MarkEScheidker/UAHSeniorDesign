@@ -1,5 +1,6 @@
 package com.chargerfuel
 
+import io.ktor.network.sockets.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.compression.*
@@ -10,6 +11,13 @@ import io.ktor.server.sessions.*
 import io.kvision.remote.kvisionInit
 import org.mindrot.jbcrypt.BCrypt
 import kotlin.collections.set
+import io.ktor.server.websocket.*
+import io.ktor.websocket.*
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import java.time.Duration
+import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.collections.LinkedHashSet
 
 private const val TIMEOUT: Long = 1000 * 60 * 30
 private val sessionCache: MutableMap<String, Long> = mutableMapOf()
@@ -56,13 +64,20 @@ fun Application.main() {
         }
     }
 
+    install(WebSockets) {
+        pingPeriod = Duration.ofSeconds(15)
+        timeout = Duration.ofSeconds(15)
+    }
+
     routing {
         //Account Login
         get("/") { call.respondRedirect("/login") }
         get("/login") {
             call.sessions.get<UserSession>()
+                ?.takeIf { sessionCache.containsKey(it.name) }
                 ?.let { call.respondRedirect("/main") }
                 ?: call.respondHtml("login")
+
         }
         authenticate("form") {
             post("/login") {
@@ -81,6 +96,7 @@ fun Application.main() {
         //Logged In Pages
         authenticate("session") {
             get("/main") { call.respondHtml("main") }
+            get("/account") { call.respondHtml("account") }
         }
 
         //Account Creation
@@ -132,8 +148,33 @@ fun Application.main() {
             }
         }
 
+        //websockets
+        val connections = Collections.synchronizedSet<Connection?>(LinkedHashSet())
+
+        //TODO actually implement this websocket for our purposes, this is not directly applicable
+        webSocket("/websocket") {
+            val thisConnection = WebSocketManager.Connection(this)
+            WebSocketManager.addConnection(thisConnection)
+            try {
+                for (frame in incoming){
+                    val text = (frame as Frame.Text).readText()
+                    println("onMessage")
+                    outgoing.send(Frame.Text(text))
+                }
+            } catch (e: ClosedReceiveChannelException) {
+                println("onClose ${closeReason.await()}")
+                WebSocketManager.removeConnection(thisConnection)
+            } catch (e: Throwable) {
+                println("onError ${closeReason.await()}")
+                WebSocketManager.removeConnection(thisConnection)
+                e.printStackTrace()
+            }
+        }
+
         //Testing
-        get("/test") { call.respondHtml("test") }
+        get("/orders") { call.respondHtml("orders") }
     }
     kvisionInit()
 }
+
+//TODO remove this class from this file and put it somewhere else

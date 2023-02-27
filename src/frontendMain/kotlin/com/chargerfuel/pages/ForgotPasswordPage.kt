@@ -6,9 +6,10 @@ import io.kvision.panel.Root
 
 object ForgotPasswordPage : Webpage("forgot") {
     override val html: Root.() -> Unit = {
-        toolbar()
-        centeredBox {
+        emptyToolbar()
+        base {
             basicForm<PasswordResetInfo>("Forgot Password", "forgot") {
+                center()
                 emailBox()
             }
         }
