@@ -149,8 +149,6 @@ fun Application.main() {
         }
 
         //websockets
-        val connections = Collections.synchronizedSet<Connection?>(LinkedHashSet())
-
         //TODO actually implement this websocket for our purposes, this is not directly applicable
         webSocket("/websocket") {
             val thisConnection = WebSocketManager.Connection(this)
@@ -160,6 +158,7 @@ fun Application.main() {
                     val text = (frame as Frame.Text).readText()
                     println("onMessage")
                     outgoing.send(Frame.Text(text))
+                    WebSocketManager.sendMessageOnWebSocket(this,"test123")
                 }
             } catch (e: ClosedReceiveChannelException) {
                 println("onClose ${closeReason.await()}")
@@ -176,5 +175,3 @@ fun Application.main() {
     }
     kvisionInit()
 }
-
-//TODO remove this class from this file and put it somewhere else
