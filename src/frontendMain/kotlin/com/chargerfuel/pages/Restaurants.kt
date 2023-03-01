@@ -13,7 +13,7 @@ import io.kvision.panel.vPanel
 import io.kvision.utils.perc
 import io.kvision.utils.px
 
-object Restaurants : Webpage("orders") {
+object Restaurants : Webpage("main") {
     override val html: Root.() -> Unit = {
         // background = Background(color =
         toolbar()

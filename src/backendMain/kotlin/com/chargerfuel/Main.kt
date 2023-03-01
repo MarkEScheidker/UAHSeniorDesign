@@ -170,9 +170,6 @@ fun Application.main() {
                 e.printStackTrace()
             }
         }
-
-        //Testing
-        get("/orders") { call.respondHtml("orders") }
     }
     kvisionInit()
 }
