@@ -1,6 +1,5 @@
 package com.chargerfuel
 
-import io.ktor.network.sockets.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.compression.*
@@ -12,9 +11,10 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import io.kvision.remote.kvisionInit
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.mindrot.jbcrypt.BCrypt
 import java.time.Duration
-import java.util.*
 
 private const val TIMEOUT: Long = 1000 * 60 * 30
 private val sessionCache: MutableMap<String, Long> = mutableMapOf()
@@ -58,12 +58,14 @@ fun Application.main() {
             if (BCrypt.checkpw(password, it)) UserIdPrincipal(email) else null
         }
 
+    fun ApplicationCall.getSession(): UserSession? =
+        sessions.get<UserSession>()?.takeIf { sessionCache.containsKey(it.name) }
+
     routing {
         //Account Login
         get("/") { call.respondRedirect("/login") }
         get("/login") {
-            call.sessions.get<UserSession>()
-                ?.takeIf { sessionCache.containsKey(it.name) }
+            call.getSession()
                 ?.let { call.respondRedirect("/main") }
                 ?: call.respondHtml("login")
         }
@@ -96,6 +98,9 @@ fun Application.main() {
         authenticate("session") {
             get("/main") { call.respondHtml("main") }
             get("/account") { call.respondHtml("account") }
+            post("/getemail") {
+                call.getSession()?.let { call.respondText(it.name) }
+            }
         }
 
         //Account Creation
@@ -159,7 +164,7 @@ fun Application.main() {
                     val text = (frame as Frame.Text).readText()
                     println("onMessage")
                     outgoing.send(Frame.Text(text))
-                    WebSocketManager.sendMessageOnWebSocket(this,"test123")
+                    WebSocketManager.sendMessageOnWebSocket(this, "test123")
                 }
             } catch (e: ClosedReceiveChannelException) {
                 println("onClose ${closeReason.await()}")

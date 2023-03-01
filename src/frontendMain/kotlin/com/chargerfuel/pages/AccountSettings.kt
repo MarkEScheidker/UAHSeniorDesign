@@ -2,6 +2,7 @@ package com.chargerfuel.pages
 
 import com.chargerfuel.util.base
 import com.chargerfuel.util.center
+import com.chargerfuel.util.handleResponse
 import com.chargerfuel.util.toolbar
 import io.kvision.core.AlignItems
 import io.kvision.core.Display
@@ -12,6 +13,8 @@ import io.kvision.html.ButtonStyle
 import io.kvision.html.button
 import io.kvision.html.h1
 import io.kvision.html.h3
+import io.kvision.jquery.invoke
+import io.kvision.jquery.jQuery
 import io.kvision.panel.Root
 import io.kvision.panel.vPanel
 import io.kvision.require
@@ -34,35 +37,18 @@ object AccountSettings : Webpage("account") {
                 h1("Account Settings") { alignSelf = AlignItems.CENTER }
                 vPanel {
                     h3("Username")
-                    text(value = "[USERNAME]") { disabled = true }
+                    text {
+                        input.apply { id = "username" }
+                        disabled = true
+                    }
                 }
                 vPanel {
                     h3("Email")
-                    text(value = "[EMAIL]") { disabled = true }
-                }
-                val phone = vPanel {
-                    h3("Phone Number")
-                    text(value = "(555) 555-5555") { disabled = true }
-                }
-                val changePhone = vPanel {
-                    display = Display.NONE
-                    h3("Phone Number")
-                    text { placeholder = "New Phone Number" }
-                }
-                phone.add(button("Change Phone Number?", style = ButtonStyle.OUTLINEPRIMARY) {
-                    alignSelf = AlignItems.END
-                    onClick {
-                        phone.display = Display.NONE
-                        changePhone.display = Display.FLEX
+                    text {
+                        input.apply { id = "email" }
+                        disabled = true
                     }
-                })
-                changePhone.add(button("Change Phone Number", style = ButtonStyle.OUTLINEPRIMARY) {
-                    alignSelf = AlignItems.END
-                    onClick {
-                        changePhone.display = Display.NONE
-                        phone.display = Display.FLEX
-                    }
-                })
+                }
                 val password = vPanel {
                     h3("Password")
                     text(value = "********") { disabled = true }
@@ -70,6 +56,7 @@ object AccountSettings : Webpage("account") {
                 val changePassword = vPanel {
                     display = Display.NONE
                     h3("Password")
+                    password { placeholder = "Old Password" }
                     password { placeholder = "New Password" }
                     password { placeholder = "Confirm New Password" }
                 }
@@ -91,6 +78,13 @@ object AccountSettings : Webpage("account") {
                     h3("Payment")
                     text(value = "[PAYMENT TYPE]") { disabled = true }
                     button("Payment Options", style = ButtonStyle.OUTLINEPRIMARY)
+                }
+                addAfterInsertHook {
+                    jQuery.post("/getemail", null, { data, _, _ ->
+                        val email = data.toString()
+                        jQuery("#username").attr("value", email.substringBefore("@"))
+                        jQuery("#email").attr("value", email)
+                    })
                 }
             }
         }
