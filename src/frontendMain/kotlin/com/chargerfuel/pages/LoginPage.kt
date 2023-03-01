@@ -1,6 +1,7 @@
 package com.chargerfuel.pages
 
 import com.chargerfuel.LoginInfo
+import com.chargerfuel.util.handleResponse
 import io.kvision.core.*
 import io.kvision.form.FormEnctype
 import io.kvision.form.FormMethod
@@ -9,6 +10,8 @@ import io.kvision.form.formPanel
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
 import io.kvision.html.*
+import io.kvision.jquery.invoke
+import io.kvision.jquery.jQuery
 import io.kvision.panel.Root
 import io.kvision.panel.flexPanel
 import io.kvision.panel.hPanel
@@ -77,6 +80,10 @@ object LoginPage : Webpage("login") {
                 gridRowGap = 10
                 width = 100.perc
                 h1("Login") { alignSelf = AlignItems.CENTER }
+                div {
+                    id = "error"
+                    colorHex = 0xDC3545
+                }
                 add(
                     "email",
                     Text(name = "email") {
@@ -95,7 +102,17 @@ object LoginPage : Webpage("login") {
                         input.setAttribute("autocapitalize", "none")
                     }, required = true
                 )
-                val button = Button(text = "Login", type = ButtonType.SUBMIT, disabled = true)
+                val button = Button(text = "Login").apply {
+                    id = "button"
+                    onClick {
+                        jQuery("#error").text("")
+                        if (this@formPanel.validate(true))
+                            jQuery.post(
+                                "/login",
+                                this@formPanel.getDataJson(),
+                                { data, _, _ -> handleResponse(data.toString()) })
+                    }
+                }
                 hPanel {
                     justifyContent = JustifyContent.SPACEBETWEEN
                     vPanel {
@@ -104,7 +121,7 @@ object LoginPage : Webpage("login") {
                     }
                     add(button)
                 }
-                onEvent { change = { button.disabled = !validate(true) } }
+                onEvent { keydown = { if (it.keyCode == 13) jQuery("#button").click() } }
             }
             val resize = {
                 if (window.innerHeight >= window.innerWidth) {

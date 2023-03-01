@@ -206,6 +206,7 @@ kotlin {
                 implementation("io.kvision:kvision:$kvisionVersion")
                 implementation("io.kvision:kvision-bootstrap:$kvisionVersion")
                 implementation("io.kvision:kvision-bootstrap-css:$kvisionVersion")
+                api("io.kvision:jquery-kotlin:1.0.0")
             }
             kotlin.srcDir("build/generated-src/frontend")
         }

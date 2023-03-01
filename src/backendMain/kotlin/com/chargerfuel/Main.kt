@@ -15,7 +15,6 @@ import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import org.mindrot.jbcrypt.BCrypt
 import java.time.Duration
 import java.util.*
-import kotlin.collections.set
 
 private const val TIMEOUT: Long = 1000 * 60 * 30
 private val sessionCache: MutableMap<String, Long> = mutableMapOf()
@@ -35,20 +34,6 @@ fun Application.main() {
     }
 
     install(Authentication) {
-        form("form") {
-            userParamName = "email"
-            passwordParamName = "password"
-
-            validate {
-                if (TokenStorage.removeToken(it.password) == it.name) UserIdPrincipal(it.name)
-                else SQLUtils.getHashedPW(it.name)?.let { password ->
-                    if (BCrypt.checkpw(it.password, password)) UserIdPrincipal(it.name) else null
-                }
-            }
-
-            challenge("/login")
-        }
-
         session<UserSession>("session") {
             validate {
                 sessionCache[it.name]?.let { time ->
@@ -67,6 +52,12 @@ fun Application.main() {
         timeout = Duration.ofSeconds(15)
     }
 
+    fun validateLogin(email: String, password: String): UserIdPrincipal? =
+        if (TokenStorage.removeToken(password) == email) UserIdPrincipal(email)
+        else SQLUtils.getHashedPW(email)?.let {
+            if (BCrypt.checkpw(password, it)) UserIdPrincipal(email) else null
+        }
+
     routing {
         //Account Login
         get("/") { call.respondRedirect("/login") }
@@ -75,14 +66,24 @@ fun Application.main() {
                 ?.takeIf { sessionCache.containsKey(it.name) }
                 ?.let { call.respondRedirect("/main") }
                 ?: call.respondHtml("login")
-
         }
-        authenticate("form") {
-            post("/login") {
-                val session = UserSession(call.principal<UserIdPrincipal>()?.name.toString())
-                sessionCache[session.name] = System.currentTimeMillis()
-                call.sessions.set(session)
-                call.respondRedirect("/main")
+        post("/login") {
+            call.receiveParameters().let {
+                val email = it["email"] ?: run {
+                    call.respondText("error: An Unknown Error Occurred, Please Try Again")
+                    return@post
+                }
+                val password = it["password"] ?: run {
+                    call.respondText("error: An Unknown Error Occurred, Please Try Again")
+                    return@post
+                }
+                println("$email:$password")
+                validateLogin(email, password)?.let { principal ->
+                    val session = UserSession(principal.name)
+                    sessionCache[session.name] = System.currentTimeMillis()
+                    call.sessions.set(session)
+                    call.respondText("redirect: main")
+                } ?: call.respondText("error: Incorrect Username/Password")
             }
         }
         get("/logout") {
