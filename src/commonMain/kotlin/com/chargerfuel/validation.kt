@@ -22,6 +22,6 @@ val passwordValidationMessage: (String?) -> String = {
     else ""
 }
 
-val emailValidation: (String?) -> Boolean = { "[a-z]{2,3}[0-9]{4}@uah.edu".toRegex().matches(it ?: "") }
+val emailValidation: (String?) -> Boolean = { "[a-zA-Z0-9.]+@uah.edu".toRegex().matches(it ?: "") }
 
 val emailValidationMessage: (String?) -> String = { "Email must be a valid UAH address" }
