@@ -118,7 +118,7 @@ object SQLUtils {
     //todo move this data class somewhere else, prefereably in common code
     data class MenuItem(val itemID: Int, val name: String, val description: String, val price: Double, val image: ByteArray)
 
-     //*/
+     */
 
 
     private fun refreshConnection() {
