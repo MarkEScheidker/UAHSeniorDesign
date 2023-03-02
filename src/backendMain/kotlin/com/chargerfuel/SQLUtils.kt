@@ -1,5 +1,6 @@
 package com.chargerfuel
 
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import java.io.File
 import java.sql.Connection
@@ -116,6 +117,7 @@ object SQLUtils {
         }
     }
     //todo move this data class somewhere else, prefereably in common code
+    @Serializable
     data class MenuItem(val itemID: Int, val name: String, val description: String, val price: Double, val image: ByteArray)
 
      */
