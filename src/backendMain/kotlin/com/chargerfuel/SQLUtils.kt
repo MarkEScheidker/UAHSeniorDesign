@@ -1,10 +1,13 @@
 package com.chargerfuel
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
 import java.sql.Statement
+import kotlinx.serialization.json.*
 
 object SQLUtils {
     private const val DB_URL = "jdbc:mysql://localhost:3306/main657432?enabledTLSProtocols=TLSv1.2&useSSL=false"
@@ -19,7 +22,6 @@ object SQLUtils {
 
     private var connection: Connection = DriverManager.getConnection(DB_URL, USER, PASS)
 
-    //TODO add more get/store commands for user accounts
     fun getHashedPW(email: String): String? {
         return try {
             refreshConnection()
@@ -88,6 +90,38 @@ object SQLUtils {
             e.printStackTrace()
         }
     }
+
+    /*
+    fun getMenuItems(restaurantName: String): String? {
+        return try {
+            refreshConnection()
+            val statement = connection.createStatement()
+            //TODO make this query actually work with our database
+            val resultSet = statement.executeQuery("SELECT ItemID, Name, Description, Price, Image FROM MenuItems WHERE RestaurantName = '$restaurantName'")
+            val items = mutableListOf<MenuItem>()
+            while (resultSet.next()) {
+                val itemID = resultSet.getInt("ItemID")
+                val name = resultSet.getString("Name")
+                val description = resultSet.getString("Description")
+                val price = resultSet.getDouble("Price")
+                val image = resultSet.getBytes("Image")
+                items.add(MenuItem(itemID, name, description, price, image))
+            }
+            val json = Json.encodeToString(items)
+            resultSet.close()
+            statement.close()
+            return json
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            null
+        }
+    }
+    //todo move this data class somewhere else, prefereably in common code
+    @Serializable
+    data class MenuItem(val itemID: Int, val name: String, val description: String, val price: Double, val image: ByteArray)
+
+     */
+
 
     private fun refreshConnection() {
         if (connection.isClosed) connection = DriverManager.getConnection(DB_URL, USER, PASS)

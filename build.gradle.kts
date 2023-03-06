@@ -97,6 +97,20 @@ class ChargerPlugin : Plugin<Project> {
                 }
             }
         }
+        target.task("restart_everything") {
+            group = "charger fuel"
+            doLast{
+                establishSession()?.run{
+                    println("Killing server...")
+                    runCommand("pkill -f \"chargerfuel -jar /opt/charger_fuel/chargerfuel.jar\"")
+                    println("Restarting Nginx...")
+                    runCommand("sudo /usr/sbin/service nginx reload")
+                    println("Reloading server...")
+                    runCommand("nohup bash -c 'exec -a \"chargerfuel\" java -jar /opt/charger_fuel/chargerfuel.jar > /opt/charger_fuel/log.txt 2>&1 &'")
+                    println("all tasks complete")
+                }
+            }
+        }
     }
 }
 
