@@ -1,5 +1,6 @@
 package com.chargerfuel
 
+import io.ktor.network.sockets.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import java.io.File
@@ -52,6 +53,38 @@ object SQLUtils {
             false
         }
     }
+
+    fun getPhoneNumber(email: String): String? {
+        return try {
+            refreshConnection()
+            val statement = connection.createStatement()
+            val resultSet =
+                statement.executeQuery("SELECT PhoneNumber FROM UserLogin ul JOIN PhoneNumber p ON ul.PhoneNumberID = p.PhoneNumberID WHERE UserEmail = '$email'")
+            var result: String? = null
+            if (resultSet.next()) result = resultSet.getString("PasswordHash")
+            resultSet.close()
+            statement.close()
+            result
+        } catch (e: SQLException) {
+        e.printStackTrace()
+        null
+        }
+    }
+
+    fun setPhoneNumber(email: String, PhoneNumber: String): Boolean{
+        return try {
+            refreshConnection()
+            val statement = connection.createStatement()
+            val updateCount = statement.executeUpdate("UPDATE PhoneNumber p JOIN UserLogin ul ON p.PhoneNumberID = ul.PhoneNumberID SET PhoneNumber = '$PhoneNumber' WHERE ul.UserEmail = '$email'")
+            statement.close()
+            updateCount > 0
+        }
+        catch (e: SQLException) {
+            e.printStackTrace()
+            false
+        }
+    }
+
 
     fun isEmailRegistered(email: String): Boolean {
         return try {
