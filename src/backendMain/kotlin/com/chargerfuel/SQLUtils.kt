@@ -59,9 +59,9 @@ object SQLUtils {
             refreshConnection()
             val statement = connection.createStatement()
             val resultSet =
-                statement.executeQuery("SELECT PhoneNumber FROM UserLogin ul JOIN PhoneNumber p ON ul.PhoneNumberID = p.PhoneNumberID WHERE UserEmail = '$email'")
+                statement.executeQuery("SELECT PhoneNumber FROM UserLogin WHERE UserEmail = '$email'")
             var result: String? = null
-            if (resultSet.next()) result = resultSet.getString("PasswordHash")
+            if (resultSet.next()) result = resultSet.getString("PhoneNumber")
             resultSet.close()
             statement.close()
             result
@@ -75,7 +75,7 @@ object SQLUtils {
         return try {
             refreshConnection()
             val statement = connection.createStatement()
-            val updateCount = statement.executeUpdate("UPDATE PhoneNumber p JOIN UserLogin ul ON p.PhoneNumberID = ul.PhoneNumberID SET PhoneNumber = '$PhoneNumber' WHERE ul.UserEmail = '$email'")
+            val updateCount = statement.executeUpdate("UPDATE UserLogin SET PhoneNumber = '$PhoneNumber' WHERE UserEmail = '$email'")
             statement.close()
             updateCount > 0
         }
@@ -84,7 +84,6 @@ object SQLUtils {
             false
         }
     }
-
 
     fun isEmailRegistered(email: String): Boolean {
         return try {
