@@ -11,6 +11,7 @@ object SignupPage : Webpage("signup") {
             basicForm<LoginInfo>("Create Account", "signup") {
                 center()
                 emailBox()
+                PhoneNumberBox()
                 passwordBoxWithConfirmation("Password")
             }
         }

@@ -205,6 +205,7 @@ kotlin {
                 implementation("mysql:mysql-connector-java:8.0.15")
                 implementation("org.mindrot:jbcrypt:0.4")
                 implementation("com.sun.mail:javax.mail:1.6.2")
+                implementation("com.twilio.sdk:twilio:9.2.1")
 
             }
         }

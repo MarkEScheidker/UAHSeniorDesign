@@ -1,5 +1,6 @@
 package com.chargerfuel
 
+import io.ktor.network.sockets.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import java.io.File
@@ -48,6 +49,37 @@ object SQLUtils {
             statement.close()
             updateCount > 0
         } catch (e: SQLException) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    fun getPhoneNumber(email: String): String? {
+        return try {
+            refreshConnection()
+            val statement = connection.createStatement()
+            val resultSet =
+                statement.executeQuery("SELECT PhoneNumber FROM UserLogin WHERE UserEmail = '$email'")
+            var result: String? = null
+            if (resultSet.next()) result = resultSet.getString("PhoneNumber")
+            resultSet.close()
+            statement.close()
+            result
+        } catch (e: SQLException) {
+        e.printStackTrace()
+        null
+        }
+    }
+
+    fun setPhoneNumber(email: String, PhoneNumber: String): Boolean{
+        return try {
+            refreshConnection()
+            val statement = connection.createStatement()
+            val updateCount = statement.executeUpdate("UPDATE UserLogin SET PhoneNumber = '$PhoneNumber' WHERE UserEmail = '$email'")
+            statement.close()
+            updateCount > 0
+        }
+        catch (e: SQLException) {
             e.printStackTrace()
             false
         }

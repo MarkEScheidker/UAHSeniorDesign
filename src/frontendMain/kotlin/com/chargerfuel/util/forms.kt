@@ -53,6 +53,19 @@ fun FormPanel<*>.emailBox() {
         validator = { emailValidation(it.value ?: "") })
 }
 
+fun FormPanel<*>.PhoneNumberBox() {
+    add("phoneNumber",
+        Text(name = "phoneNumber") {
+            placeholder = "Phone Number"
+            width = 100.perc
+            input.width = 100.perc
+            input.setAttribute("type", "number")
+        },
+        required = true,
+        validatorMessage = { emailValidationMessage(it.value ?: "") },
+        validator = { emailValidation(it.value ?: "") })
+}
+
 fun FormPanel<*>.passwordBoxWithConfirmation(placeholder: String) {
     val password = Password(name = "password") {
         this.placeholder = placeholder
