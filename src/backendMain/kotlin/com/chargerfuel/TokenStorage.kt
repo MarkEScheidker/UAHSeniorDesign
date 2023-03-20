@@ -17,7 +17,7 @@ object TokenStorage {
 
     @Suppress("UNCHECKED_CAST")
     fun <T : ChargerForm> removeToken(hash: String, `class`: KClass<T>): T? =
-        tokens.getOrPut(`class`) { mutableMapOf() }[hash]?.takeIf { System.currentTimeMillis() - it.time < TIMEOUT }?.value as T?
+        tokens.getOrPut(`class`) { mutableMapOf() }.remove(hash)?.takeIf { System.currentTimeMillis() - it.time < TIMEOUT }?.value as T?
 
     inline fun <reified T : ChargerForm> addToken(hash: String, value: T): Unit = addToken(hash, value, T::class)
 

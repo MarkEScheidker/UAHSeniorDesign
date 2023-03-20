@@ -2,11 +2,11 @@ package com.chargerfuel.pages
 
 import com.chargerfuel.LoginInfo
 import com.chargerfuel.util.*
+import com.chargerfuel.util.ScreenType.*
 import io.kvision.core.*
 import io.kvision.form.text.Password
 import io.kvision.html.image
 import io.kvision.html.link
-import io.kvision.jquery.invoke
 import io.kvision.panel.Root
 import io.kvision.panel.flexPanel
 import io.kvision.panel.hPanel
@@ -16,7 +16,6 @@ import io.kvision.utils.perc
 import io.kvision.utils.px
 import io.kvision.utils.vh
 import io.kvision.utils.vw
-import kotlinx.browser.window
 
 object LoginPage : Webpage("login") {
     override val html: Root.() -> Unit = {
@@ -70,7 +69,7 @@ object LoginPage : Webpage("login") {
             val img = image(require("img/fuel.png") as? String, "banner") { setStyle("object-fit", "contain") }
             basicForm<LoginInfo>("Login") {
                 errorBox()
-                usernameBox()
+                usernameOrEmailBox()
                 add(
                     "password",
                     Password(name = "password") {
@@ -87,33 +86,33 @@ object LoginPage : Webpage("login") {
                         link("Forgot Password?", "reset") { colorName = Col.LIGHTSTEELBLUE }
                         link("New to Charger Fuel?", "signup") { colorName = Col.LIGHTSTEELBLUE }
                     }
-                    add(submitButton("Login", "login"))
+                    add(submitButton("Login", "login") { clearData() })
                 }
+            }
+            handleResize {
+                when (it) {
+                    DESKTOP -> {
+                        img.height = 30.vh
+                        img.maxWidth = 100.perc
+                        width = 500.px
+                        flexDirection = FlexDirection.COLUMN
+                    }
 
-            }
-            val resize = {
-                if (window.innerHeight >= window.innerWidth) {
-                    //Vertical Mobile
-                    img.height = 30.vh
-                    img.maxWidth = 100.perc
-                    width = 100.vw
-                    flexDirection = FlexDirection.COLUMN
-                } else if (window.innerHeight < 600) {
-                    //Horizontal Mobile
-                    img.height = 60.vh
-                    img.maxWidth = 50.perc
-                    width = 100.vw
-                    flexDirection = FlexDirection.ROW
-                } else {
-                    //Desktop
-                    img.height = 30.vh
-                    img.maxWidth = 100.perc
-                    width = 500.px
-                    flexDirection = FlexDirection.COLUMN
+                    VERTICAL_MOBILE -> {
+                        img.height = 30.vh
+                        img.maxWidth = 100.perc
+                        width = 100.vw
+                        flexDirection = FlexDirection.COLUMN
+                    }
+
+                    HORIZONTAL_MOBILE -> {
+                        img.height = 60.vh
+                        img.maxWidth = 50.perc
+                        width = 100.vw
+                        flexDirection = FlexDirection.ROW
+                    }
                 }
             }
-            resize()
-            window.addEventListener("resize", { resize() })
         }
         //endregion
     }

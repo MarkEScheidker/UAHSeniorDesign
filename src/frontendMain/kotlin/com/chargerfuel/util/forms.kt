@@ -9,7 +9,6 @@ import io.kvision.form.formPanel
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
 import io.kvision.html.Button
-import io.kvision.html.button
 import io.kvision.html.h2
 import io.kvision.jquery.invoke
 import io.kvision.jquery.jQuery
@@ -47,11 +46,11 @@ fun FormPanel<*>.emailBox() {
         validator = { emailValidation(it.value ?: "") })
 }
 
-fun FormPanel<*>.usernameBox() {
+fun FormPanel<*>.usernameOrEmailBox() {
     add(
         "username",
         Text(name = "username") {
-            placeholder = "Username"
+            placeholder = "Username/Email"
             width = 100.perc
             input.width = 100.perc
             input.setAttribute("autocapitalize", "none")

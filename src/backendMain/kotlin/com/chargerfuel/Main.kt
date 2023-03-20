@@ -98,7 +98,7 @@ fun Application.main() {
         }
         post("/login") {
             val info = call.construct<LoginInfo>()
-            call.validateLogin(info.username, info.password)
+            call.validateLogin(info.user, info.password)
                 ?.let { call.respondText("redirect: main") }
                 ?: call.respondText("info|error|Incorrect Username/Password")
         }
@@ -134,15 +134,15 @@ fun Application.main() {
             }
             id.let { TokenStorage.removeToken<PasswordForgotInfo>(it) }
                 ?.let {
-                    call.login(it.username)
+                    call.login(it.user)
                     call.respondHtml("reset")
                 } ?: call.respondRedirect("/reset")
         }
         post("/forgot") {
             val info = call.construct<PasswordForgotInfo>()
-            if (SQLUtils.isAccountRegistered(info.username)) {
+            if (SQLUtils.isAccountRegistered(info.user)) {
                 val token = Security.generateSecureToken()
-                TokenStorage.addToken(token, PasswordForgotInfo(info.username))
+                TokenStorage.addToken(token, PasswordForgotInfo(info.user))
                 call.respondText("info|info|Check your email lol")
                 EmailService.sendPasswordReset(info.email, token)
             } else call.respondText("info|error|Username not found")

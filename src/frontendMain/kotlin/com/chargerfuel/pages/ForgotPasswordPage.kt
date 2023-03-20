@@ -12,7 +12,7 @@ object ForgotPasswordPage : Webpage("forgot") {
                 id = "info"
                 center()
                 errorBox()
-                usernameBox()
+                usernameOrEmailBox()
                 add(submitButton("Forgot Password", "forgot"))
             }
         }

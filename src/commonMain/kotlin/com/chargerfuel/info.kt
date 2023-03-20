@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 interface ChargerForm
 
 @Serializable
-data class LoginInfo(val username: String, val password: String) : ChargerForm {
-    val email = "${username}@uah.edu"
+data class LoginInfo(private val username: String, val password: String) : ChargerForm {
+    val user: String = if (username.contains('@')) username.substringBefore('@') else username
 }
 
 @Serializable
@@ -20,11 +20,12 @@ data class AccountCreationInfo(
 }
 
 @Serializable
-data class AccountVerifyInfo(val username: String, val password: String, val phone: String): ChargerForm
+data class AccountVerifyInfo(val username: String, val password: String, val phone: String) : ChargerForm
 
 @Serializable
-data class PasswordForgotInfo(val username: String) : ChargerForm {
-    val email = "$username@uah.edu"
+data class PasswordForgotInfo(private val username: String) : ChargerForm {
+    val user: String = if (username.contains('@')) username.substringBefore('@') else username
+    val email: String = if (username.contains('@')) username else "$username@uah.edu"
 }
 
 @Serializable
