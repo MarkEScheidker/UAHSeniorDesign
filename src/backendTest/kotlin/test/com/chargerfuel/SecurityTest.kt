@@ -9,13 +9,13 @@ class SecurityTest {
     fun test_generateXByteKey() {
         val key1 = Security.generateXByteKey(0)
         val key2 = Security.generateXByteKey(1)
-        val key3= Security.generateXByteKey(64)
+        val key3 = Security.generateXByteKey(64)
 
-        if(key1.size != 0 || key2.size != 1 || key3.size != 64){
+        if (key1.size != 0 || key2.size != 1 || key3.size != 64) {
             throw Exception()
         }
 
-        if(key1.size == null || key2.size == null || key3.size == null){
+        if (key1.size == null || key2.size == null || key3.size == null) {
             throw Exception()
         }
     }
@@ -37,16 +37,16 @@ class SecurityTest {
     }
 
     @Test
-    fun test_generateSecureToken(){
+    fun test_generateSecureToken() {
         val token = Security.generateSecureToken()
-        if(token.length != 44){
+        if (token.length != 44) {
             throw Exception()
         }
         print(token)
     }
 
     @Test
-    fun generateHashesManually(){
+    fun generateHashesManually() {
         print(BCrypt.hashpw("test123", BCrypt.gensalt()))
     }
 }

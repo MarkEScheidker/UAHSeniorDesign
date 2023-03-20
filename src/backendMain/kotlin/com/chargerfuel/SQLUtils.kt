@@ -17,6 +17,7 @@ object SQLUtils {
     private var connection: Connection = DriverManager.getConnection(DB_URL, USER, PASS)
 
     private fun getPassword(user: String): String? {
+        if (!userValidation(user)) return null
         return try {
             refreshConnection()
             val statement = connection.createStatement()
@@ -34,16 +35,18 @@ object SQLUtils {
             statement.close()
             result
         } catch (e: SQLException) {
-            e.printStackTrace()
             null
         }
     }
 
     fun checkPassword(user: String, password: String): Boolean {
-        return BCrypt.checkpw(password, getPassword(user) ?: return false)
+        if (!userValidation(user) || !passwordValidation(password)) return false
+        val hash = getPassword(user) ?: return false
+        return BCrypt.checkpw(password, hash)
     }
 
     fun setPassword(user: String, password: String): Boolean {
+        if (!userValidation(user) || !passwordValidation(password)) return false
         return try {
             refreshConnection()
             val statement = connection.createStatement()
@@ -59,12 +62,12 @@ object SQLUtils {
             statement.close()
             updateCount > 0
         } catch (e: SQLException) {
-            e.printStackTrace()
             false
         }
     }
 
     fun getPhoneNumber(user: String): String? {
+        if (!userValidation(user)) return null
         return try {
             refreshConnection()
             val statement = connection.createStatement()
@@ -76,12 +79,12 @@ object SQLUtils {
             statement.close()
             result
         } catch (e: SQLException) {
-            e.printStackTrace()
             null
         }
     }
 
     fun setPhoneNumber(user: String, number: String): Boolean {
+        if (!userValidation(user) || !phoneValidation(number)) return false
         return try {
             refreshConnection()
             val statement = connection.createStatement()
@@ -90,12 +93,12 @@ object SQLUtils {
             statement.close()
             updateCount > 0
         } catch (e: SQLException) {
-            e.printStackTrace()
             false
         }
     }
 
     fun isAccountRegistered(user: String): Boolean {
+        if (!userValidation(user)) return false
         return try {
             refreshConnection()
             val statement = connection.createStatement()
@@ -105,12 +108,12 @@ object SQLUtils {
             statement.close()
             exists
         } catch (e: SQLException) {
-            e.printStackTrace()
             return false
         }
     }
 
     fun addUserAccount(info: AccountVerifyInfo) {
+        if (!userValidation(info.username) || !phoneValidation(info.phone) || !passwordValidation(info.password)) return
         try {
             refreshConnection()
             var statement = connection.prepareStatement(
@@ -128,8 +131,7 @@ object SQLUtils {
                 statement.executeUpdate()
                 statement.close()
             }
-        } catch (e: SQLException) {
-            e.printStackTrace()
+        } catch (_: SQLException) {
         }
     }
 

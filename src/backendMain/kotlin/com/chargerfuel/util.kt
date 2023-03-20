@@ -20,14 +20,18 @@ fun getHtml(file: String): String =
 
 suspend fun ApplicationCall.respondHtml(html: String) = respondText(getHtml(html), ContentType.Text.Html)
 
-suspend inline fun <reified T : ChargerForm> ApplicationCall.construct(): T {
-    val parameters = receiveParameters()
-    return T::class.primaryConstructor?.let {
-        val args = it.parameters.map { parameter ->
-            parameters[parameter.name ?: throw IllegalArgumentException()] ?: throw NoSuchElementException()
-        }.toTypedArray()
-        it.call(*args)
-    } ?: throw NoSuchElementException()
+suspend inline fun <reified T : ChargerForm> ApplicationCall.construct(): T? {
+    return try {
+        val parameters = receiveParameters()
+        T::class.primaryConstructor?.let {
+            val args = it.parameters.map { parameter ->
+                parameters[parameter.name ?: throw IllegalArgumentException()] ?: throw NoSuchElementException()
+            }.toTypedArray()
+            it.call(*args)
+        } ?: throw NoSuchElementException()
+    } catch (e: Exception) {
+        null
+    }
 }
 
 fun String.encrypt(): String = BCrypt.hashpw(this, BCrypt.gensalt())
