@@ -1,17 +1,12 @@
 package com.chargerfuel.pages
 
 import com.chargerfuel.LoginInfo
-import com.chargerfuel.util.handleResponse
+import com.chargerfuel.util.*
 import io.kvision.core.*
-import io.kvision.form.FormEnctype
-import io.kvision.form.FormMethod
-import io.kvision.form.FormType
-import io.kvision.form.formPanel
 import io.kvision.form.text.Password
-import io.kvision.form.text.Text
-import io.kvision.html.*
+import io.kvision.html.image
+import io.kvision.html.link
 import io.kvision.jquery.invoke
-import io.kvision.jquery.jQuery
 import io.kvision.panel.Root
 import io.kvision.panel.flexPanel
 import io.kvision.panel.hPanel
@@ -69,30 +64,13 @@ object LoginPage : Webpage("login") {
             alignItems = AlignItems.CENTER
             display = Display.FLEX
             flexDirection = FlexDirection.COLUMN
+            gridRowGap = 20
             padding = 20.px
             zIndex = 4
             val img = image(require("img/fuel.png") as? String, "banner") { setStyle("object-fit", "contain") }
-            formPanel<LoginInfo>(FormMethod.POST, "/login", FormEnctype.MULTIPART, FormType.INLINE) {
-                display = Display.FLEX
-                flexDirection = FlexDirection.COLUMN
-                alignItems = AlignItems.STRETCH
-                justifyContent = JustifyContent.CENTER
-                gridRowGap = 10
-                width = 100.perc
-                h1("Login") { alignSelf = AlignItems.CENTER }
-                div {
-                    id = "error"
-                    colorHex = 0xDC3545
-                }
-                add(
-                    "email",
-                    Text(name = "email") {
-                        placeholder = "UAH Email"
-                        width = 100.perc
-                        input.width = 100.perc
-                        input.setAttribute("autocapitalize", "none")
-                    }, required = true
-                )
+            basicForm<LoginInfo>("Login") {
+                errorBox()
+                usernameBox()
                 add(
                     "password",
                     Password(name = "password") {
@@ -102,26 +80,16 @@ object LoginPage : Webpage("login") {
                         input.setAttribute("autocapitalize", "none")
                     }, required = true
                 )
-                val button = Button(text = "Login").apply {
-                    id = "button"
-                    onClick {
-                        jQuery("#error").text("")
-                        if (this@formPanel.validate(true))
-                            jQuery.post(
-                                "/login",
-                                this@formPanel.getDataJson(),
-                                { data, _, _ -> handleResponse(data.toString()) })
-                    }
-                }
                 hPanel {
+                    width = 100.perc
                     justifyContent = JustifyContent.SPACEBETWEEN
                     vPanel {
-                        link("Forgot Password?", "forgot") { colorName = Col.LIGHTSTEELBLUE }
+                        link("Forgot Password?", "reset") { colorName = Col.LIGHTSTEELBLUE }
                         link("New to Charger Fuel?", "signup") { colorName = Col.LIGHTSTEELBLUE }
                     }
-                    add(button)
+                    add(submitButton("Login", "login"))
                 }
-                onEvent { keydown = { if (it.keyCode == 13) jQuery("#button").click() } }
+
             }
             val resize = {
                 if (window.innerHeight >= window.innerWidth) {

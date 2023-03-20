@@ -1,12 +1,10 @@
 package com.chargerfuel
 
 import io.ktor.websocket.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.collections.LinkedHashSet
 
 object WebSocketManager {
     private val connections = Collections.synchronizedSet<Connection?>(LinkedHashSet())
@@ -28,14 +26,9 @@ object WebSocketManager {
             }
         }
     }
+
     fun sendMessageOnWebSocket(webSocket: WebSocketSession, message: String) {
-        val job = GlobalScope.launch {
-            sendWebSocketMessage(webSocket, message)
-        }
-        job.invokeOnCompletion {
-            println("Message sent and coroutine completed.")
-            job.cancel()
-        }
+        runBlocking { sendWebSocketMessage(webSocket, message) }
     }
 
     fun broadcast(message: String) {
@@ -48,6 +41,7 @@ object WebSocketManager {
         companion object {
             val lastId = AtomicInteger(0)
         }
+
         val name = "user${lastId.getAndIncrement()}"
     }
 }

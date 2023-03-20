@@ -3,7 +3,6 @@ package com.chargerfuel
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.compression.*
-import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
@@ -11,13 +10,23 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import io.kvision.remote.kvisionInit
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import org.mindrot.jbcrypt.BCrypt
 import java.time.Duration
 
 private const val TIMEOUT: Long = 1000 * 60 * 30
 private val sessionCache: MutableMap<String, Long> = mutableMapOf()
+
+fun ApplicationCall.getSession(): UserSession? =
+    sessions.get<UserSession>()?.takeIf { sessionCache.containsKey(it.name) }
+
+fun ApplicationCall.validateLogin(user: String, password: String): UserIdPrincipal? =
+    if (SQLUtils.checkPassword(user, password)) login(user) else null
+
+fun ApplicationCall.login(user: String): UserIdPrincipal = UserIdPrincipal(user).also {
+    val session = UserSession(it.name)
+    sessionCache[session.name] = System.currentTimeMillis()
+    this.sessions.set(session)
+}
+
 
 @Suppress("unused")
 fun Application.main() {
@@ -52,16 +61,34 @@ fun Application.main() {
         timeout = Duration.ofSeconds(15)
     }
 
-    fun validateLogin(email: String, password: String): UserIdPrincipal? =
-        if (TokenStorage.removeToken(password) == email) UserIdPrincipal(email)
-        else SQLUtils.getHashedPW(email)?.let {
-            if (BCrypt.checkpw(password, it)) UserIdPrincipal(email) else null
+    routing {
+        //Logged In Pages
+        authenticate("session") {
+            get("/main") { call.respondHtml("main") }
+            get("/account") { call.respondHtml("account") }
+            post("/getemail") { call.getSession()?.let { call.respondText(it.name) } }
+            post("/getphone") {
+                call.getSession()?.let { call.respondText(SQLUtils.getPhoneNumber(it.name) ?: "N/A") }
+            }
+            post("/changepassword") {
+                val info = call.construct<PasswordChangeInfo>()
+                call.getSession()?.let {
+                    if (SQLUtils.checkPassword(it.name, info.oldPassword)) {
+                        if (SQLUtils.setPassword(it.name, info.password))
+                            call.respondText("info|passS|Password Changed!")
+                    } else call.respondText("info|passF|Incorrect Password")
+                } ?: call.respondText("info|passF|An Unknown Error Occurred")
+            }
+            post("/changephone") {
+                val info = call.construct<PhoneChangeInfo>()
+                call.getSession()?.let {
+                    if (SQLUtils.setPhoneNumber(it.name, info.phone))
+                        call.respondText("info|phoneS|Phone Number Changed!")
+                    else call.respondText("info|phoneF|An Unknown Error Occurred")
+                } ?: call.respondText("info|phoneF|An Unknown Error Occurred")
+            }
         }
 
-    fun ApplicationCall.getSession(): UserSession? =
-        sessions.get<UserSession>()?.takeIf { sessionCache.containsKey(it.name) }
-
-    routing {
         //Account Login
         get("/") { call.respondRedirect("/login") }
         get("/login") {
@@ -70,23 +97,10 @@ fun Application.main() {
                 ?: call.respondHtml("login")
         }
         post("/login") {
-            call.receiveParameters().let {
-                val email = it["email"] ?: run {
-                    call.respondText("error: An Unknown Error Occurred, Please Try Again")
-                    return@post
-                }
-                val password = it["password"] ?: run {
-                    call.respondText("error: An Unknown Error Occurred, Please Try Again")
-                    return@post
-                }
-                println("$email:$password")
-                validateLogin(email, password)?.let { principal ->
-                    val session = UserSession(principal.name)
-                    sessionCache[session.name] = System.currentTimeMillis()
-                    call.sessions.set(session)
-                    call.respondText("redirect: main")
-                } ?: call.respondText("error: Incorrect Username/Password")
-            }
+            val info = call.construct<LoginInfo>()
+            call.validateLogin(info.username, info.password)
+                ?.let { call.respondText("redirect: main") }
+                ?: call.respondText("info|error|Incorrect Username/Password")
         }
         get("/logout") {
             call.sessions.get<UserSession>()?.let { sessionCache.remove(it.name) }
@@ -94,64 +108,50 @@ fun Application.main() {
             call.respondRedirect("/login")
         }
 
-        //Logged In Pages
-        authenticate("session") {
-            get("/main") { call.respondHtml("main") }
-            get("/account") { call.respondHtml("account") }
-            post("/getemail") {
-                call.getSession()?.let { call.respondText(it.name) }
-            }
-        }
-
         //Account Creation
         get("/signup") { call.respondHtml("signup") }
         post("/signup") {
-            val parameters = call.receiveParameters()
-            val email = parameters["email"].takeIf(emailValidation)
-                ?: TODO("Tell user error has occurred and to try again")
-            if (!SQLUtils.isEmailRegistered(email)) {
-                val hash = BCrypt.hashpw(
-                    parameters["password"].takeIf(passwordValidation)
-                        ?: TODO("Tell user error has occurred and to try again"),
-                    BCrypt.gensalt()
-                )
+            val info = call.construct<AccountCreationInfo>()
+            if (!SQLUtils.isAccountRegistered(info.username)) {
                 val token = Security.generateSecureToken()
-                TokenStorage.addToken(token, "$email:$hash")
-                EmailService.sendEmailValidation(email, token)
-                //TODO Tell user to check email
-                call.respondRedirect("/login")
-            } else {
-                //TODO Tell user email is already registered"
-                call.respondRedirect("/login")
-            }
+                TokenStorage.addToken(token, AccountVerifyInfo(info.username, info.password.encrypt(), info.phone))
+                call.respondText("info|info|Check your email lol") //TODO make a better message
+                EmailService.sendEmailValidation(info.email, token)
+            } else call.respondText("info|error|Email already registered")
         }
         get("/verify") {
             call.request.queryParameters["id"]
-                ?.let { TokenStorage.removeToken(it) }
-                ?.let {
-                    val email = it.substringBefore(':')
-                    if (!SQLUtils.isEmailRegistered(email))
-                        SQLUtils.addUserAccount(email, it.substringAfter(':'))
-                    call.respondRedirect("/login")
-                }
-                ?: call.respondRedirect("/signup")
+                ?.let { TokenStorage.removeToken<AccountVerifyInfo>(it) }
+                ?.let { if (!SQLUtils.isAccountRegistered(it.username)) SQLUtils.addUserAccount(it) }
+            call.respondRedirect("/login")
         }
 
         //Password Resetting
-        get("/forgot") { call.respondHtml("forgot") }
-        post("/forgot") {
-            val email = call.receiveParameters()["email"].takeIf(emailValidation)
-                ?: TODO("Tell user error has occurred and to try again")
-            if (SQLUtils.isEmailRegistered(email)) {
-                val token = Security.generateTempPassword()
-                TokenStorage.addToken(token, email)
-                EmailService.sendPasswordReset(email, token)
-                //TODO Tell user to check email
-                call.respondRedirect("/login")
-            } else {
-                //TODO Tell user email is not registered"
-                call.respondRedirect("/login")
+        get("/reset") {
+            val id = call.request.queryParameters["id"] ?: run {
+                call.respondHtml("forgot")
+                return@get
             }
+            id.let { TokenStorage.removeToken<PasswordForgotInfo>(it) }
+                ?.let {
+                    call.login(it.username)
+                    call.respondHtml("reset")
+                } ?: call.respondRedirect("/reset")
+        }
+        post("/forgot") {
+            val info = call.construct<PasswordForgotInfo>()
+            if (SQLUtils.isAccountRegistered(info.username)) {
+                val token = Security.generateSecureToken()
+                TokenStorage.addToken(token, PasswordForgotInfo(info.username))
+                call.respondText("info|info|Check your email lol")
+                EmailService.sendPasswordReset(info.email, token)
+            } else call.respondText("info|error|Username not found")
+        }
+        post("/reset") {
+            call.getSession()?.let {
+                val parameters = call.construct<PasswordResetInfo>()
+                if (SQLUtils.setPassword(it.name, parameters.password)) call.respondText("redirect: login")
+            } ?: call.respondText("info|error|An Unknown Error Occurred")
         }
 
         //websockets

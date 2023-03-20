@@ -18,6 +18,7 @@ class App : Application() {
         load(Restaurants)
         load(ForgotPasswordPage)
         load(AccountSettings)
+        load(ResetPasswordPage)
     }
 }
 

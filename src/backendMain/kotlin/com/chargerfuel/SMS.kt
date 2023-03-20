@@ -16,13 +16,13 @@ object SMS {
     }
 
     fun sendOrderConfirm(email: String, order_number: Int, eta: Int): Boolean{
-        var number: String? = SQLUtils.getPhoneNumber(email) ?: return false
-        val message: Message = Message.creator(PhoneNumber(number), SERVICE_SID, "Your Charger Fuel order #$order_number has been reveived, and will be ready in about $eta minutes").create()
+        val number: String = SQLUtils.getPhoneNumber(email) ?: return false
+        val message: Message = Message.creator(PhoneNumber(number), SERVICE_SID, "Your Charger Fuel order #$order_number has been received, and will be ready in about $eta minutes").create()
         return true
     }
 
     fun sendOrderReady(email: String, order_number: Int): Boolean{
-        var number: String? = SQLUtils.getPhoneNumber(email) ?: return false
+        val number: String = SQLUtils.getPhoneNumber(email) ?: return false
         val message: Message = Message.creator(PhoneNumber(number), SERVICE_SID, "Your Charger Fuel order #$order_number is ready!").create()
         return true
     }

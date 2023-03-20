@@ -1,6 +1,5 @@
 package com.chargerfuel
 
-import org.mindrot.jbcrypt.BCrypt
 import java.security.SecureRandom
 import java.util.*
 
@@ -17,12 +16,6 @@ object Security {
 
     fun generateSecureToken(): String {
         val bytes = ByteArray(33)
-        secureRandom.nextBytes(bytes)
-        return Base64.getUrlEncoder().encodeToString(bytes)
-    }
-
-    fun generateTempPassword(): String {
-        val bytes = ByteArray(9)
         secureRandom.nextBytes(bytes)
         return Base64.getUrlEncoder().encodeToString(bytes)
     }

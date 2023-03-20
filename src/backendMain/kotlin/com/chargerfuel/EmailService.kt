@@ -9,7 +9,7 @@ import javax.mail.internet.MimeMessage
 private const val host = "smtp.gmail.com"
 
 object EmailService {
-    private var lines:List<String> = File("/opt/charger_fuel/emailCredentials.txt").readLines()
+    private val lines:List<String> = File("/opt/charger_fuel/emailCredentials.txt").readLines()
     private val from = lines[0]
     private val password = lines[1]
     private val session: Session
@@ -28,11 +28,11 @@ object EmailService {
         })
     }
 
-    fun sendEmailValidation(to: String, hash: String) {
+    fun sendEmailValidation(email: String, hash: String) {
         try {
             val message = MimeMessage(session)
             message.setFrom(InternetAddress(from))
-            message.addRecipient(Message.RecipientType.TO, InternetAddress(to))
+            message.addRecipient(Message.RecipientType.TO, InternetAddress(email))
             message.subject = "Charger Fuel Email Verification"
             message.setText("Please click the link below to verify your email.\n\nhttps://charger.food.is/verify?id=$hash")
             Transport.send(message)
@@ -41,13 +41,13 @@ object EmailService {
         }
     }
 
-    fun sendPasswordReset(to: String, hash: String) {
+    fun sendPasswordReset(email: String, hash: String) {
         try {
             val message = MimeMessage(session)
             message.setFrom(InternetAddress(from))
-            message.addRecipient(Message.RecipientType.TO, InternetAddress(to))
+            message.addRecipient(Message.RecipientType.TO, InternetAddress(email))
             message.subject = "Charger Fuel Password Reset"
-            message.setText("Temporary Password: $hash\n\nhttps://charger.food.is/login")
+            message.setText("Please click the link below to change your password.\n\nhttps://charger.food.is/reset?id=$hash")
             Transport.send(message)
         } catch (mex: MessagingException) {
             mex.printStackTrace()
