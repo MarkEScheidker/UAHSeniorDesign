@@ -11,11 +11,7 @@ class SecurityTest {
         val key2 = Security.generateXByteKey(1)
         val key3 = Security.generateXByteKey(64)
 
-        if (key1.size != 0 || key2.size != 1 || key3.size != 64) {
-            throw Exception()
-        }
-
-        if (key1.size == null || key2.size == null || key3.size == null) {
+        if (key1.isNotEmpty() || key2.size != 1 || key3.size != 64) {
             throw Exception()
         }
     }
@@ -25,13 +21,13 @@ class SecurityTest {
         val password = "Password1!"
         val hashed = BCrypt.hashpw(password, BCrypt.gensalt())
         val matching = BCrypt.checkpw(password, hashed)
-        if (matching == false) {
+        if (!matching) {
             throw Exception()
         }
 
         val wrongPassword = "Password1!asdf"
         val matching2 = BCrypt.checkpw(wrongPassword, hashed)
-        if (matching2 == true) {
+        if (matching2) {
             throw Exception()
         }
     }

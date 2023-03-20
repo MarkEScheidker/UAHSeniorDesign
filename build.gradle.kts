@@ -56,10 +56,10 @@ class ChargerPlugin : Plugin<Project> {
             while (true) {
                 while (inStream.available() > 0) {
                     val i = inStream.read(read, 0, 1024)
-                    if (i < 0) break;
+                    if (i < 0) break
                     println(String(read, 0, i))
                 }
-                if (isClosed) break;
+                if (isClosed) break
                 Thread.sleep(1000)
             }
             disconnect()

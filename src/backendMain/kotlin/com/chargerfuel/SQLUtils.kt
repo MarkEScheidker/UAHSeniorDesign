@@ -1,6 +1,5 @@
 package com.chargerfuel
 
-import com.twilio.type.PhoneNumber
 import org.mindrot.jbcrypt.BCrypt
 import java.io.File
 import java.sql.Connection
