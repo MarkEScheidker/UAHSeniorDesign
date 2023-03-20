@@ -13,6 +13,7 @@ import io.kvision.panel.vPanel
 import io.kvision.require
 import io.kvision.utils.perc
 import io.kvision.utils.px
+import kotlinx.browser.window
 
 object Restaurants : Webpage("main") {
     override val html: Root.() -> Unit = {
@@ -41,23 +42,25 @@ object Restaurants : Webpage("main") {
                 ) {
                     fun Container.display(image: Image): Div = div {
                         padding = 2.perc
-                        background = Background(Color.name(Col.DODGERBLUE))
+                        background = Background(Color.name(Col.ALICEBLUE))
                         border = Border(2.perc, BorderStyle.SOLID, Color.name(Col.MIDNIGHTBLUE))
                         boxShadow = BoxShadow(0.px, 0.px, 5.px, 5.px, Color.name(Col.MIDNIGHTBLUE))
                         setStyle("border-radius", "50% 20% / 10% 40%")
                         add(image.apply {
                             width = 100.perc; height = 100.perc
+                            setStyle("pointer-events", "none")
                             setStyle("object-fit", "contain")
                         })
+                        onClick { window.location.href = "main?res=${image.alt}" }
                     }
                     gridRowGap = 20
                     val images = listOf(
-                        display(Image(require("img/the_den.png") as? String, "img/the_den.png")),
-                        display(Image(require("img/burrito_bowl.png") as? String, "img/burrito_bowl.png")),
-                        display(Image(require("img/boars_head.png") as? String, "img/boars_head.png")),
-                        display(Image(require("img/mein_bowl.png") as? String, "img/mein_bowl.png")),
-                        display(Image(require("img/dunkin.png") as? String, "img/dunkin.png")),
-                        display(Image(require("img/charger_brew.png") as? String, "img/charger_brew.png"))
+                        display(Image(require("img/the_den.png") as? String, "den")),
+                        display(Image(require("img/burrito_bowl.png") as? String, "burrito")),
+                        display(Image(require("img/boars_head.png") as? String, "boar")),
+                        display(Image(require("img/mein_bowl.png") as? String, "bowl")),
+                        display(Image(require("img/dunkin.png") as? String, "dunkin")),
+                        display(Image(require("img/charger_brew.png") as? String, "brew"))
                     )
                     handleResize { type ->
                         when (type) {
