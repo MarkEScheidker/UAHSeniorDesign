@@ -94,7 +94,7 @@ fun Application.main() {
         }
         post("/login") {
             call.construct<LoginInfo>()?.let { info ->
-                call.validateLogin(info.user, info.password)
+                call.validateLogin(info.username, info.password)
                     ?.let { call.respondText("redirect: main") }
                     ?: call.respondText("info|error|Incorrect Username/Password")
             } ?: call.respondError()

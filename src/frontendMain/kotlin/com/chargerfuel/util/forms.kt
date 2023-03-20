@@ -48,8 +48,8 @@ fun FormPanel<*>.emailBox() {
 
 fun FormPanel<*>.usernameOrEmailBox() {
     add(
-        "username",
-        Text(name = "username") {
+        "entry",
+        Text(name = "entry") {
             placeholder = "Username/Email"
             width = 100.perc
             input.width = 100.perc
