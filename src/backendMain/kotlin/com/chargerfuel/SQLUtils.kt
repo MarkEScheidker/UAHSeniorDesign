@@ -8,7 +8,7 @@ import java.sql.SQLException
 import java.sql.Statement
 
 object SQLUtils {
-    private const val DB_URL = "jdbc:mysql://localhost:3306/main657432?enabledTLSProtocols=TLSv1.2&useSSL=false"
+    private const val DB_URL = "jdbc:mysql://localhost:3306/main657432?enabledTLSProtocols=TLSv1.2&useSSL=false&serverTimezone=UTC"
 
     //pull database credentials from local file
     private val lines: List<String> = File("/opt/charger_fuel/mysqlPassword.txt").readLines()
