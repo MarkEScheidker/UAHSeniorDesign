@@ -18,6 +18,7 @@ object SMS {
 
     fun sendOrderConfirm(email: String, order_number: Int, eta: Int): Boolean {
         val number: String = SQLUtils.getPhoneNumber(email) ?: return false
+        if (number == "0") {return false}
         val message: Message = Message.creator(
             PhoneNumber(number),
             SERVICE_SID,
@@ -28,6 +29,7 @@ object SMS {
 
     fun sendOrderReady(email: String, order_number: Int): Boolean {
         val number: String = SQLUtils.getPhoneNumber(email) ?: return false
+        if (number == "0") {return false}
         val message: Message =
             Message.creator(PhoneNumber(number), SERVICE_SID, "Your Charger Fuel order #$order_number is ready!")
                 .create()
