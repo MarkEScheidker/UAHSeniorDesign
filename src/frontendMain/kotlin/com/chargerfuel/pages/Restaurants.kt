@@ -58,7 +58,7 @@ object Restaurants : Webpage("main") {
                         display(Image(require("img/the_den.png") as? String, "den")),
                         display(Image(require("img/burrito_bowl.png") as? String, "burrito")),
                         display(Image(require("img/boars_head.png") as? String, "boar")),
-                        display(Image(require("img/mein_bowl.png") as? String, "bowl")),
+                        display(Image(require("img/mein_bowl.png") as? String, "mein")),
                         display(Image(require("img/dunkin.png") as? String, "dunkin")),
                         display(Image(require("img/charger_brew.png") as? String, "brew"))
                     )
