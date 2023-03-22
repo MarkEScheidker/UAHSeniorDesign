@@ -15,7 +15,7 @@ class App : Application() {
         //Register pages
         load(LoginPage)
         load(SignupPage)
-        load(Restaurants)
+        load(RestaurantPage)
         load(ForgotPasswordPage)
         load(AccountSettings)
         load(ResetPasswordPage)

@@ -60,3 +60,8 @@ data class PasswordChangeInfo(val oldPassword: String, val password: String, pri
 data class PhoneChangeInfo(val phone: String) : ChargerForm {
     override fun verify(): Boolean = phoneValidation(phone)
 }
+
+@Serializable
+data class GetRestaurantInfo(val restaurant: String) : ChargerForm {
+    override fun verify(): Boolean = true
+}

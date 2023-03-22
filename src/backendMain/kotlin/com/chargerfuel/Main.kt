@@ -7,6 +7,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.kvision.remote.kvisionInit
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 private const val TIMEOUT: Long = 1000 * 60 * 30
 private val sessionCache: MutableMap<String, Long> = mutableMapOf()
@@ -82,6 +84,23 @@ fun Application.main() {
                         else call.respondText("info|phoneF|An Unknown Error Occurred")
                     } ?: call.respondError("phoneF")
                 } ?: call.respondError("phoneF")
+            }
+            post("/getrestaurant") {
+                call.construct<GetRestaurantInfo>()?.let { info ->
+                    //TODO read data from database
+                    call.respondText(
+                        Json.encodeToString(
+                            Menu(
+                                1,
+                                "The Den",
+                                listOf(
+                                    SubMenu(1, "Breakfast", listOf(Item(1, "1", "1", 1), Item(2, "2", "2", 2))),
+                                    SubMenu(2, "Lunch", listOf(Item(3, "3", "3", 3), Item(4, "4", "4", 4)))
+                                )
+                            )
+                        )
+                    )
+                } ?: call.respondError()
             }
         }
 
