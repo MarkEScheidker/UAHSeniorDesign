@@ -2,11 +2,8 @@ package com.chargerfuel.pages
 
 import com.chargerfuel.GetRestaurantInfo
 import com.chargerfuel.Menu
+import com.chargerfuel.util.*
 import com.chargerfuel.util.ScreenType.*
-import com.chargerfuel.util.base
-import com.chargerfuel.util.center
-import com.chargerfuel.util.handleResize
-import com.chargerfuel.util.toolbar
 import io.kvision.core.*
 import io.kvision.html.Div
 import io.kvision.html.Image
@@ -53,7 +50,11 @@ object RestaurantPage : Webpage("main") {
                                 jQuery.post(
                                     "/getrestaurant",
                                     JSON.parse<Json>(Json.encodeToString(GetRestaurantInfo(res))),
-                                    { data, _, _ -> displayMenu(Json.decodeFromString(data.toString())) })
+                                    { data, _, _ ->
+                                        val response = data.toString()
+                                        if (response.startsWith("{")) displayMenu(Json.decodeFromString(response))
+                                        else handleResponse(response)
+                                    })
                             }
                         }
                         ?: run {

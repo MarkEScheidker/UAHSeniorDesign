@@ -88,9 +88,12 @@ fun Application.main() {
             }
             post("/getrestaurant") {
                 call.construct<GetRestaurantInfo>()?.let { info ->
-                    RestaurantStorage.getMenu(info.restaurant.toInt())
-                        ?.let { call.respondText(Json.encodeToString(it)) }
-                        ?: call.respondText("redirect: main")
+                    info.restaurant.toIntOrNull()
+                        ?.let { id ->
+                            RestaurantStorage.getMenu(id)
+                                ?.let { call.respondText(Json.encodeToString(it)) }
+                                ?: call.respondText("redirect: main")
+                        } ?: call.respondText("redirect: main")
                 } ?: call.respondError()
             }
         }
