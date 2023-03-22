@@ -100,14 +100,16 @@ object RestaurantPage : Webpage("main") {
 
 private fun Container.displayMenu(menu: Menu) {
     //TODO Put display stuff here @Bailey @Mark
-
+    URL(window.location.href).searchParams.get("submenu") ?.let { submenu ->
+        console.log("this worked ${submenu}")
+    }
 
     vPanel {
         div(menu.name)
         vPanel(alignItems = AlignItems.CENTER) {
             for (submenu in menu.menus) {
                 button(submenu.value.name).onClick {
-                    // handle submenu click
+                    window.location.href = window.location.href + "&submenu=${submenu.value.name}"
                 }
             }
         }
