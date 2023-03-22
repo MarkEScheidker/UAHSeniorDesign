@@ -31,6 +31,7 @@ suspend fun ApplicationCall.respondError(id: String = "error") =
 
 @Suppress("unused")
 fun Application.main() {
+    RestaurantStorage
     install(Compression)
 
     install(Sessions) {
@@ -74,7 +75,7 @@ fun Application.main() {
                                 call.respondText("info|passS|Password Changed!")
                         } else call.respondText("info|passF|Incorrect Password")
                     } ?: call.respondError("passF")
-                } ?: call.respondError("passF")
+                } ?: call.respondText("info|passF|Incorrect Password")
             }
             post("/changephone") {
                 call.construct<PhoneChangeInfo>()?.let { info ->
@@ -87,19 +88,9 @@ fun Application.main() {
             }
             post("/getrestaurant") {
                 call.construct<GetRestaurantInfo>()?.let { info ->
-                    //TODO read data from database
-                    call.respondText(
-                        Json.encodeToString(
-                            Menu(
-                                1,
-                                "The Den",
-                                listOf(
-                                    SubMenu(1, "Breakfast", listOf(Item(1, "1", "1", 1), Item(2, "2", "2", 2))),
-                                    SubMenu(2, "Lunch", listOf(Item(3, "3", "3", 3), Item(4, "4", "4", 4)))
-                                )
-                            )
-                        )
-                    )
+                    RestaurantStorage.getMenu(info.restaurant.toInt())
+                        ?.let { call.respondText(Json.encodeToString(it)) }
+                        ?: call.respondText("redirect: main")
                 } ?: call.respondError()
             }
         }

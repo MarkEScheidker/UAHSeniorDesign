@@ -22,9 +22,9 @@ object SQLUtils {
             val statement = connection.createStatement()
             val resultSet = statement.executeQuery(
                 """
-                SELECT PasswordHash
-                FROM UserLogin
-                WHERE UserEmail = '$user'
+                    SELECT PasswordHash
+                    FROM UserLogin
+                    WHERE UserEmail = '$user'
                 """.trimIndent()
             )
             var result: String? = null
@@ -49,9 +49,9 @@ object SQLUtils {
             val updateCount =
                 statement.executeUpdate(
                     """
-                    UPDATE UserLogin 
-                    SET PasswordHash = '$hash'
-                    WHERE UserEmail = '$user'
+                        UPDATE UserLogin 
+                        SET PasswordHash = '$hash'
+                        WHERE UserEmail = '$user'
                     """.trimIndent()
                 )
             statement.close()
@@ -109,13 +109,96 @@ object SQLUtils {
             refreshConnection()
             val statement = connection.prepareStatement(
                 """
-                INSERT INTO UserLogin (UserEmail, PasswordHash, PhoneNumber)
-                VALUES ('${info.username}','${info.hash}', '${info.phone}')
+                    INSERT INTO UserLogin (UserEmail, PasswordHash, PhoneNumber)
+                    VALUES ('${info.username}','${info.hash}', '${info.phone}')
                 """.trimIndent()
             )
             statement.executeUpdate()
             statement.close()
         } catch (_: SQLException) {
+        }
+    }
+
+    private data class ItemData(
+        val menuID: Int,
+        val menuName: String,
+        val id: Int,
+        val name: String,
+        val description: String,
+        val price: Int
+    )
+
+    private fun getMenu(id: Int): Menu {
+        try {
+            val name: String
+            connection.prepareStatement(
+                """
+                    SELECT Name
+                    FROM Restaurant
+                    WHERE RestaurantID = $id
+                """.trimIndent()
+            ).executeQuery().run {
+                if (!next()) return Menu("", mapOf())
+                name = getString("Name")
+                statement.close()
+                close()
+            }
+            val itemData = mutableListOf<ItemData>()
+            connection.prepareStatement(
+                """
+                    SELECT MenuID, MenuName, ItemID, ItemName, ItemDescription, ItemPrice
+                    FROM Restaurant
+                    INNER JOIN Menu USING (RestaurantID)
+                    INNER JOIN Item USING (MenuID)
+                    WHERE RestaurantID = $id
+                """.trimIndent()
+            ).executeQuery().run {
+                while (next()) {
+                    itemData.add(
+                        ItemData(
+                            getInt("MenuID"),
+                            getString("MenuName"),
+                            getInt("ItemID"),
+                            getString("ItemName"),
+                            getString("ItemDescription"),
+                            getInt("ItemPrice")
+                        )
+                    )
+                }
+                statement.close()
+                close()
+            }
+            return Menu(name, itemData.associate {
+                it.menuID to SubMenu(
+                    it.menuName,
+                    itemData.filter { item -> item.menuID == it.menuID }
+                        .associate { item -> item.id to Item(item.name, item.description, item.price) })
+            })
+        } catch (e: SQLException) {
+            return Menu("", mapOf())
+        }
+    }
+
+    fun getRestaurantMenus(): Map<Int, Menu> {
+        try {
+            refreshConnection()
+            val menus = mutableMapOf<Int, Menu>()
+            connection.prepareStatement(
+                """
+                    SELECT RestaurantID
+                    FROM Restaurant
+                """.trimIndent()
+            ).executeQuery().run {
+                while (next()) {
+                    val id = getInt("RestaurantID")
+                    menus[id] = getMenu(id)
+                }
+                statement.close()
+                close()
+            }
+            return menus
+        } catch (e: SQLException) {
+            return mutableMapOf()
         }
     }
 
