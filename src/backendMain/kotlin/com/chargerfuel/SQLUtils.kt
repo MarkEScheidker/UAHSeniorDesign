@@ -17,7 +17,7 @@ object SQLUtils {
     private var connection: Connection = DriverManager.getConnection(DB_URL, USER, PASS)
 
     private fun getPassword(user: String): String? {
-        if (!userValidation(user)) return null
+        if (!userValidation(user))return null
         return try {
             refreshConnection()
             val statement = connection.createStatement()
@@ -40,13 +40,19 @@ object SQLUtils {
     }
 
     fun checkPassword(user: String, password: String): Boolean {
-        if (!userValidation(user) || !passwordValidation(password)) return false
+        if (!userValidation(user) || !passwordValidation(password)) {
+            println("Error: Attempted to validate invalid login data!")
+            return false
+        }
         val hash = getPassword(user) ?: return false
         return BCrypt.checkpw(password, hash)
     }
 
     fun setPassword(user: String, password: String): Boolean {
-        if (!userValidation(user) || !passwordValidation(password)) return false
+        if (!userValidation(user) || !passwordValidation(password)) {
+            println("Error: Attempted to set password to invalid data!")
+            return false
+        }
         return try {
             refreshConnection()
             val statement = connection.createStatement()
@@ -84,7 +90,10 @@ object SQLUtils {
     }
 
     fun setPhoneNumber(user: String, number: String): Boolean {
-        if (!userValidation(user) || !phoneValidation(number)) return false
+        if (!userValidation(user) || !phoneValidation(number)) {
+            println("Error: Attempted to set phone number to invalid data!")
+            return false
+        }
         return try {
             refreshConnection()
             val statement = connection.createStatement()
@@ -113,11 +122,15 @@ object SQLUtils {
     }
 
     fun addUserAccount(info: AccountVerifyInfo) {
-        if (!userValidation(info.username) || !phoneValidation(info.phone) || !passwordValidation(info.password)) return
+        if (!userValidation(info.username) || !phoneValidation(info.phone) || !passwordValidation(info.hash)) {
+            println("Error: Attempted to add user account with invalid data!")
+            println(info)
+            return
+        }
         try {
             refreshConnection()
             var statement = connection.prepareStatement(
-                "INSERT INTO Password (PasswordHash) VALUES ('${info.password}')",
+                "INSERT INTO Password (PasswordHash) VALUES ('${info.hash}')",
                 Statement.RETURN_GENERATED_KEYS
             )
             statement.executeUpdate()

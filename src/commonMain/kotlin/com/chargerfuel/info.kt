@@ -21,7 +21,7 @@ data class AccountCreationInfo(
 }
 
 @Serializable
-data class AccountVerifyInfo(val username: String, val password: String, val phone: String) : ChargerForm
+data class AccountVerifyInfo(val username: String, val hash: String, val phone: String) : ChargerForm
 
 @Serializable
 data class PasswordForgotInfo(private val entry: String) : ChargerForm {

@@ -6,7 +6,9 @@ import com.chargerfuel.util.center
 import com.chargerfuel.util.handleResize
 import com.chargerfuel.util.toolbar
 import io.kvision.core.*
-import io.kvision.html.*
+import io.kvision.html.Div
+import io.kvision.html.Image
+import io.kvision.html.div
 import io.kvision.panel.Root
 import io.kvision.panel.flexPanel
 import io.kvision.panel.vPanel
@@ -30,9 +32,6 @@ object Restaurants : Webpage("main") {
                 overflowY = Overflow.SCROLL
                 alignItems = AlignItems.STRETCH
                 padding = 5.perc
-                h1(content = "Restaurants") {
-                    align = Align.CENTER
-                }
                 flexPanel(
                     FlexDirection.ROW,
                     FlexWrap.WRAP,
