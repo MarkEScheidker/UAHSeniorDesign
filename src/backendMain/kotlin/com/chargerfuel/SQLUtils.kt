@@ -5,10 +5,10 @@ import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
-import java.sql.Statement
 
 object SQLUtils {
-    private const val DB_URL = "jdbc:mysql://localhost:3306/main657432?enabledTLSProtocols=TLSv1.2&useSSL=false&serverTimezone=UTC"
+    private const val DB_URL =
+        "jdbc:mysql://localhost:3306/main657432?enabledTLSProtocols=TLSv1.2&useSSL=false&serverTimezone=UTC"
 
     //pull database credentials from local file
     private val lines: List<String> = File("/opt/charger_fuel/mysqlPassword.txt").readLines()
@@ -17,7 +17,7 @@ object SQLUtils {
     private var connection: Connection = DriverManager.getConnection(DB_URL, USER, PASS)
 
     private fun getPassword(user: String): String? {
-        if (!userValidation(user))return null
+        if (!userValidation(user)) return null
         return try {
             refreshConnection()
             val statement = connection.createStatement()
@@ -25,9 +25,8 @@ object SQLUtils {
                 """
                 SELECT PasswordHash
                 FROM UserLogin
-                INNER JOIN Password USING (PasswordID)
                 WHERE UserEmail = '$user'
-            """.trimIndent()
+                """.trimIndent()
             )
             var result: String? = null
             if (resultSet.next()) result = resultSet.getString("PasswordHash")
@@ -59,11 +58,10 @@ object SQLUtils {
             val updateCount =
                 statement.executeUpdate(
                     """
-                    UPDATE Password 
-                    INNER JOIN UserLogin USING(PasswordID)
+                    UPDATE UserLogin 
                     SET PasswordHash = '${password.encrypt()}'
                     WHERE UserEmail = '$user'
-                """.trimIndent()
+                    """.trimIndent()
                 )
             statement.close()
             updateCount > 0
@@ -129,21 +127,14 @@ object SQLUtils {
         }
         try {
             refreshConnection()
-            var statement = connection.prepareStatement(
-                "INSERT INTO Password (PasswordHash) VALUES ('${info.hash}')",
-                Statement.RETURN_GENERATED_KEYS
+            val statement = connection.prepareStatement(
+                """
+                INSERT INTO UserLogin (UserEmail, PasswordHash, PhoneNumber)
+                VALUES ('${info.username}','${info.hash}', '${info.phone}')
+                """.trimIndent()
             )
             statement.executeUpdate()
-            statement.generatedKeys?.let {
-                it.next()
-                val passwordID = it.getInt(1)
-                statement.close()
-                statement = connection.prepareStatement(
-                    "INSERT INTO UserLogin (UserEmail, PasswordID, PhoneNumber) VALUES ('${info.username}','$passwordID', '${info.phone}')"
-                )
-                statement.executeUpdate()
-                statement.close()
-            }
+            statement.close()
         } catch (_: SQLException) {
         }
     }
