@@ -97,7 +97,7 @@ fun Application.main() {
                 call.validateLogin(info.username, info.password)
                     ?.let { call.respondText("redirect: main") }
                     ?: call.respondText("info|error|Incorrect Username/Password")
-            } ?: call.respondError()
+            } ?: call.respondText("info|error|Incorrect Username/Password")
         }
         get("/logout") {
             call.sessions.get<UserSession>()?.let { sessionCache.remove(it.name) }

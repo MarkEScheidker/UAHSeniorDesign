@@ -123,12 +123,6 @@ object AccountSettings : Webpage("account") {
                         }
                     }
                 }
-                vPanel {
-                    width = 80.perc
-                    h3("Payment")
-                    text(value = "[PAYMENT TYPE]") { disabled = true }
-                    button("Payment Options", style = ButtonStyle.OUTLINEPRIMARY)
-                }
                 addAfterInsertHook {
                     jQuery.post("/getemail", null, { data, _, _ ->
                         val username = data.toString()

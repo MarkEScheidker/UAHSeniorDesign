@@ -63,6 +63,7 @@ object LoginPage : Webpage("login") {
             alignItems = AlignItems.CENTER
             display = Display.FLEX
             flexDirection = FlexDirection.COLUMN
+            justifyContent = JustifyContent.START
             gridRowGap = 20
             padding = 20.px
             zIndex = 4
@@ -70,15 +71,13 @@ object LoginPage : Webpage("login") {
             basicForm<LoginInfo>("Login") {
                 errorBox()
                 usernameOrEmailBox()
-                add(
-                    "password",
-                    Password(name = "password") {
-                        placeholder = "Password"
-                        width = 100.perc
-                        input.width = 100.perc
-                        input.setAttribute("autocapitalize", "none")
-                    }, required = true
-                )
+                val password = Password(name = "password") {
+                    placeholder = "Password"
+                    width = 100.perc
+                    input.width = 100.perc
+                    input.setAttribute("autocapitalize", "none")
+                }
+                add("password", password, required = true)
                 hPanel {
                     width = 100.perc
                     justifyContent = JustifyContent.SPACEBETWEEN
@@ -86,7 +85,7 @@ object LoginPage : Webpage("login") {
                         link("Forgot Password?", "reset") { colorName = Col.LIGHTSTEELBLUE }
                         link("New to Charger Fuel?", "signup") { colorName = Col.LIGHTSTEELBLUE }
                     }
-                    add(submitButton("Login", "login") { clearData() })
+                    add(submitButton("Login", "login") { password.input.value = null })
                 }
             }
             handleResize {
