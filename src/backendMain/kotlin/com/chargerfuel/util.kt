@@ -27,7 +27,7 @@ suspend inline fun <reified T : ChargerForm> ApplicationCall.construct(): T? {
             val args = it.parameters.map { parameter ->
                 parameters[parameter.name ?: throw IllegalArgumentException()] ?: throw NoSuchElementException()
             }.toTypedArray()
-            it.call(*args)
+            it.call(*args).takeIf { info -> info.verify() }
         } ?: throw NoSuchElementException()
     } catch (e: Exception) {
         null
@@ -35,5 +35,3 @@ suspend inline fun <reified T : ChargerForm> ApplicationCall.construct(): T? {
 }
 
 fun String.encrypt(): String = BCrypt.hashpw(this, BCrypt.gensalt())
-
-fun <T> T.debug(): T = this.also { println(this) }

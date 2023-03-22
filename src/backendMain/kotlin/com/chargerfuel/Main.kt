@@ -68,7 +68,7 @@ fun Application.main() {
                 call.construct<PasswordChangeInfo>()?.let { info ->
                     call.getSession()?.let {
                         if (SQLUtils.checkPassword(it.name, info.oldPassword)) {
-                            if (SQLUtils.setPassword(it.name, info.password))
+                            if (SQLUtils.setPassword(it.name, info.password.encrypt()))
                                 call.respondText("info|passS|Password Changed!")
                         } else call.respondText("info|passF|Incorrect Password")
                     } ?: call.respondError("passF")
@@ -152,7 +152,7 @@ fun Application.main() {
         post("/reset") {
             call.getSession()?.let {
                 call.construct<PasswordResetInfo>()?.let { info ->
-                    if (SQLUtils.setPassword(it.name, info.password)) call.respondText("redirect: login")
+                    if (SQLUtils.setPassword(it.name, info.password.encrypt())) call.respondText("redirect: login")
                 } ?: call.respondError()
             } ?: call.respondError()
         }
