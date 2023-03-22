@@ -2,11 +2,15 @@ package com.chargerfuel.pages
 
 import com.chargerfuel.GetRestaurantInfo
 import com.chargerfuel.Menu
+import com.chargerfuel.SubMenu
 import com.chargerfuel.util.*
 import com.chargerfuel.util.ScreenType.*
 import io.kvision.core.*
+import io.kvision.form.text.text
+import io.kvision.form.text.textArea
 import io.kvision.html.Div
 import io.kvision.html.Image
+import io.kvision.html.button
 import io.kvision.html.div
 import io.kvision.jquery.jQuery
 import io.kvision.panel.Root
@@ -96,5 +100,18 @@ object RestaurantPage : Webpage("main") {
 
 private fun Container.displayMenu(menu: Menu) {
     //TODO Put display stuff here @Bailey @Mark
+
+
+    vPanel {
+        div(menu.name)
+        vPanel(alignItems = AlignItems.CENTER) {
+            for (submenu in menu.menus) {
+                button(submenu.value.name).onClick {
+                    // handle submenu click
+                }
+            }
+        }
+    }
+
     console.log(menu)
 }
