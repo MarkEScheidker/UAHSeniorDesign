@@ -94,22 +94,18 @@ object RestaurantPage : Webpage("main") {
 
 private fun Container.displayMenu(menu: Menu) {
     //TODO Put display stuff here @Bailey @Mark
-    /**
-     * Changes made by Sarah:
-     * Replaced basic text `div`s with `p`s (p denotes text blocks in HTML)
-     * Replaced header `div`s with `h2`s (h2 has larger text)
-     * Replaced `deconstructed for` loops with `forEach` (You probably don't even know what deconstruction is yet, I'd avoid using it if not necessary (forEach is much better in this case))
-     * Replaced manual search loops with `find` (Instead of looping through the list and manually checking if each one is the one you're looking for, use `find`, it does it for you)
-     * Removed console log at end (Not needed anymore)
-     * Removed unnecessary div nesting (if a div is unmarked other than inner divs, it's useless)
-     */
+
     URL(window.location.href).searchParams.get("submenu")?.let { name ->
         menu.menus.values.find { it.name == name }?.let { subMenu ->
             vPanel {
                 h2(name)
                 subMenu.items.values.forEach { item ->
-                    p("${item.name}: \$${item.price / 100}.${item.price % 100}")
-                    p(item.description)
+                    button("") {
+                        p("${item.name}: \$${item.price / 100}.${item.price % 100}")
+                        p(item.description)
+                    }.onClick {
+                        jQuery.post("/cartadd", 1)
+                    }
                 }
             }
         }

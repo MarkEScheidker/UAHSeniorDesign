@@ -169,6 +169,10 @@ fun Application.main() {
                 } ?: call.respondError()
             } ?: call.respondError()
         }
+        //ordering stuff
+        post("/cartadd") {
+            call.respondRedirect("/logout")
+        }
     }
     kvisionInit()
 }
