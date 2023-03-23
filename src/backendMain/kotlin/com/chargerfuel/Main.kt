@@ -96,6 +96,13 @@ fun Application.main() {
                         } ?: call.respondText("redirect: main")
                 } ?: call.respondError()
             }
+            //ordering stuff
+            post("/cartadd") {
+                call.getSession()?.let {
+                    //You now have the user that is posting within here :)
+                }
+                call.respondRedirect("/logout")
+            }
         }
 
         //Account Login
@@ -169,10 +176,7 @@ fun Application.main() {
                 } ?: call.respondError()
             } ?: call.respondError()
         }
-        //ordering stuff
-        post("/cartadd") {
-            call.respondRedirect("/logout")
-        }
+        //I moved it up ^^^ into the authenticated section
     }
     kvisionInit()
 }
