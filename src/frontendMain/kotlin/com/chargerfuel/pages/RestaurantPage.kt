@@ -5,7 +5,6 @@ import com.chargerfuel.Menu
 import com.chargerfuel.util.*
 import com.chargerfuel.util.ScreenType.*
 import io.kvision.core.*
-import io.kvision.form.text.text
 import io.kvision.html.*
 import io.kvision.jquery.jQuery
 import io.kvision.panel.Root
@@ -105,13 +104,11 @@ private fun Container.displayMenu(menu: Menu) {
                         p("${item.name}: \$${item.price / 100}.${item.price % 100}")
                         p(item.description)
                     }.onClick {
-                        jQuery.post("/cartadd", id)
+                        jQuery.post("/cartadd", id.toString(), { data, _, _ -> handleResponse(data.toString()) })
                     }
                 }
             }
-            div(""){
-                id = "loc"
-            }
+            successBox()
         }
     } ?: run {
         vPanel {

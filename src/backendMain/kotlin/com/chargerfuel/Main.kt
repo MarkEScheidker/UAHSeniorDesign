@@ -100,8 +100,8 @@ fun Application.main() {
             //ordering stuff
             post("/cartadd") {
                 call.getSession()?.let {
-                    val id = call.receive<Int>()
-                    call.respondText("info|<loc>|item $id added")
+                    val id = call.receive<String>().toInt()
+                    call.respondText("info|success|item $id added")
                 }
             }
         }
@@ -177,7 +177,6 @@ fun Application.main() {
                 } ?: call.respondError()
             } ?: call.respondError()
         }
-        //I moved it up ^^^ into the authenticated section
     }
     kvisionInit()
 }
