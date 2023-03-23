@@ -2,16 +2,10 @@ package com.chargerfuel.pages
 
 import com.chargerfuel.GetRestaurantInfo
 import com.chargerfuel.Menu
-import com.chargerfuel.SubMenu
 import com.chargerfuel.util.*
 import com.chargerfuel.util.ScreenType.*
 import io.kvision.core.*
-import io.kvision.form.text.text
-import io.kvision.form.text.textArea
-import io.kvision.html.Div
-import io.kvision.html.Image
-import io.kvision.html.button
-import io.kvision.html.div
+import io.kvision.html.*
 import io.kvision.jquery.jQuery
 import io.kvision.panel.Root
 import io.kvision.panel.flexPanel
@@ -100,33 +94,36 @@ object RestaurantPage : Webpage("main") {
 
 private fun Container.displayMenu(menu: Menu) {
     //TODO Put display stuff here @Bailey @Mark
-    URL(window.location.href).searchParams.get("submenu") ?.let { submenu ->
-        vPanel {
-            div(submenu)
-            for ((_, subMenu) in menu.menus) {
-                if (subMenu.name == submenu) {
-                    for ((_, item) in subMenu.items) {
-                        div {
-                            div(item.name)
-                            div(item.description)
-                            div("$${item.price / 100}.${item.price % 100}")
-                        }
-                    }
+    /**
+     * Changes made by Sarah:
+     * Replaced basic text `div`s with `p`s (p denotes text blocks in HTML)
+     * Replaced header `div`s with `h2`s (h2 has larger text)
+     * Replaced `deconstructed for` loops with `forEach` (You probably don't even know what deconstruction is yet, I'd avoid using it if not necessary (forEach is much better in this case))
+     * Replaced manual search loops with `find` (Instead of looping through the list and manually checking if each one is the one you're looking for, use `find`, it does it for you)
+     * Removed console log at end (Not needed anymore)
+     * Removed unnecessary div nesting (if a div is unmarked other than inner divs, it's useless)
+     */
+    URL(window.location.href).searchParams.get("submenu")?.let { name ->
+        menu.menus.values.find { it.name == name }?.let { subMenu ->
+            vPanel {
+                h2(name)
+                subMenu.items.values.forEach { item ->
+                    p("${item.name}: \$${item.price / 100}.${item.price % 100}")
+                    p(item.description)
                 }
             }
         }
-    } ?: run{
+    } ?: run {
         vPanel {
-            div(menu.name)
+            h2(menu.name)
             vPanel(alignItems = AlignItems.CENTER) {
-                for (submenu in menu.menus) {
-                    button(submenu.value.name).onClick {
-                        window.location.href = window.location.href + "&submenu=${submenu.value.name}"
+                menu.menus.values.forEach { subMenu ->
+                    button(subMenu.name).onClick {
+                        window.location.href = window.location.href + "&submenu=${subMenu.name}"
                     }
                 }
             }
         }
     }
-    console.log(menu)
 }
 
