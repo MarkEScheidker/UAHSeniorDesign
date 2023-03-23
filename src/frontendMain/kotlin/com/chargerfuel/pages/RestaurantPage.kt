@@ -99,12 +99,12 @@ private fun Container.displayMenu(menu: Menu) {
         menu.menus.values.find { it.name == name }?.let { subMenu ->
             vPanel {
                 h2(name)
-                subMenu.items.values.forEach { item ->
+                subMenu.items.forEach { (id, item) ->
                     button("") {
                         p("${item.name}: \$${item.price / 100}.${item.price % 100}")
                         p(item.description)
                     }.onClick {
-                        jQuery.post("/cartadd", 1)
+                        jQuery.post("/cartadd", id)
                     }
                 }
             }
