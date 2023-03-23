@@ -101,19 +101,32 @@ object RestaurantPage : Webpage("main") {
 private fun Container.displayMenu(menu: Menu) {
     //TODO Put display stuff here @Bailey @Mark
     URL(window.location.href).searchParams.get("submenu") ?.let { submenu ->
-        console.log("this worked ${submenu}")
-    }
-
-    vPanel {
-        div(menu.name)
-        vPanel(alignItems = AlignItems.CENTER) {
-            for (submenu in menu.menus) {
-                button(submenu.value.name).onClick {
-                    window.location.href = window.location.href + "&submenu=${submenu.value.name}"
+        vPanel {
+            div(submenu)
+            for ((_, subMenu) in menu.menus) {
+                if (subMenu.name == submenu) {
+                    for ((_, item) in subMenu.items) {
+                        div {
+                            div(item.name)
+                            div(item.description)
+                            div("$${item.price / 100}.${item.price % 100}")
+                        }
+                    }
+                }
+            }
+        }
+    } ?: run{
+        vPanel {
+            div(menu.name)
+            vPanel(alignItems = AlignItems.CENTER) {
+                for (submenu in menu.menus) {
+                    button(submenu.value.name).onClick {
+                        window.location.href = window.location.href + "&submenu=${submenu.value.name}"
+                    }
                 }
             }
         }
     }
-
     console.log(menu)
 }
+
