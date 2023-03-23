@@ -5,6 +5,7 @@ import com.chargerfuel.Menu
 import com.chargerfuel.util.*
 import com.chargerfuel.util.ScreenType.*
 import io.kvision.core.*
+import io.kvision.form.text.text
 import io.kvision.html.*
 import io.kvision.jquery.jQuery
 import io.kvision.panel.Root
@@ -107,6 +108,9 @@ private fun Container.displayMenu(menu: Menu) {
                         jQuery.post("/cartadd", id)
                     }
                 }
+            }
+            div(""){
+                id = "loc"
             }
         }
     } ?: run {

@@ -3,6 +3,7 @@ package com.chargerfuel
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.compression.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
@@ -99,9 +100,9 @@ fun Application.main() {
             //ordering stuff
             post("/cartadd") {
                 call.getSession()?.let {
-                    //You now have the user that is posting within here :)
+                    val id = call.receive<Int>()
+                    call.respondText("info|<loc>|item $id added")
                 }
-                call.respondRedirect("/logout")
             }
         }
 
