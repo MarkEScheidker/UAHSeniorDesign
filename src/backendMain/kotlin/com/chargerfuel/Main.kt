@@ -101,7 +101,7 @@ fun Application.main() {
             post("/cartadd") {
                 call.getSession()?.let {
                     val id = call.receive<String>().toInt()
-                    call.respondText("info|success|item $id added")
+                    call.respondText("info|success|item $id added to cart")
                 }
             }
         }
@@ -136,11 +136,10 @@ fun Application.main() {
                         token,
                         AccountVerifyInfo(info.username, info.password.encrypt(), info.phone)
                     )
-                    call.respondText("info|info|Check your email lol") //TODO make a better message
+                    call.respondText("info|info|Check your email")
                     EmailService.sendEmailValidation(info.email, token)
                 } else call.respondText("info|error|Email already registered")
             } ?: call.respondError()
-
         }
         get("/verify") {
             call.request.queryParameters["id"]

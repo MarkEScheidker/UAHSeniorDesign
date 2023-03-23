@@ -98,6 +98,7 @@ private fun Container.displayMenu(menu: Menu) {
     URL(window.location.href).searchParams.get("submenu")?.let { name ->
         menu.menus.values.find { it.name == name }?.let { subMenu ->
             vPanel {
+                successBox()
                 h2(name)
                 subMenu.items.forEach { (id, item) ->
                     button("") {
@@ -108,7 +109,6 @@ private fun Container.displayMenu(menu: Menu) {
                     }
                 }
             }
-            successBox()
         }
     } ?: run {
         vPanel {
