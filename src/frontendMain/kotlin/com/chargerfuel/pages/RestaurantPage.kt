@@ -109,10 +109,10 @@ private fun Container.displayMenu(menu: Menu) {
                             borderRadius = 3.perc
                             width = 65.perc
                             p("${item.name}: \$${item.price / 100}.${item.price % 100}"){
-                                fontSize = 1.vw
+                                fontSize = 14.px
                             }
                             p(item.description){
-                                fontSize= 0.75.vw
+                                fontSize= 10.px
                             }
                         }
                         vPanel {
@@ -120,15 +120,15 @@ private fun Container.displayMenu(menu: Menu) {
                             button("") {
                                 if(item.disabled == true){
                                     p("Out Of Stock"){
-                                        fontSize = 0.75.vw
+                                        fontSize = 9.px
                                     }
                                 }else{
                                     p("Add To Cart"){
-                                        fontSize = 0.75.vw
+                                        fontSize = 9.px
                                     }
                                 }
                                 disabled = item.disabled
-                                height = 2.vw
+                                height = 30.px
 
                             }.onClick {
                                 jQuery.post("/cartadd", id.toString(), { data, _, _ -> handleResponse(data.toString()) })
@@ -136,7 +136,7 @@ private fun Container.displayMenu(menu: Menu) {
                             div {
                                 this.id = id.toString()
                                 colorName = Col.LIMEGREEN
-                                fontSize = 0.75.vw
+                                fontSize = 8.px
                             }
 
                         }
