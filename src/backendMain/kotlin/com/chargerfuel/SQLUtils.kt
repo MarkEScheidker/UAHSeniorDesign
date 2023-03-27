@@ -125,7 +125,8 @@ object SQLUtils {
         val id: Int,
         val name: String,
         val description: String,
-        val price: Int
+        val price: Int,
+        val disabled: Boolean
     )
 
     private fun getMenu(id: Int): Menu {
@@ -146,7 +147,7 @@ object SQLUtils {
             val itemData = mutableListOf<ItemData>()
             connection.prepareStatement(
                 """
-                    SELECT MenuID, MenuName, ItemID, ItemName, ItemDescription, ItemPrice
+                    SELECT MenuID, MenuName, ItemID, ItemName, ItemDescription, ItemPrice, disabled
                     FROM Restaurant
                     INNER JOIN Menu USING (RestaurantID)
                     INNER JOIN Item USING (MenuID)
@@ -161,7 +162,8 @@ object SQLUtils {
                             getInt("ItemID"),
                             getString("ItemName"),
                             getString("ItemDescription"),
-                            getInt("ItemPrice")
+                            getInt("ItemPrice"),
+                            getBoolean("disabled")
                         )
                     )
                 }
@@ -172,7 +174,7 @@ object SQLUtils {
                 it.menuID to SubMenu(
                     it.menuName,
                     itemData.filter { item -> item.menuID == it.menuID }
-                        .associate { item -> item.id to Item(item.name, item.description, item.price) })
+                        .associate { item -> item.id to Item(item.name, item.description, item.price, item.disabled) })
             })
         } catch (e: SQLException) {
             return Menu("", mapOf())
