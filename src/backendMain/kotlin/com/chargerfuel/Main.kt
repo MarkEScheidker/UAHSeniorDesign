@@ -64,6 +64,7 @@ fun Application.main() {
         authenticate("session") {
             get("/main") { call.respondHtml("main") }
             get("/account") { call.respondHtml("account") }
+            get("/cart") { call.respondHtml("cart") }
             post("/getemail") { call.getSession()?.let { call.respondText(it.name) } }
             post("/getphone") {
                 call.getSession()?.let { call.respondText(SQLUtils.getPhoneNumber(it.name) ?: "N/A") }

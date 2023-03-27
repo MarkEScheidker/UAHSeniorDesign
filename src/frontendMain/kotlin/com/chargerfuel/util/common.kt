@@ -81,6 +81,17 @@ fun SimplePanel.toolbar() {
                 minWidth = 2.px
                 setStyle("border-radius", "2px")
             }
+            link("Cart", "/cart") {
+                setStyle("font-size", "min(3vh, 4vw)")
+                textDecoration = TextDecoration(TextDecorationLine.NONE)
+                colorName = Col.BLACK
+            }
+            div {
+                background = Background(Color.name(Col.BLACK))
+                height = 100.perc
+                minWidth = 2.px
+                setStyle("border-radius", "2px")
+            }
             link("Logout", "/logout") {
                 setStyle("font-size", "min(3vh, 4vw)")
                 textDecoration = TextDecoration(TextDecorationLine.NONE)

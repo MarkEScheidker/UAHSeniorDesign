@@ -19,6 +19,7 @@ class App : Application() {
         load(ForgotPasswordPage)
         load(AccountSettings)
         load(ResetPasswordPage)
+        load(CartPage)
     }
 }
 
