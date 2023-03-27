@@ -104,6 +104,7 @@ private fun Container.displayMenu(menu: Menu) {
                     button("") {
                         p("${item.name}: \$${item.price / 100}.${item.price % 100}")
                         p(item.description)
+                        disabled = item.disabled
                     }.onClick {
                         jQuery.post("/cartadd", id.toString(), { data, _, _ -> handleResponse(data.toString()) })
                     }
