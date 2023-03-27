@@ -101,29 +101,29 @@ private fun Container.displayMenu(menu: Menu) {
         menu.menus.values.find { it.name == name }?.let { subMenu ->
             vPanel {
                 //successBox()
-                h2(name,false, Align.CENTER)
+                h2(name, align = Align.CENTER)
                 subMenu.items.forEach { (id, item) ->
                     hPanel {
-                        div{
-                            border = Border(3.perc,BorderStyle.SOLID, Color.name(Col.LIGHTSTEELBLUE))
-                            borderRadius = 3.perc
+                        div {
+                            border = Border(3.px, BorderStyle.SOLID, Color.name(Col.LIGHTSTEELBLUE))
+                            borderRadius = 3.px
                             width = 65.perc
-                            p("${item.name}: \$${item.price / 100}.${item.price % 100}"){
+                            p("${item.name}: \$${item.price / 100}.${item.price % 100}") {
                                 fontSize = 14.px
                             }
-                            p(item.description){
-                                fontSize= 10.px
+                            p(item.description) {
+                                fontSize = 10.px
                             }
                         }
                         vPanel {
                             width = 35.perc
                             button("") {
-                                if(item.disabled == true){
-                                    p("Out Of Stock"){
+                                if (item.disabled) {
+                                    p("Out Of Stock") {
                                         fontSize = 9.px
                                     }
-                                }else{
-                                    p("Add To Cart"){
+                                } else {
+                                    p("Add To Cart") {
                                         fontSize = 9.px
                                     }
                                 }
@@ -131,12 +131,15 @@ private fun Container.displayMenu(menu: Menu) {
                                 height = 30.px
 
                             }.onClick {
-                                jQuery.post("/cartadd", id.toString(), { data, _, _ -> handleResponse(data.toString()) })
+                                jQuery.post(
+                                    "/cartadd",
+                                    id.toString(),
+                                    { data, _, _ -> handleResponse(data.toString()) })
                             }
                             div {
                                 this.id = id.toString()
                                 colorName = Col.LIMEGREEN
-                                fontSize = 8.px
+                                fontSize = 9.px
                             }
 
                         }
@@ -149,7 +152,11 @@ private fun Container.displayMenu(menu: Menu) {
             h2(menu.name)
             vPanel(alignItems = AlignItems.CENTER) {
                 menu.menus.values.forEach { subMenu ->
-                    button(subMenu.name).onClick {
+                    button(subMenu.name) {
+                        width = 100.perc
+                        height = 60.perc
+                        fontSize = 16.px
+                    }.onClick {
                         window.location.href = window.location.href + "&submenu=${subMenu.name}"
                     }
                 }

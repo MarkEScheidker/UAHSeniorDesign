@@ -101,7 +101,7 @@ fun Application.main() {
             post("/cartadd") {
                 call.getSession()?.let {
                     val id = call.receive<String>().toInt()
-                    call.respondText("info|$id|item added to cart")
+                    call.respondText("info|$id|Item Added to Cart")
                 }
             }
         }
