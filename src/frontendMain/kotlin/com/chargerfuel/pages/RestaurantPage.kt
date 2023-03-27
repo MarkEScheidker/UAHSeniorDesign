@@ -9,10 +9,12 @@ import io.kvision.html.*
 import io.kvision.jquery.jQuery
 import io.kvision.panel.Root
 import io.kvision.panel.flexPanel
+import io.kvision.panel.hPanel
 import io.kvision.panel.vPanel
 import io.kvision.require
 import io.kvision.utils.perc
 import io.kvision.utils.px
+import io.kvision.utils.vw
 import kotlinx.browser.window
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -28,8 +30,8 @@ object RestaurantPage : Webpage("main") {
                 require("css/scrollbars.css")
                 position = Position.ABSOLUTE
                 colorName = Col.BLACK
-                width = 90.perc
-                height = 90.perc
+                width = 95.perc
+                height = 95.perc
                 overflowX = Overflow.HIDDEN
                 overflowY = Overflow.SCROLL
                 alignItems = AlignItems.STRETCH
@@ -98,15 +100,46 @@ private fun Container.displayMenu(menu: Menu) {
     URL(window.location.href).searchParams.get("submenu")?.let { name ->
         menu.menus.values.find { it.name == name }?.let { subMenu ->
             vPanel {
-                successBox()
-                h2(name)
+                //successBox()
+                h2(name,false, Align.CENTER)
                 subMenu.items.forEach { (id, item) ->
-                    button("") {
-                        p("${item.name}: \$${item.price / 100}.${item.price % 100}")
-                        p(item.description)
-                        disabled = item.disabled
-                    }.onClick {
-                        jQuery.post("/cartadd", id.toString(), { data, _, _ -> handleResponse(data.toString()) })
+                    hPanel {
+                        div{
+                            border = Border(3.perc,BorderStyle.SOLID, Color.name(Col.LIGHTSTEELBLUE))
+                            borderRadius = 3.perc
+                            width = 65.perc
+                            p("${item.name}: \$${item.price / 100}.${item.price % 100}"){
+                                fontSize = 1.vw
+                            }
+                            p(item.description){
+                                fontSize= 0.75.vw
+                            }
+                        }
+                        vPanel {
+                            width = 35.perc
+                            button("") {
+                                if(item.disabled == true){
+                                    p("Out Of Stock"){
+                                        fontSize = 0.75.vw
+                                    }
+                                }else{
+                                    p("Add To Cart"){
+                                        fontSize = 0.75.vw
+                                    }
+                                }
+                                disabled = item.disabled
+                                height = 2.vw
+
+                            }.onClick {
+                                jQuery.post("/cartadd", id.toString(), { data, _, _ -> handleResponse(data.toString()) })
+                            }
+                            div {
+                                this.id = id.toString()
+                                colorName = Col.LIMEGREEN
+                                fontSize = 0.75.vw
+                            }
+
+                        }
                     }
                 }
             }
