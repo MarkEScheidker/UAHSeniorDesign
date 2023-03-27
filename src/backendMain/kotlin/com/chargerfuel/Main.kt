@@ -101,8 +101,12 @@ fun Application.main() {
             post("/cartadd") {
                 call.getSession()?.let {
                     val id = call.receive<String>().toInt()
+                    it.addToCart(id)
                     call.respondText("info|$id|Item Added to Cart")
                 }
+            }
+            post("/getcartsize") {
+                call.getSession()?.let { call.respondText("info|cart|${it.getCartSize()}") }
             }
         }
 
