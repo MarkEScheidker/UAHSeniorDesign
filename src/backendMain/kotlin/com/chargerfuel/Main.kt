@@ -106,8 +106,22 @@ fun Application.main() {
                     call.respondText("info|$id|Item Added to Cart")
                 }
             }
+            post("/cartremove") {
+                call.getSession()?.let {
+                    val id = call.receive<String>().toInt()
+                    it.removeFromCart(id)
+                    call.respondText("info|$id|Item Removed from Cart")
+                }
+            }
             post("/getcartsize") {
                 call.getSession()?.let { call.respondText("info|cart|${it.getCartSize()}") }
+            }
+            post("/getcart") {
+                call.getSession()?.let { call.respondText(Json.encodeToString(it.getCart())) }
+            }
+            post("/placeorder") {
+                call.getSession()?.submitOrder()
+                call.respondText("redirect: main")
             }
         }
 
