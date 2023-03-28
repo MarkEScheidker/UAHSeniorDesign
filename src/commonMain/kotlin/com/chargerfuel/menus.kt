@@ -2,6 +2,8 @@ package com.chargerfuel
 
 import kotlinx.serialization.Serializable
 
+typealias Cart = MutableMap<Int, Int>
+
 @Serializable
 data class Item(val name: String, val description: String, val price: Int, val disabled: Boolean)
 
