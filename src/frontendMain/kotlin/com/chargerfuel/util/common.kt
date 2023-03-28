@@ -59,7 +59,7 @@ fun SimplePanel.toolbar() {
             width = 100.perc
             float = PosFloat.LEFT
             setStyle("column-gap", "2vh")
-            link("Orders", "/main") {
+            link("Order", "/main") {
                 setStyle("font-size", "min(3vh, 4vw)")
                 textDecoration = TextDecoration(TextDecorationLine.NONE)
                 colorName = Col.BLACK
