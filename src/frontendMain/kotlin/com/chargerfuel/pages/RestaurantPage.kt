@@ -100,10 +100,13 @@ private fun Container.displayMenu(menu: Menu) {
     URL(window.location.href).searchParams.get("submenu")?.let { name ->
         menu.menus.values.find { it.name == name }?.let { subMenu ->
             vPanel {
-                //successBox()
+                successBox()
+                width = 100.perc
+                maxWidth = 400.px
                 h2(name, align = Align.CENTER)
                 subMenu.items.forEach { (id, item) ->
                     hPanel {
+                        paddingBottom = 10.px
                         div {
                             border = Border(3.px, BorderStyle.SOLID, Color.name(Col.LIGHTSTEELBLUE))
                             borderRadius = 3.px
@@ -120,15 +123,16 @@ private fun Container.displayMenu(menu: Menu) {
                             button("") {
                                 if (item.disabled) {
                                     p("Out Of Stock") {
-                                        fontSize = 9.px
+                                        fontSize = 10.px
                                     }
                                 } else {
                                     p("Add To Cart") {
-                                        fontSize = 9.px
+                                        fontSize = 10.px
                                     }
                                 }
                                 disabled = item.disabled
                                 height = 30.px
+                                maxWidth = 120.px
 
                             }.onClick {
                                 jQuery.post(
@@ -141,7 +145,6 @@ private fun Container.displayMenu(menu: Menu) {
                                 colorName = Col.LIMEGREEN
                                 fontSize = 9.px
                             }
-
                         }
                     }
                 }
@@ -154,8 +157,9 @@ private fun Container.displayMenu(menu: Menu) {
                 menu.menus.values.forEach { subMenu ->
                     button(subMenu.name) {
                         width = 100.perc
-                        height = 60.perc
+                        height = 75.perc
                         fontSize = 16.px
+                        padding = 10.px
                     }.onClick {
                         window.location.href = window.location.href + "&submenu=${subMenu.name}"
                     }
