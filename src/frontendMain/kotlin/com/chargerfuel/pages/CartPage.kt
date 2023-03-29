@@ -9,6 +9,7 @@ import io.kvision.core.*
 import io.kvision.html.b
 import io.kvision.html.button
 import io.kvision.html.div
+import io.kvision.html.p
 import io.kvision.jquery.jQuery
 import io.kvision.panel.Root
 import io.kvision.panel.VPanel
@@ -25,7 +26,7 @@ object CartPage : Webpage("cart") {
         base {
             vPanel(alignItems = AlignItems.CENTER) {
                 center()
-                width = 35.perc
+                width = 100.perc
                 overflowX = Overflow.HIDDEN
                 overflowY = Overflow.SCROLL
                 height = 90.perc
@@ -54,7 +55,9 @@ private fun VPanel.fillCartPage(cart: Map<Int, Pair<Item, Int>>) {
     cart.forEach { (id, pair) ->
         val (item, count) = pair
         hPanel {
-            width = 100.perc
+            width = 98.perc
+            maxWidth = 500.px
+            paddingBottom = 10.px
             div {
                 width = 100.perc
                 border = Border(3.px, BorderStyle.SOLID, Color.name(Col.BLACK))
@@ -73,13 +76,23 @@ private fun VPanel.fillCartPage(cart: Map<Int, Pair<Item, Int>>) {
             }
         }
     }
-    button("Place Order") {
-        width = 100.perc
-        marginTop = 50.perc
-        onClick {
-            jQuery.post("/placeorder", null, { data, _, _ ->
-                handleResponse(data.toString())
-            })
+
+    if(cart.isNotEmpty()) {
+        button("Place Order") {
+            width = 98.perc
+            marginTop = 10.px
+            maxWidth = 500.px
+            onClick {
+                jQuery.post("/placeorder", null, { data, _, _ ->
+                    handleResponse(data.toString())
+                })
+            }
+        }
+    } else{
+        p("Your cart is empty, go order some food and come back.") {
+            marginTop = 10.perc
+            marginLeft = 10.perc
+            marginRight = 10.perc
         }
     }
 }
