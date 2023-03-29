@@ -20,6 +20,7 @@ class App : Application() {
         load(AccountSettings)
         load(ResetPasswordPage)
         load(CartPage)
+        load(RestaurantViewPage)
     }
 }
 

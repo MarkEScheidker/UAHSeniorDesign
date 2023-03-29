@@ -31,6 +31,27 @@ object SQLUtils {
             if (resultSet.next()) result = resultSet.getString("PasswordHash")
             resultSet.close()
             statement.close()
+            result ?: getRestaurantPassword(user)
+        } catch (e: SQLException) {
+            null
+        }
+    }
+
+    private fun getRestaurantPassword(user: String): String? {
+        return try {
+            refreshConnection()
+            val statement = connection.createStatement()
+            val resultSet = statement.executeQuery(
+                """
+                    SELECT PasswordHash
+                    FROM Restaurant
+                    WHERE Email = '$user'
+                """.trimIndent()
+            )
+            var result: String? = null
+            if (resultSet.next()) result = resultSet.getString("PasswordHash")
+            resultSet.close()
+            statement.close()
             result
         } catch (e: SQLException) {
             null
@@ -206,5 +227,9 @@ object SQLUtils {
 
     private fun refreshConnection() {
         if (connection.isClosed) connection = DriverManager.getConnection(DB_URL, USER, PASS)
+    }
+
+    fun isRestaurant(user: String): Boolean {
+        return getRestaurantPassword(user) != null
     }
 }

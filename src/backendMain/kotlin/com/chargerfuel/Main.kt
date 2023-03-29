@@ -23,7 +23,7 @@ fun ApplicationCall.validateLogin(user: String, password: String): UserIdPrincip
 fun ApplicationCall.login(user: String): UserIdPrincipal = UserIdPrincipal(user).also {
     val session = UserSession(it.name)
     sessionCache[session.name] = System.currentTimeMillis()
-    this.sessions.set(session)
+    sessions.set(session)
 }
 
 suspend fun ApplicationCall.respondError(id: String = "error") =
@@ -123,6 +123,12 @@ fun Application.main() {
                 call.getSession()?.submitOrder()
                 call.respondText("redirect: main")
             }
+            get("/resmain") {
+                call.getSession()?.let {
+                    if (SQLUtils.isRestaurant(it.name)) call.respondHtml("resmain")
+                    else call.respondRedirect("main")
+                }
+            }
         }
 
         //Account Login
@@ -135,7 +141,12 @@ fun Application.main() {
         post("/login") {
             call.construct<LoginInfo>()?.let { info ->
                 call.validateLogin(info.username, info.password)
-                    ?.let { call.respondText("redirect: main") }
+                    ?.run {
+                        call.getSession()?.let {
+                            if (SQLUtils.isRestaurant(it.name)) call.respondText("redirect: resmain")
+                            else call.respondText("redirect: main")
+                        }
+                    }
                     ?: call.respondText("info|error|Incorrect Username/Password")
             } ?: call.respondText("info|error|Incorrect Username/Password")
         }
