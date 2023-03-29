@@ -8,7 +8,6 @@ import com.chargerfuel.util.toolbar
 import io.kvision.core.*
 import io.kvision.html.b
 import io.kvision.html.button
-import io.kvision.html.div
 import io.kvision.html.p
 import io.kvision.jquery.jQuery
 import io.kvision.panel.Root
@@ -58,12 +57,17 @@ private fun VPanel.fillCartPage(cart: Map<Int, Pair<Item, Int>>) {
             width = 98.perc
             maxWidth = 500.px
             paddingBottom = 10.px
-            div {
+            hPanel {
                 width = 100.perc
                 border = Border(3.px, BorderStyle.SOLID, Color.name(Col.BLACK))
                 b("${item.name}: $count") {
                     textAlign = TextAlign.CENTER
-                    minWidth = 100.perc
+                    width = 75.perc
+                    maxWidth = 75.perc
+                }
+                b("\$${(item.price*count) / 100}.${((item.price*count) % 100).toString().padStart(2,'0')}"){
+                    textAlign = TextAlign.RIGHT
+                    paddingLeft = 20.px
                 }
             }
             button("Remove From Cart") {

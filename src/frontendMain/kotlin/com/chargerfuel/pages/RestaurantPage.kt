@@ -111,7 +111,7 @@ private fun Container.displayMenu(menu: Menu) {
                             border = Border(3.px, BorderStyle.SOLID, Color.name(Col.LIGHTSTEELBLUE))
                             borderRadius = 3.px
                             width = 65.perc
-                            p("${item.name}: \$${item.price / 100}.${item.price % 100}") {
+                            p("${item.name}: \$${item.price/100}.${(item.price%100).toString().padStart(2,'0')}") {
                                 fontSize = 14.px
                             }
                             p(item.description) {
