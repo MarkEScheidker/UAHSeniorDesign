@@ -159,7 +159,7 @@ private fun Container.displayMenu(menu: Menu) {
                         width = 100.perc
                         height = 75.perc
                         fontSize = 16.px
-                        padding = 10.px
+                        marginBottom = 10.px
                     }.onClick {
                         window.location.href = window.location.href + "&submenu=${subMenu.name}"
                     }
