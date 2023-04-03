@@ -105,7 +105,7 @@ private fun Container.displayMenu(menu: Menu) {
                 maxWidth = 400.px
                 h2(name, align = Align.CENTER)
 
-                button("Back"){
+                button("Back", style = ButtonStyle.OUTLINEDARK){
                     marginBottom = 10.px
                     fontSize = 18.px
                 }.onClick {
@@ -132,10 +132,12 @@ private fun Container.displayMenu(menu: Menu) {
                                     p("Out Of Stock") {
                                         fontSize = 10.px
                                     }
+                                    style = ButtonStyle.OUTLINEDANGER
                                 } else {
                                     p("Add To Cart") {
                                         fontSize = 10.px
                                     }
+                                    style = ButtonStyle.SUCCESS
                                 }
                                 disabled = item.disabled
                                 height = 30.px
@@ -161,14 +163,14 @@ private fun Container.displayMenu(menu: Menu) {
         vPanel(alignItems = AlignItems.CENTER) {
             h2(menu.name)
             vPanel(alignItems = AlignItems.CENTER) {
-                button("Back"){
+                button("Back", style = ButtonStyle.OUTLINEDARK){
                     marginBottom = 10.px
                     fontSize = 18.px
                 }.onClick {
                     window.history.back()
                 }
                 menu.menus.values.forEach { subMenu ->
-                    button(subMenu.name, style = ButtonStyle.PRIMARY) {
+                    button(subMenu.name, style = ButtonStyle.INFO) {
                         width = 100.perc
                         height = 75.perc
                         fontSize = 16.px
