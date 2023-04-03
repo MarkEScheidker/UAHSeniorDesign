@@ -172,14 +172,14 @@ private fun Container.displayMenu(menu: Menu) {
                     }.onClick {
                         window.location.href = window.location.href + "&submenu=${subMenu.name}"
                     }
-                    button("Back", style = ButtonStyle.OUTLINEDARK){
-                        width = 100.perc
-                        height = 75.perc
-                        marginBottom = 10.px
-                        fontSize = 18.px
-                    }.onClick {
-                        window.history.back()
-                    }
+                }
+                button("Back", style = ButtonStyle.OUTLINEDARK){
+                    width = 100.perc
+                    height = 75.perc
+                    marginBottom = 10.px
+                    fontSize = 18.px
+                }.onClick {
+                    window.history.back()
                 }
             }
         }
