@@ -105,12 +105,6 @@ private fun Container.displayMenu(menu: Menu) {
                 maxWidth = 400.px
                 h2(name, align = Align.CENTER)
 
-                button("Back", style = ButtonStyle.OUTLINEDARK){
-                    marginBottom = 10.px
-                    fontSize = 18.px
-                }.onClick {
-                    window.history.back()
-                }
                 subMenu.items.forEach { (id, item) ->
                     hPanel {
                         paddingBottom = 10.px
@@ -157,21 +151,18 @@ private fun Container.displayMenu(menu: Menu) {
                         }
                     }
                 }
-            }
-        }
-    } ?: run {
-        vPanel(alignItems = AlignItems.CENTER) {
-            h2(menu.name)
-            width = 100.perc
-            maxWidth = 400.px
-            vPanel(alignItems = AlignItems.CENTER) {
-
                 button("Back", style = ButtonStyle.OUTLINEDARK){
                     marginBottom = 10.px
                     fontSize = 18.px
                 }.onClick {
                     window.history.back()
                 }
+            }
+        }
+    } ?: run {
+        vPanel(alignItems = AlignItems.CENTER) {
+            h2(menu.name)
+            vPanel(alignItems = AlignItems.CENTER) {
                 menu.menus.values.forEach { subMenu ->
                     button(subMenu.name, style = ButtonStyle.INFO) {
                         width = 100.perc
@@ -180,6 +171,14 @@ private fun Container.displayMenu(menu: Menu) {
                         marginBottom = 10.px
                     }.onClick {
                         window.location.href = window.location.href + "&submenu=${subMenu.name}"
+                    }
+                    button("Back", style = ButtonStyle.OUTLINEDARK){
+                        width = 100.perc
+                        height = 75.perc
+                        marginBottom = 10.px
+                        fontSize = 18.px
+                    }.onClick {
+                        window.history.back()
                     }
                 }
             }
