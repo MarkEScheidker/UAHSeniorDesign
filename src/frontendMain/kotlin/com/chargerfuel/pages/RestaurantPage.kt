@@ -162,7 +162,10 @@ private fun Container.displayMenu(menu: Menu) {
     } ?: run {
         vPanel(alignItems = AlignItems.CENTER) {
             h2(menu.name)
+            width = 100.perc
+            maxWidth = 400.px
             vPanel(alignItems = AlignItems.CENTER) {
+
                 button("Back", style = ButtonStyle.OUTLINEDARK){
                     marginBottom = 10.px
                     fontSize = 18.px
