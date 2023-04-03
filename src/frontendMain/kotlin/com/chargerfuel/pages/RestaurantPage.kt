@@ -19,6 +19,7 @@ import kotlinx.browser.window
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.w3c.dom.History
 import org.w3c.dom.url.URL
 
 object RestaurantPage : Webpage("main") {
@@ -104,6 +105,12 @@ private fun Container.displayMenu(menu: Menu) {
                 width = 100.perc
                 maxWidth = 400.px
                 h2(name, align = Align.CENTER)
+
+                button("Back"){
+                    marginBottom = 10.px
+                }.onClick {
+                    window.history.back()
+                }
                 subMenu.items.forEach { (id, item) ->
                     hPanel {
                         paddingBottom = 10.px
@@ -154,6 +161,12 @@ private fun Container.displayMenu(menu: Menu) {
         vPanel {
             h2(menu.name)
             vPanel(alignItems = AlignItems.CENTER) {
+                button("Back"){
+                    marginBottom = 10.px
+                    fontSize = 18.px
+                }.onClick {
+                    window.history.back()
+                }
                 menu.menus.values.forEach { subMenu ->
                     button(subMenu.name) {
                         width = 100.perc
