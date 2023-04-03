@@ -108,6 +108,7 @@ private fun Container.displayMenu(menu: Menu) {
 
                 button("Back"){
                     marginBottom = 10.px
+                    fontSize = 18.px
                 }.onClick {
                     window.history.back()
                 }
