@@ -96,7 +96,6 @@ object RestaurantPage : Webpage("main") {
 }
 
 private fun Container.displayMenu(menu: Menu) {
-    //TODO Put display stuff here @Bailey @Mark
 
     URL(window.location.href).searchParams.get("submenu")?.let { name ->
         menu.menus.values.find { it.name == name }?.let { subMenu ->
@@ -159,7 +158,7 @@ private fun Container.displayMenu(menu: Menu) {
             }
         }
     } ?: run {
-        vPanel {
+        vPanel(alignItems = AlignItems.CENTER) {
             h2(menu.name)
             vPanel(alignItems = AlignItems.CENTER) {
                 button("Back"){
@@ -169,7 +168,7 @@ private fun Container.displayMenu(menu: Menu) {
                     window.history.back()
                 }
                 menu.menus.values.forEach { subMenu ->
-                    button(subMenu.name) {
+                    button(subMenu.name, style = ButtonStyle.PRIMARY) {
                         width = 100.perc
                         height = 75.perc
                         fontSize = 16.px
