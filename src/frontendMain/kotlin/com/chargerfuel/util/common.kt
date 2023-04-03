@@ -22,7 +22,7 @@ fun SimplePanel.base(init: Div.() -> Unit) {
         width = 100.vw; height = 90.vh
         div {
             center()
-            width = 80.perc; height = 80.perc
+            width = 85.perc; height = 85.perc
             background = Background(Color.name(Col.ALICEBLUE))
             border = Border(5.px, BorderStyle.SOLID, Color.name(Col.MIDNIGHTBLUE))
             setStyle("border-radius", "25px")
