@@ -82,6 +82,18 @@ private fun VPanel.fillCartPage(cart: Map<Int, Pair<Item, Int>>) {
     }
 
     if(cart.isNotEmpty()) {
+        var total = 0
+        cart.forEach { (id, pair) ->
+            val (item, count) = pair
+            total += item.price*count
+        }
+        b("Total: \$${total / 100}.${(total % 100).toString().padStart(2,'0')}"){
+            textAlign = TextAlign.RIGHT
+            fontSize = 20.px
+            paddingTop = 5.px
+            paddingBottom = 5.px
+        }
+
         button("Place Order") {
             width = 98.perc
             marginTop = 10.px
@@ -92,6 +104,7 @@ private fun VPanel.fillCartPage(cart: Map<Int, Pair<Item, Int>>) {
                 })
             }
         }
+
     } else{
         p("Your cart is empty, go order some food and come back.") {
             marginTop = 10.perc
