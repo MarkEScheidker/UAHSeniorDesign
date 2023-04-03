@@ -113,6 +113,13 @@ fun Application.main() {
                     call.respondText("info|$id|Item Removed from Cart")
                 }
             }
+            post("/cartclear"){
+                call.getSession()?.let{
+                    it.clearCart()
+                    call.respondText("redirect: cart")
+                }
+            }
+
             post("/getcartsize") {
                 call.getSession()?.let { call.respondText("info|cart|${it.getCartSize()}") }
             }

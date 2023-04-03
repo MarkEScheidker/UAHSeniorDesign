@@ -87,13 +87,24 @@ private fun VPanel.fillCartPage(cart: Map<Int, Pair<Item, Int>>) {
             val (item, count) = pair
             total += item.price*count
         }
-        b("Total: \$${total / 100}.${(total % 100).toString().padStart(2,'0')}"){
-            textAlign = TextAlign.RIGHT
-            fontSize = 20.px
-            paddingTop = 5.px
-            paddingBottom = 5.px
+        hPanel {
+            width = 98.perc
+            maxWidth = 500.px
+            button("Clear Cart"){
+                width = 40.perc
+            }.onClick {
+                jQuery.post("/cartclear", null, { data, _, _ ->
+                    handleResponse(data.toString())
+                })
+            }
+            b("Total: \$${total / 100}.${(total % 100).toString().padStart(2, '0')}") {
+                textAlign = TextAlign.RIGHT
+                fontSize = 20.px
+                paddingTop = 5.px
+                paddingBottom = 5.px
+                width = 60.perc
+            }
         }
-
         button("Place Order") {
             width = 98.perc
             marginTop = 10.px
