@@ -98,11 +98,13 @@ private fun VPanel.fillCartPage(cart: Map<Int, Pair<Item, Int>>) {
                 })
             }
             b("Total: \$${total / 100}.${(total % 100).toString().padStart(2, '0')}") {
-                textAlign = TextAlign.RIGHT
+                border = Border(3.px, BorderStyle.SOLID, Color.name(Col.BLACK))
+                textAlign = TextAlign.CENTER
                 fontSize = 20.px
                 paddingTop = 5.px
                 paddingBottom = 5.px
-                width = 60.perc
+                width = 50.perc
+                marginLeft = 10.perc
             }
         }
         button("Place Order") {
