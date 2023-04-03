@@ -27,10 +27,17 @@ object RestaurantPage : Webpage("main") {
         toolbar()
         base {
             vPanel(alignItems = AlignItems.CENTER) {
-                top = 47.perc
+                URL(window.location.href).searchParams.get("res")
+                    ?.let { res ->
+                        top = 47.perc
+                        height = 90.perc
+                    }?: run{
+                        top = 50.perc
+                        height = 98.perc
+                    }
                 left = 50.perc
                 width = 98.perc
-                height = 90.perc
+
                 setStyle("transform", "translate(-50%,-50%)")
                 require("css/scrollbars.css")
                 position = Position.ABSOLUTE
@@ -94,20 +101,23 @@ object RestaurantPage : Webpage("main") {
                 }
             }
         }
-        div {
-            height = 5.perc
-            width = 50.perc
-            maxWidth = 300.px
-            position = Position.ABSOLUTE
-            bottom = 5.5.perc
-            left = 50.perc
-            setStyle("transform", "translate(-50%,-50%)")
-            button("Back") {
-                center()
-                height = 100.perc
-                width = 100.perc
-            }.onClick {
-                window.history.back()
+        URL(window.location.href).searchParams.get("res")
+            ?.let { res ->
+            div {
+                height = 5.perc
+                width = 50.perc
+                maxWidth = 300.px
+                position = Position.ABSOLUTE
+                bottom = 5.5.perc
+                left = 50.perc
+                setStyle("transform", "translate(-50%,-50%)")
+                button("Back") {
+                    center()
+                    height = 100.perc
+                    width = 100.perc
+                }.onClick {
+                    window.history.back()
+                }
             }
         }
     }
@@ -173,14 +183,6 @@ private fun Container.displayMenu(menu: Menu) {
                         }
                     }
                 }
-                button("Back", style = ButtonStyle.OUTLINEDARK){
-                    width = 100.perc
-                    height = 75.perc
-                    marginBottom = 10.px
-                    fontSize = 18.px
-                }.onClick {
-                    window.history.back()
-                }
             }
         }
     } ?: run {
@@ -196,14 +198,6 @@ private fun Container.displayMenu(menu: Menu) {
                     }.onClick {
                         window.location.href = window.location.href + "&submenu=${subMenu.name}"
                     }
-                }
-                button("Back", style = ButtonStyle.OUTLINEDARK){
-                    width = 100.perc
-                    height = 75.perc
-                    marginBottom = 10.px
-                    fontSize = 18.px
-                }.onClick {
-                    window.history.back()
                 }
             }
         }
