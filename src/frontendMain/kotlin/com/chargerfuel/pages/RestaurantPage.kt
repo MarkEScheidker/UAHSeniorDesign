@@ -75,7 +75,7 @@ object RestaurantPage : Webpage("main") {
                             val images = listOf(
                                 display(Image(require("img/the_den.png") as? String, "1")),
                                 display(Image(require("img/burrito_bowl.png") as? String, "2")),
-                                display(Image(require("img/boars_head.png") as? String, "3")),
+                                display(Image(require("img/papa_johns.png") as? String, "3")),
                                 display(Image(require("img/mein_bowl.png") as? String, "4")),
                                 display(Image(require("img/dunkin.png") as? String, "5")),
                                 display(Image(require("img/charger_brew.png") as? String, "6"))
