@@ -25,88 +25,89 @@ import org.w3c.dom.url.URL
 object RestaurantPage : Webpage("main") {
     override val html: Root.() -> Unit = {
         toolbar()
-        vPanel {
-            center()
-            base {
-                center()
-                vPanel(alignItems = AlignItems.CENTER) {
-                    center()
-                    require("css/scrollbars.css")
-                    position = Position.ABSOLUTE
-                    colorName = Col.BLACK
-                    width = 98.perc
-                    height = 98.perc
-                    overflowX = Overflow.HIDDEN
-                    overflowY = Overflow.SCROLL
-                    alignItems = AlignItems.STRETCH
-                    padding = 5.perc
-                    flexPanel(
-                        FlexDirection.ROW,
-                        FlexWrap.WRAP,
-                        JustifyContent.SPACEEVENLY,
-                        AlignItems.CENTER,
-                        AlignContent.SPACEAROUND
-                    ) {
-                        gridRowGap = 20
-                        URL(window.location.href).searchParams.get("res")
-                            ?.let { res ->
-                                addAfterInsertHook {
-                                    jQuery.post(
-                                        "/getrestaurant",
-                                        JSON.parse<Json>(Json.encodeToString(GetRestaurantInfo(res))),
-                                        { data, _, _ ->
-                                            val response = data.toString()
-                                            if (response.startsWith("{")) displayMenu(Json.decodeFromString(response))
-                                            else handleResponse(response)
-                                        })
-                                }
-                            }
-                            ?: run {
-                                fun Container.display(image: Image): Div = div {
-                                    padding = 2.perc
-                                    background = Background(Color.name(Col.ALICEBLUE))
-                                    border = Border(2.perc, BorderStyle.SOLID, Color.name(Col.MIDNIGHTBLUE))
-                                    boxShadow = BoxShadow(0.px, 0.px, 5.px, 5.px, Color.name(Col.MIDNIGHTBLUE))
-                                    setStyle("border-radius", "50% 20% / 10% 40%")
-                                    add(image.apply {
-                                        width = 100.perc; height = 100.perc
-                                        setStyle("pointer-events", "none")
-                                        setStyle("object-fit", "contain")
+        base {
+            vPanel(alignItems = AlignItems.CENTER) {
+                top = 47.perc
+                left = 50.perc
+                width = 98.perc
+                height = 90.perc
+                setStyle("transform", "translate(-50%,-50%)")
+                require("css/scrollbars.css")
+                position = Position.ABSOLUTE
+                colorName = Col.BLACK
+                overflowX = Overflow.HIDDEN
+                overflowY = Overflow.AUTO
+                alignItems = AlignItems.STRETCH
+                padding = 5.perc
+                flexPanel(
+                    FlexDirection.ROW,
+                    FlexWrap.WRAP,
+                    JustifyContent.SPACEEVENLY,
+                    AlignItems.CENTER,
+                    AlignContent.SPACEAROUND
+                ) {
+                    gridRowGap = 20
+                    URL(window.location.href).searchParams.get("res")
+                        ?.let { res ->
+                            addAfterInsertHook {
+                                jQuery.post(
+                                    "/getrestaurant",
+                                    JSON.parse<Json>(Json.encodeToString(GetRestaurantInfo(res))),
+                                    { data, _, _ ->
+                                        val response = data.toString()
+                                        if (response.startsWith("{")) displayMenu(Json.decodeFromString(response))
+                                        else handleResponse(response)
                                     })
-                                    onClick { window.location.href = "main?res=${image.alt}" }
-                                }
+                            }
+                        }
+                        ?: run {
+                            fun Container.display(image: Image): Div = div {
+                                padding = 2.perc
+                                background = Background(Color.name(Col.ALICEBLUE))
+                                border = Border(2.perc, BorderStyle.SOLID, Color.name(Col.MIDNIGHTBLUE))
+                                boxShadow = BoxShadow(0.px, 0.px, 5.px, 5.px, Color.name(Col.MIDNIGHTBLUE))
+                                setStyle("border-radius", "50% 20% / 10% 40%")
+                                add(image.apply {
+                                    width = 100.perc; height = 100.perc
+                                    setStyle("pointer-events", "none")
+                                    setStyle("object-fit", "contain")
+                                })
+                                onClick { window.location.href = "main?res=${image.alt}" }
+                            }
 
-                                val images = listOf(
-                                    display(Image(require("img/the_den.png") as? String, "1")),
-                                    display(Image(require("img/burrito_bowl.png") as? String, "2")),
-                                    display(Image(require("img/papa_johns.png") as? String, "3")),
-                                    display(Image(require("img/mein_bowl.png") as? String, "4")),
-                                    display(Image(require("img/dunkin.png") as? String, "5")),
-                                    display(Image(require("img/charger_brew.png") as? String, "6"))
-                                )
-                                handleResize { type ->
-                                    when (type) {
-                                        DESKTOP -> images.forEach { it.width = 30.perc }
-                                        VERTICAL_MOBILE -> images.forEach { it.width = 90.perc }
-                                        HORIZONTAL_MOBILE -> images.forEach { it.width = 45.perc }
-                                    }
+                            val images = listOf(
+                                display(Image(require("img/the_den.png") as? String, "1")),
+                                display(Image(require("img/burrito_bowl.png") as? String, "2")),
+                                display(Image(require("img/papa_johns.png") as? String, "3")),
+                                display(Image(require("img/mein_bowl.png") as? String, "4")),
+                                display(Image(require("img/dunkin.png") as? String, "5")),
+                                display(Image(require("img/charger_brew.png") as? String, "6"))
+                            )
+                            handleResize { type ->
+                                when (type) {
+                                    DESKTOP -> images.forEach { it.width = 30.perc }
+                                    VERTICAL_MOBILE -> images.forEach { it.width = 90.perc }
+                                    HORIZONTAL_MOBILE -> images.forEach { it.width = 45.perc }
                                 }
                             }
-                    }
+                        }
                 }
             }
-            div {
+        }
+        div {
+            height = 5.perc
+            width = 50.perc
+            maxWidth = 300.px
+            position = Position.ABSOLUTE
+            bottom = 5.5.perc
+            left = 50.perc
+            setStyle("transform", "translate(-50%,-50%)")
+            button("Back") {
                 center()
-                height = 5.perc
-                width = 50.perc
-                maxWidth = 300.px
-                button("Back") {
-                    center()
-                    height = 100.perc
-                    width = 100.perc
-                }.onClick {
-                    window.history.back()
-                }
+                height = 100.perc
+                width = 100.perc
+            }.onClick {
+                window.history.back()
             }
         }
     }
@@ -208,4 +209,3 @@ private fun Container.displayMenu(menu: Menu) {
         }
     }
 }
-
