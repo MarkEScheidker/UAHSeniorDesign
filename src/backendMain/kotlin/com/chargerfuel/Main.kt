@@ -137,10 +137,26 @@ fun Application.main() {
                 call.getSession()?.submitOrder()
                 call.respondText("redirect: main")
             }
+            //restaurant account stuff
             get("/resmain") {
                 call.getSession()?.let {
                     if (SQLUtils.isRestaurant(it.name)) call.respondHtml("resmain")
                     else call.respondRedirect("main")
+                }
+            }
+            post("/toggleopenclosed"){
+                call.getSession()?.let {
+                    if(SQLUtils.isRestaurant(it.name)) {
+                        //todo set restaurant as open or closed
+                    }
+                }
+            }
+            post("/restaurantstate"){
+                call.getSession()?.let{
+                    if(SQLUtils.isRestaurant(it.name)) {
+                        //todo get restaurant's open or closed state and respond accordingly
+                        call.respondText("closed")
+                    }
                 }
             }
         }

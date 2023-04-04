@@ -225,6 +225,29 @@ object SQLUtils {
         }
     }
 
+    fun getRestaurants(): Map<String, Boolean> {
+        try {
+            refreshConnection()
+            val restaurants = mutableMapOf<String, Boolean>()
+            connection.prepareStatement(
+                """
+                    SELECT Email
+                    FROM Restaurant
+                """.trimIndent()
+            ).executeQuery().run {
+                while (next()) {
+                    val name = getString("Email")
+                    restaurants[name] = false
+                }
+                statement.close()
+                close()
+            }
+            return restaurants
+        } catch (e: SQLException) {
+            return mutableMapOf()
+        }
+    }
+
     private fun refreshConnection() {
         if (connection.isClosed) connection = DriverManager.getConnection(DB_URL, USER, PASS)
     }
