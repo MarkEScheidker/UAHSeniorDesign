@@ -111,7 +111,7 @@ object RestaurantPage : Webpage("main") {
                 bottom = 7.perc
                 left = 50.perc
                 setStyle("transform", "translate(-50%,-50%)")
-                button("Back", style = ButtonStyle.OUTLINEDARK) {
+                button("Back", style = ButtonStyle.SECONDARY) {
                     center()
                     height = 100.perc
                     width = 100.perc
