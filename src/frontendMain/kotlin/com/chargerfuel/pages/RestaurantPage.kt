@@ -29,8 +29,8 @@ object RestaurantPage : Webpage("main") {
             vPanel(alignItems = AlignItems.CENTER) {
                 URL(window.location.href).searchParams.get("res")
                     ?.let { res ->
-                        top = 47.perc
-                        height = 90.perc
+                        top = 45.perc
+                        height = 85.perc
                     }?: run{
                         top = 50.perc
                         height = 98.perc
@@ -108,10 +108,10 @@ object RestaurantPage : Webpage("main") {
                 width = 50.perc
                 maxWidth = 300.px
                 position = Position.ABSOLUTE
-                bottom = 5.5.perc
+                bottom = 10.10.perc
                 left = 50.perc
                 setStyle("transform", "translate(-50%,-50%)")
-                button("Back") {
+                button("Back", style = ButtonStyle.OUTLINEDARK) {
                     center()
                     height = 100.perc
                     width = 100.perc
