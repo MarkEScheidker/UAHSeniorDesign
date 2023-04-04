@@ -121,7 +121,7 @@ fun SimplePanel.restaurantToolbar() {
             width = 100.perc
             float = PosFloat.LEFT
             setStyle("column-gap", "2vh")
-            link("Menu", "/menu") {
+            link("Main", "/resmain") {
                 setStyle("font-size", "min(3vh, 4vw)")
                 textDecoration = TextDecoration(TextDecorationLine.NONE)
                 colorName = Col.BLACK

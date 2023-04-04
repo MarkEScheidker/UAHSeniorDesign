@@ -144,21 +144,35 @@ fun Application.main() {
                     else call.respondRedirect("main")
                 }
             }
+            post("/reschangepassword") {
+                call.construct<PasswordChangeInfo>()?.let { info ->
+                    call.getSession()?.let {
+                        if (SQLUtils.checkRestaurantPassword(it.name, info.oldPassword)) {
+                            if (SQLUtils.setRestaurantPassword(it.name, info.password.encrypt()))
+                                call.respondText("info|passS|Password Changed!")
+                        } else call.respondText("info|passF|Incorrect Password")
+                    } ?: call.respondError("passF")
+                } ?: call.respondText("info|passF|Incorrect Password")
+            }
             post("/toggleopenclosed"){
                 call.getSession()?.let {
                     if(SQLUtils.isRestaurant(it.name)) {
-                        //todo set restaurant as open or closed
+                        RestaurantState.toggleRestaurantState(it.name)
                     }
                 }
             }
             post("/restaurantstate"){
                 call.getSession()?.let{
                     if(SQLUtils.isRestaurant(it.name)) {
-                        //todo get restaurant's open or closed state and respond accordingly
-                        call.respondText("closed")
+                        if(RestaurantState.getRestaurantState(it.name) == true){
+                            call.respondText("Closed")
+                        }else{
+                            call.respondText("Open")
+                        }
                     }
                 }
             }
+
         }
 
         //Account Login

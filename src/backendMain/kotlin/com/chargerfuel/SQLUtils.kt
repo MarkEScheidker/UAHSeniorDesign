@@ -63,6 +63,11 @@ object SQLUtils {
         return BCrypt.checkpw(password, hash)
     }
 
+    fun checkRestaurantPassword(user: String, password: String): Boolean {
+        val hash = getRestaurantPassword(user) ?: return false
+        return BCrypt.checkpw(password, hash)
+    }
+
     fun setPassword(user: String, hash: String): Boolean {
         return try {
             refreshConnection()
@@ -73,6 +78,25 @@ object SQLUtils {
                         UPDATE UserLogin 
                         SET PasswordHash = '$hash'
                         WHERE UserEmail = '$user'
+                    """.trimIndent()
+                )
+            statement.close()
+            updateCount > 0
+        } catch (e: SQLException) {
+            false
+        }
+    }
+
+    fun setRestaurantPassword(user: String, hash: String): Boolean {
+        return try {
+            refreshConnection()
+            val statement = connection.createStatement()
+            val updateCount =
+                statement.executeUpdate(
+                    """
+                        UPDATE Restaurant 
+                        SET PasswordHash = '$hash'
+                        WHERE Email = '$user'
                     """.trimIndent()
                 )
             statement.close()

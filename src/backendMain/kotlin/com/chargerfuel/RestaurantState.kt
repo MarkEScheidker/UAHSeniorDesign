@@ -14,6 +14,4 @@ object RestaurantState {
     fun toggleRestaurantState(email: String){
         restaurants[email] = restaurants[email] != true
     }
-
-
 }
