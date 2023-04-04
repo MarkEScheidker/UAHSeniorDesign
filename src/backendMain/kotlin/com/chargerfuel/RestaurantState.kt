@@ -7,5 +7,13 @@ object RestaurantState {
         restaurants = SQLUtils.getRestaurants().toMutableMap()
     }
 
+    fun getRestaurantState(email: String): Boolean? {
+        return restaurants[email]
+    }
+
+    fun toggleRestaurantState(email: String){
+        restaurants[email] = restaurants[email] != true
+    }
+
 
 }
