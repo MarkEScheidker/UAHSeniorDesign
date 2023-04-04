@@ -31,6 +31,21 @@ object RestaurantViewPage: Webpage("resmain") {
                 padding = 5.perc
                 setStyle("row-gap", "5vh")
                 h1("Restaurant Management") { alignSelf = AlignItems.CENTER }
+                vPanel{
+                    width = 80.perc
+                    button("") {
+                        this.id = "openorclosed"
+                        onClick {
+                            jQuery.post(
+                                "/toggleopenclosed",
+                                { data, _, _ -> handleResponse(data.toString()) })
+                        }
+                    }
+                    jQuery.post(
+                        "/restaurantstate",
+                        { data, _, _ -> handleResponse(data.toString()) })
+
+                }
                 vPanel {
                     width = 80.perc
                     h3("Username")

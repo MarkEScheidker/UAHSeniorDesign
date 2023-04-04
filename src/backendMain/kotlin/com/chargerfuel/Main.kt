@@ -159,15 +159,20 @@ fun Application.main() {
                     if(SQLUtils.isRestaurant(it.name)) {
                         RestaurantState.toggleRestaurantState(it.name)
                     }
+                    if(RestaurantState.getRestaurantState(it.name) == true){
+                        call.respondText("info|openorclosed|Restaurant is Open")
+                    }else{
+                        call.respondText("info|openorclosed|Restaurant is Closed")
+                    }
                 }
             }
             post("/restaurantstate"){
                 call.getSession()?.let{
                     if(SQLUtils.isRestaurant(it.name)) {
                         if(RestaurantState.getRestaurantState(it.name) == true){
-                            call.respondText("Closed")
+                            call.respondText("info|openorclosed|Restaurant is Open")
                         }else{
-                            call.respondText("Open")
+                            call.respondText("info|openorclosed|Restaurant is Closed")
                         }
                     }
                 }
