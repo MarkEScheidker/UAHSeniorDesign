@@ -108,7 +108,7 @@ object RestaurantPage : Webpage("main") {
                 width = 50.perc
                 maxWidth = 300.px
                 position = Position.ABSOLUTE
-                bottom = 10.10.perc
+                bottom = 10.5.perc
                 left = 50.perc
                 setStyle("transform", "translate(-50%,-50%)")
                 button("Back", style = ButtonStyle.OUTLINEDARK) {
