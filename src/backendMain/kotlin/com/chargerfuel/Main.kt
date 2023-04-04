@@ -102,8 +102,15 @@ fun Application.main() {
             post("/cartadd") {
                 call.getSession()?.let {
                     val id = call.receive<String>().toInt()
+                    if (it.getCart().containsKey(id)) {
+                        val itemAndCount = it.getCart().get(id)
+                        val count = itemAndCount?.second ?: 0
+                        val itemName = itemAndCount?.first?.name ?: "Unknown Item"
+                        call.respondText("info|$id|${count+1} items added to cart")
+                    } else {
+                        call.respondText("info|$id|Item Added to Cart")
+                    }
                     it.addToCart(id)
-                    call.respondText("info|$id|Item Added to Cart")
                 }
             }
             post("/cartremove") {

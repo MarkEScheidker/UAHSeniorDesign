@@ -175,7 +175,7 @@ private fun Container.displayMenu(menu: Menu) {
                                 this.id = id.toString()
                                 colorName = Col.LIMEGREEN
                                 fontSize = 10.px
-                                fontSize = 0.9.vw
+                                fontSize = 0.80.vw
                                 marginLeft = 2.px
                                 marginTop = 2.px
                                 setStyle("white-space","nowrap")
