@@ -190,7 +190,7 @@ private fun Container.displayMenu(menu: Menu) {
             h2(menu.name)
             vPanel(alignItems = AlignItems.CENTER) {
                 menu.menus.values.forEach { subMenu ->
-                    button(subMenu.name, style = ButtonStyle.INFO) {
+                    button(subMenu.name, style = ButtonStyle.OUTLINEPRIMARY) {
                         width = 100.perc
                         height = 75.perc
                         fontSize = 16.px
