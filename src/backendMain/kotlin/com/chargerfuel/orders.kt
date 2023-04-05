@@ -8,6 +8,8 @@ fun UserSession.placeOrder():Boolean{
     if (getCart().values.any { RestaurantStorage.getMenu(it.first) != restaurant }) {
         return false
     }
+    SMS.sendOrderConfirm(this.name,orders.size+1,
+        orders.values.filter { it.cart.values.firstOrNull()?.let { RestaurantStorage.getMenu(it.first) } == restaurant }.filter { !it.completed }.size*2 + 10)
     orders[orders.size + 1] = Order(orders.size + 1, SQLUtils.getPhoneNumber(name) ?: "", name, System.currentTimeMillis(), getCart())
     clearCart()
     return true
