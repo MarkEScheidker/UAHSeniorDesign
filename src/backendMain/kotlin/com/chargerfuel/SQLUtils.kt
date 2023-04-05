@@ -177,15 +177,17 @@ object SQLUtils {
     private fun getMenu(id: Int): Menu {
         try {
             val name: String
+            val email: String
             connection.prepareStatement(
                 """
-                    SELECT Name
+                    SELECT Name, Email
                     FROM Restaurant
                     WHERE RestaurantID = $id
                 """.trimIndent()
             ).executeQuery().run {
-                if (!next()) return Menu("", mapOf())
+                if (!next()) return Menu("", "", mapOf())
                 name = getString("Name")
+                email = getString("Email")
                 statement.close()
                 close()
             }
@@ -215,14 +217,14 @@ object SQLUtils {
                 statement.close()
                 close()
             }
-            return Menu(name, itemData.associate {
+            return Menu(email, name, itemData.associate {
                 it.menuID to SubMenu(
                     it.menuName,
                     itemData.filter { item -> item.menuID == it.menuID }
                         .associate { item -> item.id to Item(item.name, item.description, item.price, item.disabled) })
             })
         } catch (e: SQLException) {
-            return Menu("", mapOf())
+            return Menu("", "", mapOf())
         }
     }
 

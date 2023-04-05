@@ -11,4 +11,4 @@ data class Item(val name: String, val description: String, val price: Int, val d
 data class SubMenu(val name: String, val items: Map<Int, Item>)
 
 @Serializable
-data class Menu(val name: String, val menus: Map<Int, SubMenu>)
+data class Menu(val id: String, val name: String, val menus: Map<Int, SubMenu>)
