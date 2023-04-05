@@ -16,7 +16,6 @@ fun UserSession.placeOrder():Boolean{
 }
 
 
-
 fun getOrders(restaurant: String): List<Order> =
     orders.values.filter {
         it.cart.values.map { RestaurantStorage.getMenu(it.first) }.contains(RestaurantStorage.getMenu(restaurant))
@@ -33,5 +32,9 @@ fun getOrders(restaurant: String): List<Order> =
     }
 
 fun completeOrder(id: Int) {
-    orders[id]?.completed = true
+    val order = orders[id]
+    order?.completed = true
+    if (order != null) {
+        SMS.sendOrderReady(order.user, order.id)
+    }
 }
