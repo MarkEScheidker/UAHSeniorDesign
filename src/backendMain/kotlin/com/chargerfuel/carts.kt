@@ -16,6 +16,3 @@ fun UserSession.getCart(): Map<Int, Pair<Item, Int>> = carts[name]
     ?.mapNotNull { (id, count) -> RestaurantStorage.getItem(id)?.let { id to (it to count) } }?.toMap()
     ?: mapOf()
 
-fun UserSession.submitOrder() {
-    clearCart()
-}

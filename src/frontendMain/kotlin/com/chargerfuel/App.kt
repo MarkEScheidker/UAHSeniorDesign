@@ -21,6 +21,7 @@ class App : Application() {
         load(ResetPasswordPage)
         load(CartPage)
         load(RestaurantViewPage)
+        load(OrdersPage)
     }
 }
 

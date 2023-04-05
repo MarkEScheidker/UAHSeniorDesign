@@ -106,7 +106,7 @@ fun Application.main() {
                         val itemAndCount = it.getCart().get(id)
                         val count = itemAndCount?.second ?: 0
                         val itemName = itemAndCount?.first?.name ?: "Unknown Item"
-                        call.respondText("info|$id|${count+1} items added to cart")
+                        call.respondText("info|$id|${count + 1} items added to cart")
                     } else {
                         call.respondText("info|$id|Item Added to Cart")
                     }
@@ -120,8 +120,8 @@ fun Application.main() {
                     call.respondText("info|$id|Item Removed from Cart")
                 }
             }
-            post("/cartclear"){
-                call.getSession()?.let{
+            post("/cartclear") {
+                call.getSession()?.let {
                     it.clearCart()
                     call.respondText("redirect: cart")
                 }
@@ -134,7 +134,7 @@ fun Application.main() {
                 call.getSession()?.let { call.respondText(Json.encodeToString(it.getCart())) }
             }
             post("/placeorder") {
-                call.getSession()?.submitOrder()
+                call.getSession()?.placeOrder()
                 call.respondText("redirect: main")
             }
             //restaurant account stuff
@@ -142,6 +142,18 @@ fun Application.main() {
                 call.getSession()?.let {
                     if (SQLUtils.isRestaurant(it.name)) call.respondHtml("resmain")
                     else call.respondRedirect("main")
+                } ?: call.respondRedirect("login")
+            }
+            get("/orders") {
+                call.getSession()?.let {
+                    if (SQLUtils.isRestaurant(it.name)) call.respondHtml("orders")
+                    else call.respondRedirect("main")
+                } ?: call.respondRedirect("login")
+            }
+            post("/getorders") {
+                call.getSession()?.let {
+                    if (SQLUtils.isRestaurant(it.name)) call.respondText(Json.encodeToString(getOrders(it.name)))
+                    else call.respondText("redirect: main")
                 }
             }
             post("/reschangepassword") {
@@ -154,30 +166,42 @@ fun Application.main() {
                     } ?: call.respondError("passF")
                 } ?: call.respondText("info|passF|Incorrect Password")
             }
-            post("/toggleopenclosed"){
+            post("/toggleopenclosed") {
                 call.getSession()?.let {
-                    if(SQLUtils.isRestaurant(it.name)) {
+                    if (SQLUtils.isRestaurant(it.name)) {
                         RestaurantState.toggleRestaurantState(it.name)
                     }
-                    if(RestaurantState.getRestaurantState(it.name) == true){
+                    if (RestaurantState.getRestaurantState(it.name) == true) {
                         call.respondText("info|openorclosed|Restaurant is Open")
-                    }else{
+                    } else {
                         call.respondText("info|openorclosed|Restaurant is Closed")
                     }
                 }
             }
-            post("/restaurantstate"){
-                call.getSession()?.let{
-                    if(SQLUtils.isRestaurant(it.name)) {
-                        if(RestaurantState.getRestaurantState(it.name) == true){
+            post("/restaurantstate") {
+                call.getSession()?.let {
+                    if (SQLUtils.isRestaurant(it.name)) {
+                        if (RestaurantState.getRestaurantState(it.name) == true) {
                             call.respondText("info|openorclosed|Restaurant is Open")
-                        }else{
+                        } else {
                             call.respondText("info|openorclosed|Restaurant is Closed")
                         }
                     }
                 }
             }
-
+            post("/completeorder") {
+                call.getSession()?.let {
+                    if (SQLUtils.isRestaurant(it.name)) {
+                        val orderID = call.receive<String>().toIntOrNull() ?: run {
+                            call.respondError()
+                            return@let
+                        }
+                        println(orderID)
+                        completeOrder(orderID)
+                        call.respondText("info|success|order completed")
+                    } else call.respondRedirect("main")
+                } ?: call.respondRedirect("login")
+            }
         }
 
         //Account Login
