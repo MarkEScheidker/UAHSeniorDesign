@@ -26,98 +26,97 @@ object RestaurantPage : Webpage("main") {
     override val html: Root.() -> Unit = {
         toolbar()
         base {
-            vPanel(alignItems = AlignItems.CENTER) {
-                URL(window.location.href).searchParams.get("res")
-                    ?.let { res ->
-                        top = 45.perc
-                        height = 85.perc
-                    }?: run{
-                        top = 50.perc
-                        height = 98.perc
-                    }
-                left = 50.perc
-                width = 98.perc
-
-                setStyle("transform", "translate(-50%,-50%)")
-                require("css/scrollbars.css")
-                position = Position.ABSOLUTE
-                colorName = Col.BLACK
-                overflowX = Overflow.HIDDEN
-                overflowY = Overflow.AUTO
-                alignItems = AlignItems.STRETCH
-                padding = 5.perc
-                flexPanel(
-                    FlexDirection.ROW,
-                    FlexWrap.WRAP,
-                    JustifyContent.SPACEEVENLY,
-                    AlignItems.CENTER,
-                    AlignContent.SPACEAROUND
-                ) {
-                    gridRowGap = 20
+            vPanel {
+                height = 100.perc
+                width = 100.perc
+                vPanel(alignItems = AlignItems.CENTER) {
                     URL(window.location.href).searchParams.get("res")
                         ?.let { res ->
-                            addAfterInsertHook {
-                                jQuery.post(
-                                    "/getrestaurant",
-                                    JSON.parse<Json>(Json.encodeToString(GetRestaurantInfo(res))),
-                                    { data, _, _ ->
-                                        val response = data.toString()
-                                        if (response.startsWith("{")) displayMenu(Json.decodeFromString(response))
-                                        else handleResponse(response)
-                                    })
-                            }
-                        }
-                        ?: run {
-                            fun Container.display(image: Image): Div = div {
-                                padding = 2.perc
-                                background = Background(Color.name(Col.ALICEBLUE))
-                                border = Border(2.perc, BorderStyle.SOLID, Color.name(Col.MIDNIGHTBLUE))
-                                boxShadow = BoxShadow(0.px, 0.px, 5.px, 5.px, Color.name(Col.MIDNIGHTBLUE))
-                                setStyle("border-radius", "50% 20% / 10% 40%")
-                                add(image.apply {
-                                    width = 100.perc; height = 100.perc
-                                    setStyle("pointer-events", "none")
-                                    setStyle("object-fit", "contain")
-                                })
-                                onClick { window.location.href = "main?res=${image.alt}" }
-                            }
+                            //top = 46.perc
+                            marginTop = 0.5.perc
+                            height = 85.perc
+                        } ?: run {
+                        //top = 52.perc
+                        marginTop = 0.5.perc
+                        height = 98.perc
+                    }
+                    left = 50.perc
+                    width = 99.perc
 
-                            val images = listOf(
-                                display(Image(require("img/the_den.png") as? String, "1")),
-                                display(Image(require("img/burrito_bowl.png") as? String, "2")),
-                                display(Image(require("img/papa_johns.png") as? String, "3")),
-                                display(Image(require("img/mein_bowl.png") as? String, "4")),
-                                display(Image(require("img/dunkin.png") as? String, "5")),
-                                display(Image(require("img/charger_brew.png") as? String, "6"))
-                            )
-                            handleResize { type ->
-                                when (type) {
-                                    DESKTOP -> images.forEach { it.width = 30.perc }
-                                    VERTICAL_MOBILE -> images.forEach { it.width = 90.perc }
-                                    HORIZONTAL_MOBILE -> images.forEach { it.width = 45.perc }
+                    //setStyle("transform", "translate(-50%,-50%)")
+                    require("css/scrollbars.css")
+                    colorName = Col.BLACK
+                    overflowX = Overflow.HIDDEN
+                    overflowY = Overflow.AUTO
+                    alignItems = AlignItems.STRETCH
+                    padding = 5.perc
+                    flexPanel(
+                        FlexDirection.ROW,
+                        FlexWrap.WRAP,
+                        JustifyContent.SPACEEVENLY,
+                        AlignItems.CENTER,
+                        AlignContent.SPACEAROUND
+                    ) {
+                        gridRowGap = 20
+                        URL(window.location.href).searchParams.get("res")
+                            ?.let { res ->
+                                addAfterInsertHook {
+                                    jQuery.post(
+                                        "/getrestaurant",
+                                        JSON.parse<Json>(Json.encodeToString(GetRestaurantInfo(res))),
+                                        { data, _, _ ->
+                                            val response = data.toString()
+                                            if (response.startsWith("{")) displayMenu(Json.decodeFromString(response))
+                                            else handleResponse(response)
+                                        })
                                 }
                             }
+                            ?: run {
+                                fun Container.display(image: Image): Div = div {
+                                    padding = 2.perc
+                                    background = Background(Color.name(Col.ALICEBLUE))
+                                    border = Border(2.perc, BorderStyle.SOLID, Color.name(Col.MIDNIGHTBLUE))
+                                    boxShadow = BoxShadow(0.px, 0.px, 5.px, 5.px, Color.name(Col.MIDNIGHTBLUE))
+                                    setStyle("border-radius", "50% 20% / 10% 40%")
+                                    add(image.apply {
+                                        width = 100.perc; height = 100.perc
+                                        setStyle("pointer-events", "none")
+                                        setStyle("object-fit", "contain")
+                                    })
+                                    onClick { window.location.href = "main?res=${image.alt}" }
+                                }
+
+                                val images = listOf(
+                                    display(Image(require("img/the_den.png") as? String, "1")),
+                                    display(Image(require("img/burrito_bowl.png") as? String, "2")),
+                                    display(Image(require("img/papa_johns.png") as? String, "3")),
+                                    display(Image(require("img/mein_bowl.png") as? String, "4")),
+                                    display(Image(require("img/dunkin.png") as? String, "5")),
+                                    display(Image(require("img/charger_brew.png") as? String, "6"))
+                                )
+                                handleResize { type ->
+                                    when (type) {
+                                        DESKTOP -> images.forEach { it.width = 30.perc }
+                                        VERTICAL_MOBILE -> images.forEach { it.width = 90.perc }
+                                        HORIZONTAL_MOBILE -> images.forEach { it.width = 45.perc }
+                                    }
+                                }
+                            }
+                    }
+                }
+                URL(window.location.href).searchParams.get("res")
+                    ?.let { res ->
+                        button("Back", style = ButtonStyle.SECONDARY) {
+                            setStyle("transform", "translate(-50%, 0%)")
+                            marginLeft = 50.perc
+                            marginTop = 20.px
+                            height = 40.px
+                            width = 50.perc
+                            maxWidth = 300.px
+                        }.onClick {
+                            window.history.back()
                         }
-                }
-            }
-        }
-        URL(window.location.href).searchParams.get("res")
-            ?.let { res ->
-            div {
-                height = 5.perc
-                width = 50.perc
-                maxWidth = 300.px
-                position = Position.ABSOLUTE
-                bottom = 7.perc
-                left = 50.perc
-                setStyle("transform", "translate(-50%,-50%)")
-                button("Back", style = ButtonStyle.SECONDARY) {
-                    center()
-                    height = 100.perc
-                    width = 100.perc
-                }.onClick {
-                    window.history.back()
-                }
+                    }
             }
         }
     }
