@@ -55,15 +55,13 @@ object OrdersPage : Webpage("orders") {
                             if (response.startsWith("[")) updateMenu(Json.decodeFromString(response), menuPanel)
                             else handleResponse(response)
                         })
-                    }, 500)
+                    }, 2000)
                 }
             }
         }
     }
 }
 
-// Clear the menuPanel and display the updated menu
-// Clear the menuPanel and display the updated menu
 private fun updateMenu(list: List<Order>, menuPanel: VPanel) {
     menuPanel.removeAll()
     menuPanel.displayMenu(list)
@@ -83,6 +81,10 @@ private fun VPanel.displayMenu(list: List<Order>) {
                 border = Border(3.px, BorderStyle.SOLID, Color.name(Col.BLACK))
                 paddingBottom = 10.px
                 width = 70.perc
+                b("Order Number: ${it.id}"){
+                    textAlign = TextAlign.CENTER
+                    marginBottom = 5.px
+                }
                 it.cart.forEach { (id, pair) ->
                     val (item, count) = pair
                     hPanel {
