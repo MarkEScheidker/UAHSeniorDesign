@@ -135,10 +135,15 @@ fun Application.main() {
             }
             post("/placeorder") {
                 call.getSession()?.let{
-                    if(it.placeOrder()){
+                    val response = it.placeOrder()
+
+                    if(response == 0){
                         call.respondText("redirect: main")
-                    }else {
+                    }else if(response == 1) {
                         call.respondText("info|warning|Cart cannot contain items from more than one restaurant.")
+                    }
+                    else {
+                        call.respondText("info|warning|Restaurant is not open at this time.")
                     }
                 }
             }

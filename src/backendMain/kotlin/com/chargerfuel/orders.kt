@@ -3,16 +3,21 @@ import kotlin.collections.MutableMap
 
 private val orders: MutableMap<Int, Order> = mutableMapOf()
 
-fun UserSession.placeOrder():Boolean{
+fun UserSession.placeOrder():Int{
     val restaurant = RestaurantStorage.getMenu(getCart().values.first().first)
     if (getCart().values.any { RestaurantStorage.getMenu(it.first) != restaurant }) {
-        return false
+        return 1
     }
+    /* todo, return 2 if restaurant is closed
+    if(RestaurantState.getRestaurantState(/*todo get restaurant name*/)){
+        return 2
+    }
+    */
     SMS.sendOrderConfirm(this.name,orders.size+1,
         orders.values.filter { it.cart.values.firstOrNull()?.let { RestaurantStorage.getMenu(it.first) } == restaurant }.filter { !it.completed }.size*2 + 10)
     orders[orders.size + 1] = Order(orders.size + 1, SQLUtils.getPhoneNumber(name) ?: "", name, System.currentTimeMillis(), getCart())
     clearCart()
-    return true
+    return 0
 }
 
 
