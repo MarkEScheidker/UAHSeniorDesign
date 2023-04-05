@@ -134,8 +134,13 @@ fun Application.main() {
                 call.getSession()?.let { call.respondText(Json.encodeToString(it.getCart())) }
             }
             post("/placeorder") {
-                call.getSession()?.placeOrder()
-                call.respondText("redirect: main")
+                call.getSession()?.let{
+                    if(it.placeOrder()){
+                        call.respondText("redirect: main")
+                    }else {
+                        call.respondText("info|warning|Cart cannot contain items from more than one restaurant.")
+                    }
+                }
             }
             //restaurant account stuff
             get("/resmain") {

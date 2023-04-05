@@ -108,6 +108,13 @@ private fun VPanel.fillCartPage(cart: Map<Int, Pair<Item, Int>>) {
                 marginLeft = 10.perc
             }
         }
+        b(""){
+            this.id = "warning"
+            colorName = Col.RED
+            textAlign = TextAlign.CENTER
+            paddingTop = 5.px
+            paddingBottom = 5.px
+        }
         button("Place Order") {
             width = 98.perc
             marginTop = 10.px

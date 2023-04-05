@@ -3,7 +3,7 @@ import kotlin.collections.MutableMap
 
 private val orders: MutableMap<Int, Order> = mutableMapOf()
 
-fun UserSession.placeOrder(): Boolean {
+fun UserSession.placeOrder():Boolean{
     val restaurant = RestaurantStorage.getMenu(getCart().values.first().first)
     if (getCart().values.any { RestaurantStorage.getMenu(it.first) != restaurant }) {
         return false
