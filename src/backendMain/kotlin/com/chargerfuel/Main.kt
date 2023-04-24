@@ -270,7 +270,7 @@ fun Application.main() {
                 if (SQLUtils.isAccountRegistered(info.user)) {
                     val token = Security.generateSecureToken()
                     TokenStorage.addToken(token, PasswordForgotInfo(info.user))
-                    call.respondText("info|info|Check your email lol")
+                    call.respondText("info|info|Check your email")
                     EmailService.sendPasswordReset(info.email, token)
                 } else call.respondText("info|error|Username not found")
             } ?: call.respondError()
