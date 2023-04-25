@@ -18,4 +18,5 @@ The project is already feature complete, but needs more polish and some reworkin
 
 # Database Schema
 ![ChargerFuelDatabaseSchema](https://user-images.githubusercontent.com/83242911/234393810-89e298bd-2950-4533-90d4-9440b1bf1768.PNG)
+
 We used a stardard MySQL Database. All the lines represent forgein keys. You will need to change the backend to link to your database, with its user and password. We made a seperate login that had less permissions to increase security.
